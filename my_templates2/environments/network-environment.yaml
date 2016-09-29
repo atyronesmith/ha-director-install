@@ -1,0 +1,94 @@
+# This template configures each role to use a pair of bonded nics (nic2 and
+# nic3) and configures an IP address on each relevant isolated network
+# for each role. This template assumes use of network-isolation.yaml.
+#
+# FIXME: if/when we add functionality to heatclient to include heat
+# environment files we should think about using it here to automatically
+# include network-isolation.yaml.
+
+parameter_defaults:
+  # This sets 'external_network_bridge' in l3_agent.ini to an empty string
+  # so that external networks act like provider bridge networks (they
+  # will plug into br-int instead of br-ex)
+  NeutronExternalNetworkBridge: "''"
+
+  InternalApiNetCidr: 192.168.101.0/24
+  TenantNetCidr: 192.168.104.0/24
+  StorageNetCidr: 192.168.102.0/24
+  StorageMgmtNetCidr: 192.168.103.0/24
+  ManagementNetCidr: 192.168.14.0/24
+  ExternalNetCidr: 10.69.6.0/24
+  InternalApiAllocationPools: [{'start': '192.168.101.10', 'end': '192.168.101.200'}]
+  TenantAllocationPools: [{'start': '192.168.104.10', 'end': '192.168.104.200'}]
+  StorageAllocationPools: [{'start': '192.168.102.10', 'end': '192.168.102.200'}]
+  StorageMgmtAllocationPools: [{'start': '192.168.103.10', 'end': '192.168.103.200'}]
+  ManagementAllocationPools: [{'start': '192.168.14.10', 'end': '192.168.14.200'}]
+# Leave room for floating IPs in the External allocation pool
+  ExternalAllocationPools: [{'start': '10.69.6.33', 'end': '10.69.6.44'}]
+# Set to the router gateway on the external network
+  ExternalInterfaceDefaultRoute: 10.69.6.254           # .1 doesn't exist - AJB
+# Gateway router for the provisioning network (or Undercloud IP)
+  ControlPlaneDefaultRoute: 192.168.11.254
+# The IP address of the EC2 metadata server. Generally the IP of the Undercloud
+  EC2MetadataIp: 192.168.11.1
+# Define the DNS servers (maximum 2) for the overcloud nodes
+  DnsServers: ["8.8.8.8","8.8.4.4"]
+  InternalApiNetworkVlanID: 101
+  StorageNetworkVlanID: 102
+  StorageMgmtNetworkVlanID: 103
+  TenantNetworkVlanID: 104
+  ManagementNetworkVlanID: 14
+  ExternalNetworkVlanID: 2
+  # Set to "br-ex" if using floating IPs on native VLAN on bridge br-ex
+  NeutronExternalNetworkBridge: "''"
+  # Customize bonding options if required
+  BondInterfaceOvsOptions: "bond_mode=balance-slb lacp=active"
+
+resource_registry:
+  OS::TripleO::BlockStorage::Net::SoftwareConfig: ../nic-configs/cinder-storage.yaml
+  OS::TripleO::Compute::Net::SoftwareConfig: ../nic-configs/compute.yaml
+  OS::TripleO::Controller::Net::SoftwareConfig: ../nic-configs/controller.yaml
+  OS::TripleO::ObjectStorage::Net::SoftwareConfig: ../nic-configs/swift-storage.yaml
+  OS::TripleO::CephStorage::Net::SoftwareConfig: ../nic-configs/ceph-storage.yaml
+
+  OS::TripleO::Network::Management: ../network/management.yaml
+  OS::TripleO::Network::External: ../network/external.yaml
+  OS::TripleO::Network::InternalApi: ../network/internal_api.yaml
+  OS::TripleO::Network::StorageMgmt: ../network/storage_mgmt.yaml
+  OS::TripleO::Network::Storage: ../network/storage.yaml
+  OS::TripleO::Network::Tenant: ../network/tenant.yaml
+  OS::TripleO::Network::Management: ../network/management.yaml
+
+ # Port assignments for the VIPs
+  OS::TripleO::Network::Ports::ExternalVipPort: ../network/ports/external.yaml
+  OS::TripleO::Network::Ports::InternalApiVipPort: ../network/ports/internal_api.yaml
+  OS::TripleO::Network::Ports::StorageVipPort: ../network/ports/storage.yaml
+  OS::TripleO::Network::Ports::StorageMgmtVipPort: ../network/ports/storage_mgmt.yaml
+  OS::TripleO::Network::Ports::RedisVipPort: ../network/ports/vip.yaml
+
+  # Port assignments for service virtual IPs for the controller role
+  OS::TripleO::Controller::Ports::RedisVipPort: ../network/ports/vip.yaml
+  # Port assignments for the controller role
+  OS::TripleO::Controller::Ports::ExternalPort: ../network/ports/external.yaml
+  OS::TripleO::Controller::Ports::InternalApiPort: ../network/ports/internal_api.yaml
+  OS::TripleO::Controller::Ports::StoragePort: ../network/ports/storage.yaml
+  OS::TripleO::Controller::Ports::StorageMgmtPort: ../network/ports/storage_mgmt.yaml
+  OS::TripleO::Controller::Ports::TenantPort: ../network/ports/tenant.yaml
+  OS::TripleO::Controller::Ports::ManagementPort: ../network/ports/management.yaml
+
+  # Port assignments for the compute role
+  OS::TripleO::Compute::Ports::ExternalPort: ../network/ports/external.yaml
+  OS::TripleO::Compute::Ports::InternalApiPort: ../network/ports/internal_api.yaml
+  OS::TripleO::Compute::Ports::StoragePort: ../network/ports/storage.yaml
+  OS::TripleO::Compute::Ports::StorageMgmtPort: ../network/ports/noop.yaml
+  OS::TripleO::Compute::Ports::TenantPort: ../network/ports/tenant.yaml
+  OS::TripleO::Compute::Ports::ManagementPort: ../network/ports/management.yaml
+
+  # Port assignments for the ceph storage role
+  OS::TripleO::CephStorage::Ports::ExternalPort: ../network/ports/external.yaml
+  OS::TripleO::CephStorage::Ports::InternalApiPort: ../network/ports/noop.yaml
+  OS::TripleO::CephStorage::Ports::StoragePort: ../network/ports/storage.yaml
+  OS::TripleO::CephStorage::Ports::StorageMgmtPort: ../network/ports/storage_mgmt.yaml
+  OS::TripleO::CephStorage::Ports::TenantPort: ../network/ports/noop.yaml
+  OS::TripleO::CephStorage::Ports::ManagementPort: ../network/ports/management.yaml
+

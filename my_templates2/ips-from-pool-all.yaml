@@ -1,0 +1,27 @@
+# Environment file demonstrating how to pre-assign IPs to all node types
+resource_registry:
+  OS::TripleO::Controller::Ports::ExternalPort: ./network/ports/external_from_pool.yaml
+
+  OS::TripleO::Compute::Ports::ExternalPort: ./network/ports/external_from_pool.yaml
+
+  OS::TripleO::CephStorage::Ports::ExternalPort: ./network/ports/external_from_pool.yaml
+
+parameter_defaults:
+  ControllerIPs:
+    # Each controller will get an IP from the lists below, first controller, first IP
+    external:
+    - 10.69.6.11
+    - 10.69.6.12
+    - 10.69.6.13
+  NovaComputeIPs:
+    # Each compute will get an IP from the lists below, first compute, first IP
+    external:
+    - 10.69.6.14
+    - 10.69.6.15
+    - 10.69.6.16
+  CephStorageIPs:
+    # Each ceph node will get an IP from the lists below, first node, first IP
+    external:
+    - 10.69.6.20
+    - 10.69.6.21
+    - 10.69.6.22

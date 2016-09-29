@@ -1,0 +1,2 @@
+resource_registry:
+  OS::TripleO::NodeExtraConfigPost: /home/stack/my_templates2/node-setup.yaml
