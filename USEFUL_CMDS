@@ -1,0 +1,3 @@
+- Redirect metadata service traffic to vlan 11 device (allows overcloud nodes to call back after initial deployment):
+
+iptables -t nat -A PREROUTING -d 169.254.169.254/32 -i vlan11 -p tcp -m tcp --dport 80 -j REDIRECT --to-ports 8775
