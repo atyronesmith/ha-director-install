@@ -1,0 +1,25 @@
+[stack@undercloud ~]$ neutron net-show ctlplane
++---------------------------+--------------------------------------+
+| Field                     | Value                                |
++---------------------------+--------------------------------------+
+| admin_state_up            | True                                 |
+| availability_zone_hints   |                                      |
+| availability_zones        | nova                                 |
+| created_at                | 2016-09-27T14:54:56                  |
+| description               |                                      |
+| id                        | 3967d0ee-eeb0-4b93-83df-4510fb29684a |
+| ipv4_address_scope        |                                      |
+| ipv6_address_scope        |                                      |
+| mtu                       | 1500                                 |
+| name                      | ctlplane                             |
+| provider:network_type     | vlan                                 |
+| provider:physical_network | ctlplane                             |
+| provider:segmentation_id  | 11                                   |
+| router:external           | False                                |
+| shared                    | False                                |
+| status                    | ACTIVE                               |
+| subnets                   | dac2e8ff-9915-4604-9a5d-1717888107e2 |
+| tags                      |                                      |
+| tenant_id                 | 567eeb84c56c45a4a648f06841d11392     |
+| updated_at                | 2016-09-27T14:54:57                  |
++---------------------------+--------------------------------------+
