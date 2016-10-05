@@ -1,0 +1,11 @@
+DEVICE=vlan11
+ONBOOT=yes
+DEVICETYPE=ovs
+TYPE=OVSIntPort
+BOOTPROTO=static
+IPADDR=192.168.11.1
+NETMASK=255.255.255.0
+OVS_BRIDGE=br-ctlplane
+OVS_OPTIONS="tag=11"
+OVS_EXTRA="set Interface $DEVICE external-ids:iface-id=$(hostname -s)-$DEVICE-vif"
+HOTPLUG=no
