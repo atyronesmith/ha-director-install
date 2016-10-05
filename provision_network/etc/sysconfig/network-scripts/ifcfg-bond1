@@ -1,0 +1,9 @@
+DEVICE=bond1
+ONBOOT=yes
+DEVICETYPE=ovs
+TYPE=OVSBond
+OVS_BRIDGE=br-ctlplane
+BOOTPROTO=none
+BOND_IFACES="eno1 eno2"
+OVS_OPTIONS="bond_mode=balance-tcp lacp=active"
+HOTPLUG=no
