@@ -1,1 +1,1 @@
-These are interface configuration scripts for devices on the undercloud
+These are interface configuration scripts for provisioning network devices on the undercloud
