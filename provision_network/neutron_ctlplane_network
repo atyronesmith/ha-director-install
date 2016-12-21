@@ -3,10 +3,22 @@ is "flat" by default.  Unfortunately, you can't update the provider:network_type
 network.  So to avoid complications and keep the network name as "ctlplane", here's what you do:
 
 1. Rename ctlplane network to ctlplane2
+
+neutron net-update 625efa5f-7b2b-42ce-b5cc-8d3d57848d9f --name ctlplane2
+
 2. Create new ctlplane network with provider:network_type "vlan" and provider:segmentation_id
    of whatever tag your provisioning network uses
+
+neutron net-create --provider:network_type vlan --provider:segmentation_id 1038 --provider:physical_network ctlplane ctlplane
+   
 3. Create a subnet for new network
-4. Delete old ctlplane2 network
+
+neutron subnet-create --allocation-pool start=192.0.2.20,end=192.0.2.100 07ebfb16-e0d0-430b-a482-2942bae46e48 192.0.2.0/24
+
+4. Delete (or disable) old ctlplane2 network
+
+neutron net-update --admin_state_up=false 625efa5f-7b2b-42ce-b5cc-8d3d57848d9f
+
 5. Restart neutron-server
 
 [stack@undercloud ~]$ neutron net-show ctlplane
