@@ -13,7 +13,7 @@ resources:
     type: OS::Heat::SoftwareConfig
     properties:
       group: script
-      config: {get_file: /home/stack/my_templates2/node-setup.sh}
+      config: {get_file: /home/stack/my_templates/node-setup.sh}
 
 
   ExtraDeployments:

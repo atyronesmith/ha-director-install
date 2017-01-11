@@ -1,0 +1,29 @@
+1. Create an ifcfg script for a new device, "vlan1038" (/etc/sysconfig/network-scripts/ifcfg-vlan1038).  This device attaches to br-ctlplane on the undercloud.  Its ifcfg should have the IP address instead of br-ctlplane's:
+
+DEVICE=vlan1038
+ONBOOT=yes
+DEVICETYPE=ovs
+TYPE=OVSIntPort
+BOOTPROTO=static
+IPADDR=192.0.2.1
+NETMASK=255.255.255.0
+OVS_BRIDGE=br-ctlplane
+OVS_OPTIONS="tag=1038"
+OVS_EXTRA="set Interface $DEVICE external-ids:iface-id=$(hostname -s)-$DEVICE-vif"
+HOTPLUG=no
+
+2. Edit /etc/ironic-inspector/dnsmasq.conf and /etc/ironic-inspector/inspector.conf so that the provisioning device is "vlan1038" (search for br-ctlplane as a value and replace with vlan1038).
+
+3. ovs-vsctl set Port eth0 tag=1038
+
+4. systemctl restart network
+
+5. iptables -D INPUT -i br-ctlplane -p udp -m udp --dport 67 -j ironic-inspector
+
+6. iptables -F ironic-inspector
+
+7. iptables -X ironic-inspector
+
+8. for i in $(systemctl | grep ironic | awk '{print $1'}); do systemctl restart $i; done
+
+9. iptables -t nat -A PREROUTING -d 169.254.169.254/32 -i vlan1038 -p tcp -m tcp --dport 80 -j DNAT --to-destination 192.0.2.1:8775 

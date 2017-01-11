@@ -4,7 +4,8 @@
 # assign a port (related to that role) on that network.
 # Note that the basic sample NIC configuration templates
 # do not include the management network, see the
-# single-nic-vlans-mgmt templates for an example.
+# comments in the sample network config templates in
+# network/config/ for an example.
 resource_registry:
   OS::TripleO::Network::Management: ../network/management.yaml
 

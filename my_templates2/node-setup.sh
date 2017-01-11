@@ -43,4 +43,3 @@ semanage port -a -t http_port_t -p tcp 8088
 systemctl start httpd
 systemctl reload httpd
 systemctl enable httpd
-

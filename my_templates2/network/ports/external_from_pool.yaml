@@ -25,7 +25,7 @@ parameters:
     description: Index of the IP to get from Pool
     type: number
   ExternalNetCidr:
-    default: '10.0.0.0/24'
+    default: '10.19.108.0/24'
     description: Cidr for the external network.
     type: string
 

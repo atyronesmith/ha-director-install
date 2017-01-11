@@ -10,18 +10,20 @@ parameter_defaults:
   ControllerIPs:
     # Each controller will get an IP from the lists below, first controller, first IP
     external:
-    - 10.69.6.11
-    - 10.69.6.12
-    - 10.69.6.13
+    - 10.19.108.11
+    - 10.19.108.12
+    - 10.19.108.13
   NovaComputeIPs:
     # Each compute will get an IP from the lists below, first compute, first IP
     external:
-    - 10.69.6.14
-    - 10.69.6.15
-    - 10.69.6.16
+    - 10.19.108.14
+    - 10.19.108.15
+    - 10.19.108.16
+    - 10.19.108.17 
+    - 10.10.108.18
   CephStorageIPs:
     # Each ceph node will get an IP from the lists below, first node, first IP
     external:
-    - 10.69.6.20
-    - 10.69.6.21
-    - 10.69.6.22
+    - 10.19.108.20
+    - 10.19.108.21
+    - 10.19.108.22
