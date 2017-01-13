@@ -8,3 +8,7 @@ iptables -t nat -A PREROUTING -d 169.254.169.254/32 -i vlan11 -p tcp -m tcp --dp
 - Deploy non-DPDK overcloud:
 
 openstack overcloud deploy --templates ~/my_templates/ -e environments/network-isolation.yaml -e ~/my_templates/environments/network-environment.yaml -e ~/my_templates/environments/storage-environment.yaml  --control-scale 1 --compute-scale 1 --compute-flavor compute --control-flavor control --neutron-network-type vxlan --neutron-tunnel-types vxlan --ntp-server 10.5.26.10 -e ~/my_templates/ips-from-pool-all.yaml -e ~/my_templates/post-deployment.yaml
+
+- Set the root_device for all nodes to a particular disk.  In this case, we are setting all nodes' root devices to a disk with a particular (uniform) size across all the hardware:
+
+for node in $(ironic node-list | awk '!/UUID/ {print $2}'); do openstack baremetal node set --property root_device='{"wwn": '$(cat inspector_data-$node | jq '.inventory.disks[] | select(.size==599013720064) | .wwn')'}' $node; done
