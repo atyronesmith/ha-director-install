@@ -12,3 +12,7 @@ openstack overcloud deploy --templates ~/my_templates/ -e environments/network-i
 - Set the root_device for all nodes to a particular disk.  In this case, we are setting all nodes' root devices to a disk with a particular (uniform) size across all the hardware:
 
 for node in $(ironic node-list | awk '!/UUID/ {print $2}'); do openstack baremetal node set --property root_device='{"wwn": '$(cat inspector_data-$node | jq '.inventory.disks[] | select(.size==599013720064) | .wwn')'}' $node; done
+
+- Copy overcloudrc to all overcloud nodes:
+
+for i in $(nova list | grep -v ID | awk '{print $12}' | cut -d '=' -f 2); do scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null overcloudrc root@$i:~/.; done
