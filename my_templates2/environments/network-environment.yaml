@@ -8,6 +8,8 @@ resource_registry:
   OS::TripleO::ObjectStorage::Net::SoftwareConfig: ../nic-configs/swift-storage.yaml
   OS::TripleO::CephStorage::Net::SoftwareConfig: ../nic-configs/ceph-storage.yaml
 
+  # first boot script for compute (set kernel args) and ceph nodes (wipe disks)
+  OS::TripleO::NodeUserData: /home/stack/my_templates/firstboot/first-boot.yaml
 
 parameter_defaults:
   # This section is where deployment-specific configuration is done
