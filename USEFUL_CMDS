@@ -16,3 +16,11 @@ for node in $(ironic node-list | awk '!/UUID/ {print $2}'); do openstack baremet
 - Copy overcloudrc to all overcloud nodes:
 
 for i in $(nova list | grep -v ID | awk '{print $12}' | cut -d '=' -f 2); do scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null overcloudrc root@$i:~/.; done
+
+Create SR-IOV networks and ports:
+
+neutron net-create --provider:network_type vlan --provider:physical_network phy-sriov1 --provider:segmentation_id 4000 sriov1
+net_id=$(neutron net-list | grep sriov1 | awk '{print $2}')
+neutron subnet-create $net_id --allocation_pool start=172.20.0.2,end=172.20.1.0 --name sriov1-sub 172.20.0.0/16
+sub_id=$(neutron subnet-list | grep sriov1-sub | awk '{print $2}')
+port-create --name sriov1-port --fixed-ip subnet_id=$sub_id,ip_address=172.20.0.10 --vnic-type direct $net_id
