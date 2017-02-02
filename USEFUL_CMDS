@@ -30,3 +30,7 @@ net_id=$(neutron net-list | grep sriov2 | awk '{print $2}')
 neutron subnet-create $net_id --allocation_pool start=172.22.0.2,end=172.22.1.0 --name sriov2-sub 172.22.0.0/16
 sub_id=$(neutron subnet-list | grep sriov2-sub | awk '{print $2}')
 neutron port-create --name sriov2-port --fixed-ip subnet_id=$sub_id,ip_address=172.22.0.10 --vnic-type direct $net_id
+
+Match Ironic nodes to Nova instances:
+
+for node in $(ironic node-list | awk '!/UUID/ {print $2}'); do echo IRONIC $(ironic node-list | grep $node | awk '{print $4}') IS NOVA $(nova list | grep $(ironic node-list | grep $node | awk '{print $6}') | awk '{print $4}'); done
