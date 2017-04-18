@@ -48,3 +48,7 @@ neutron port-create --name sriov-bonded-port4 --fixed-ip subnet_id=$sub_id,ip_ad
 Match Ironic nodes to Nova instances:
 
 for node in $(ironic node-list | sort -k3 | awk '!/UUID/ {print $2}'); do echo IRONIC $(ironic node-list | grep $node | awk '{print $4}') ==\> NOVA $(nova list | grep $(ironic node-list | grep $node | awk '{print $6}') | awk '{print $4}'); done
+
+Match IPMI IPs to Nova instances:
+
+for node in $(ironic node-list | sort -k3 | awk '!/UUID/ {print $2}'); do echo $(ironic node-show $node | grep ipmi_address | awk {'print $4'} | cut -d "'" -f 2) ==\> NOVA $(nova list | grep $(ironic node-list | grep $node | awk '{print $6}') | awk '{print $4}'); done
