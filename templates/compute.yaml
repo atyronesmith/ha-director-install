@@ -33,11 +33,11 @@ parameters:
     default: ''
     description: IP address/subnet on the management network
     type: string
-  LinuxBondInterfaceOptions:
+  BondInterfaceOvsOptions:
     default: 'balance-slb'
     description: The ovs_options string for the bond interface. Set things like
                  lacp=active and/or bond_mode=balance-slb using this option.
-    type: string 
+    type: string
   ExternalNetworkVlanID:
     default: 100
     description: Vlan ID for the external network traffic.
@@ -105,96 +105,89 @@ resources:
                 -
                   ip_netmask: 169.254.169.254/32
                   next_hop: {get_param: EC2MetadataIp}
-                -
-                  default: true
-                  next_hop: {get_param: ControlPlaneDefaultRoute}
 
-
-            - 
-              type: interface
+            - type: interface
               name: ens255f0
               use_dhcp: false
               defroute: false
 
+            - type: interface
+              name: ens6f0
+              use_dhcp: false
+              defroute: false
+
+            - type: interface
+              name: ens6f1
+              use_dhcp: false
+              defroute: false
 
             -
-              type: linux_bond
-              name: bond1
+              type: ovs_bridge
+              name: {get_input: bridge_name}
               use_dhcp: false
-              bonding_options: {get_param: LinuxBondInterfaceOptions}
+
               members:
                 -
-                  type: interface
-                  name: ens3f0
-                -
-                  type: interface
-                  name: ens3f1
- 
-#                -
-#                  type: vlan
-#                  device: bond1
-#                  vlan_id: {get_param: ExternalNetworkVlanID}
-#                  addresses:
-#                    -
-#                     ip_netmask: {get_param: ExternalIpSubnet}
-#                     routes:
-#                    -
-#                      default: true
-#                      next_hop: {get_param: ExternalInterfaceDefaultRoute}
-            -
-              type: vlan
-              device: bond1
-              vlan_id: {get_param: InternalApiNetworkVlanID}
-              addresses:
-                -
-                  ip_netmask: {get_param: InternalApiIpSubnet}
-            -
-              type: vlan
-              device: bond1
-              vlan_id: {get_param: StorageNetworkVlanID}
-              addresses:
-                -
-                  ip_netmask: {get_param: StorageIpSubnet}
-            -
-              type: vlan
-              device: bond1
-              vlan_id: {get_param: StorageMgmtNetworkVlanID}
-              addresses:
-                -
-                  ip_netmask: {get_param: StorageMgmtIpSubnet}
-            -
-              type: vlan
-              device: bond1
-              vlan_id: {get_param: TenantNetworkVlanID}
-              addresses:
-                -
-                  ip_netmask: {get_param: TenantIpSubnet}
-  
-            #
-            # Uncomment when including environments/network-management.yaml
-            #-
-            #  type: vlan
-            #  device: bond1
-            #  vlan_id: {get_param: ManagementNetworkVlanID}
-            #  addresses:
-            #    -
-            #      ip_netmask: {get_param: ManagementIpSubnet}
-
-            -
-              type: linux_bridge
-              name: br-link
-              members: 
-                - 
-                  type: linux_bond
-                  name: bond2
-                  bonding_options: {get_param: LinuxBondInterfaceOptions}
+                  type: ovs_bond
+                  name: bond1
+                  ovs_options: {get_param: BondInterfaceOvsOptions}
                   members:
-                    - type: interface
-                      name: ens6f0
-                    - type: interface
-                      name: ens6f1
+                    -
+                      type: interface
+                      name: ens3f0
+                    -
+                      type: interface
+                      name: ens3f1
+                -
+                  type: vlan
+                  device: bond1
+                  vlan_id: {get_param: ExternalNetworkVlanID}
+                  addresses:
+                  -
+                    ip_netmask: {get_param: ExternalIpSubnet}
+                  routes:
+                    -
+                      default: true
+                      next_hop: {get_param: ExternalInterfaceDefaultRoute}
+                -
+                  type: vlan
+                  device: bond1
+                  vlan_id: {get_param: InternalApiNetworkVlanID}
+                  addresses:
+                    -
+                      ip_netmask: {get_param: InternalApiIpSubnet}
+                -
+                  type: vlan
+                  device: bond1
+                  vlan_id: {get_param: StorageNetworkVlanID}
+                  addresses:
+                    -
+                      ip_netmask: {get_param: StorageIpSubnet}
+                -
+                  type: vlan
+                  device: bond1
+                  vlan_id: {get_param: StorageMgmtNetworkVlanID}
+                  addresses:
+                    -
+                      ip_netmask: {get_param: StorageMgmtIpSubnet}
+                -
+                  type: vlan
+                  device: bond1
+                  vlan_id: {get_param: TenantNetworkVlanID}
+                  addresses:
+                    -
+                      ip_netmask: {get_param: TenantIpSubnet}
+                # Uncomment when including environments/network-management.yaml
+                #-
+                #  type: vlan
+                #  device: bond1
+                #  vlan_id: {get_param: ManagementNetworkVlanID}
+                #  addresses:
+                #    -
+                #      ip_netmask: {get_param: ManagementIpSubnet}
 
 outputs:
   OS::stack_id:
     description: The OsNetConfigImpl resource.
     value: {get_resource: OsNetConfigImpl}
+
