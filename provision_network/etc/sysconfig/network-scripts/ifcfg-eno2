@@ -1,7 +1,0 @@
-TYPE=Ethernet
-BOOTPROTO=none
-NAME=eno2
-UUID=f83fe68f-4813-4449-b38f-7f7b1ebb5fc8
-DEVICE=eno2
-ONBOOT=yes
-NM_CONTROLLED=no
