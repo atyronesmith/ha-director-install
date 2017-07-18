@@ -33,10 +33,9 @@ parameters:
     default: ''
     description: IP address/subnet on the management network
     type: string
-  BondInterfaceOvsOptions:
+  LinuxBondInterfaceOptions:
     default: 'balance-slb'
-    description: The ovs_options string for the bond interface. Set things like
-                 lacp=active and/or bond_mode=balance-slb using this option.
+    description: The ovs_options string for the bond interface. Set things like lacp=active and/or bond_mode=balance-slb using this option.
     type: string
   ExternalNetworkVlanID:
     default: 100
@@ -91,11 +90,11 @@ resources:
           network_config:
 
             - type: interface
-              name: eno2 
+              name: ens255f1 
               use_dhcp: false
               dns_servers: {get_param: DnsServers}
               addresses:
-                 -
+                -
                   ip_netmask:
                     list_join:
                       - '/'
@@ -106,52 +105,123 @@ resources:
                   ip_netmask: 169.254.169.254/32
                   next_hop: {get_param: EC2MetadataIp}
 
-            - type: interface
-              name: eno1 
+            - 
+              type: interface
+              name: ens255f0
               use_dhcp: false
               defroute: false
+            - 
+              type: interface
+              name: ens6f1
+              use_dhcp: false
+              defroute: false
+              mtu: 9000
 
             -
               type: ovs_bridge
-              name: br-all
+              name: br-isolated
               use_dhcp: false
-
+              mtu: 9000
               members:
                 -
                   type: linux_bond
                   name: bond1
-                  ovs_options: {get_param: LinuxBondInterfaceOptions}
+                  bonding_options: {get_param: LinuxBondInterfaceOptions}
+                  mtu: 9000
                   members:
                     -
                       type: interface
-                      name: ens1f0
+                      name: ens3f0
+                      mtu: 9000
                     -
                       type: interface
-                      name: ens1f1
+                      name: ens3f1
+                      mtu: 9000
                 -
                   type: vlan
-                  device: bond1
+                  device: br-isolated
                   vlan_id: {get_param: InternalApiNetworkVlanID}
+                  mtu: 9000
                   addresses:
                     -
                       ip_netmask: {get_param: InternalApiIpSubnet}
                 -
                   type: vlan
-                  device: bond1
+                  device: br-isolated
                   vlan_id: {get_param: StorageNetworkVlanID}
+                  mtu: 9000
                   addresses:
                     -
                       ip_netmask: {get_param: StorageIpSubnet}
                 -
                   type: vlan
-                  device: bond1
+                  device: br-isolated
+                  vlan_id: {get_param:  TenantNetworkVlanID}
+                  mtu: 9000
+                  addresses:
+                    -
+                      ip_netmask: {get_param: TenantIpSubnet}
+                -
+                  type: vlan
+                  device: br-isolated
                   vlan_id: {get_param: StorageMgmtNetworkVlanID}
+                  mtu: 9000
                   addresses:
                     -
                       ip_netmask: {get_param: StorageMgmtIpSubnet}
+                -
+                  type: vlan
+                  device: br-isolated
+                  vlan_id: {get_param: ExternalNetworkVlanID}
+                  addresses:
+                    -
+                      ip_netmask: {get_param: ExternalIpSubnet}
+                  routes:
+                    -
+                      default: true
+                      next_hop: {get_param: ExternalInterfaceDefaultRoute}
 
+                # Uncomment when including environments/network-management.yaml
+                #-
+                #  type: vlan
+                #  device: bond1
+                #  vlan_id: {get_param: ManagementNetworkVlanID}
+                #  addresses:
+                #    -
+                #      ip_netmask: {get_param: ManagementIpSubnet}
+
+
+
+#            -
+#              type: ovs_bridge
+#              name: br-link
+#              use_dhcp: false
+#              members:
+#                -
+#                  type: interface
+#                  name: ens6f0
+#
+            -
+              type: ovs_bridge
+              name: br-link
+              use_dhcp: false
+              mtu: 9000
+              members:
+                -
+                  type: linux_bond
+                  name: bond2
+                  mtu: 9000
+                  bonding_options: {get_param: LinuxBondInterfaceOptions}
+                  members:
+                    -
+                      type: interface
+                      name: ens6f0
+                      mtu: 9000
+                    -
+                      type: interface
+                      name: ens6f1
+                      mtu: 9000
 outputs:
   OS::stack_id:
     description: The OsNetConfigImpl resource.
     value: {get_resource: OsNetConfigImpl}
-

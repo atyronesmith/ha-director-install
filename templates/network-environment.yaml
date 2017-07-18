@@ -30,7 +30,7 @@ parameter_defaults:
   StorageNetworkVlanID: 1030
   StorageMgmtNetworkVlanID: 1040
   TenantNetworkVlanID: 1050
-  ExternalNetworkVlanID: 100
+  ExternalNetworkVlanID: 111
   # Customize the IP ranges on each network to use for static IPs and VIPs
   InternalApiAllocationPools: [{'start': '172.17.0.10', 'end': '172.17.0.200'}]
   StorageAllocationPools: [{'start': '172.18.0.10', 'end': '172.18.0.200'}]
@@ -40,21 +40,12 @@ parameter_defaults:
   ExternalAllocationPools: [{'start': '10.19.111.23', 'end': '10.19.111.50'}]
   ExternalNetworkVip: 10.19.111.51
 
-# Specify the NTP server for nodes to use
+  # Specify the NTP server for nodes to use
   NtpServer: 10.5.26.10
-# Customize the IP ranges on each network to use for static IPs and VIPs
-
 
   # Gateway router for the external network
   ExternalInterfaceDefaultRoute: 10.19.111.254
 
-
-  # Uncomnent if using the Management Network (see network-management.yaml)
-  # ManagementNetCidr: 10.0.1.0/24
-  # ManagementAllocationPools: [{'start': '10.0.1.10', 'end', '10.0.1.50'}]
-  # Use either this parameter or ControlPlaneDefaultRoute in the NIC templates
-  # ManagementInterfaceDefaultRoute: 10.0.1.1
-  # Define the DNS servers (maximum 2) for the overcloud nodes
   DnsServers: ["10.16.36.29","10.11.5.19"]
 
   # Set to empty string to enable multiple external networks or VLANs
@@ -62,12 +53,13 @@ parameter_defaults:
 
   # Customize bonding options, e.g. "mode=4 lacp_rate=1 updelay=1000 miimon=100"
   # LinuxBondInterfaceOptions: "mode=802.3ad" <== Don't use this use next one specifying details to make it faster
-  LinuxBondInterfaceOptions: "mode=4 lacp_rate=1 updelay=1000 miimon=100"
+  LinuxBondInterfaceOptions: "mode=1 lacp_rate=1 updelay=1000 miimon=100"
+  BondInterfaceOvsOptions: "bond_mode=active-backup lacp=active"
 
   # Set to 9000 for Jumbo frames
   #NeutronGlobalPhysnetMtu: 9000 
 
- # Flavor of controller and compute nodes:
+  # Flavor of controller and compute nodes:
   OvercloudControlFlavor: control
   OvercloudComputeFlavor: compute
   OvercloudCephStorageFlavor: ceph-storage
