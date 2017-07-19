@@ -38,6 +38,11 @@ parameters:
     description: The ovs_options string for the bond interface. Set things like
                  lacp=active and/or bond_mode=balance-slb using this option.
     type: string
+  LinuxBondInterfaceOptions:
+    default: 'balance-slb'
+    description: The ovs_options string for the bond interface. Set things like
+                 lacp=active and/or bond_mode=balance-slb using this option.
+    type: string
   ExternalNetworkVlanID:
     default: 100
     description: Vlan ID for the external network traffic.
