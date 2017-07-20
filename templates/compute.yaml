@@ -145,7 +145,7 @@ resources:
                 -
                   type: linux_bond
                   name: bond1
-                  ovs_options: {get_param: LinuxBondInterfaceOptions}
+                  bonding_options: {get_param: LinuxBondInterfaceOptions}
                   members:
                     -
                       type: interface
@@ -167,13 +167,6 @@ resources:
                   addresses:
                     -
                       ip_netmask: {get_param: StorageIpSubnet}
-                -
-                  type: vlan
-                  device: bond1
-                  vlan_id: {get_param: StorageMgmtNetworkVlanID}
-                  addresses:
-                    -
-                      ip_netmask: {get_param: StorageMgmtIpSubnet}
             -
               type: ovs_bridge
               name: br-ex
@@ -183,7 +176,7 @@ resources:
                 -
                   type: linux_bond
                   name: bond2
-                  ovs_options: {get_param: LinuxBondInterfaceOptions}
+                  bonding_options: {get_param: LinuxBondInterfaceOptions}
                   members:
                     -
                       type: interface
@@ -191,13 +184,13 @@ resources:
                     -
                       type: interface
                       name: ens2f2
+                -
+                  type: vlan
+                  device: bond2
+                  vlan_id: {get_param: TenantNetworkVlanID}
+                  addresses:
                     -
-                      type: vlan
-                      device: bond2
-                      vlan_id: {get_param: TenantNetworkVlanID}
-                      addresses:
-                        -
-                          ip_netmask: {get_param: TenantIpSubnet}
+                      ip_netmask: {get_param: TenantIpSubnet}
 
 outputs:
   OS::stack_id:

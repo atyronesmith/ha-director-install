@@ -53,7 +53,7 @@ parameter_defaults:
 
   # Customize bonding options, e.g. "mode=4 lacp_rate=1 updelay=1000 miimon=100"
   # LinuxBondInterfaceOptions: "mode=802.3ad" <== Don't use this use next one specifying details to make it faster
-  LinuxBondInterfaceOptions: "mode=1 lacp_rate=1 updelay=1000 miimon=100"
+  LinuxBondInterfaceOptions: "mode=4 lacp_rate=1 updelay=1000 miimon=100"
   BondInterfaceOvsOptions: "bond_mode=active-backup lacp=active"
 
   # Set to 9000 for Jumbo frames

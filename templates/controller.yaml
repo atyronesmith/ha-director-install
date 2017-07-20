@@ -125,7 +125,7 @@ resources:
                 -
                   type: linux_bond
                   name: bond1
-                  ovs_options: {get_param: LinuxBondInterfaceOptions}
+                  bonding_options: {get_param: LinuxBondInterfaceOptions}
                   members:
                     -
                       type: interface

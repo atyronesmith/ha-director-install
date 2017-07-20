@@ -125,7 +125,7 @@ resources:
                 -
                   type: linux_bond
                   name: bond1
-                  ovs_options: {get_param: LinuxBondInterfaceOptions}
+                  bonding_options: {get_param: LinuxBondInterfaceOptions}
                   members:
                     -
                       type: interface
@@ -133,13 +133,6 @@ resources:
                     -
                       type: interface
                       name: ens1f1
-                -
-                  type: vlan
-                  device: bond1
-                  vlan_id: {get_param: InternalApiNetworkVlanID}
-                  addresses:
-                    -
-                      ip_netmask: {get_param: InternalApiIpSubnet}
                 -
                   type: vlan
                   device: bond1

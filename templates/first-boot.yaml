@@ -15,7 +15,41 @@ resources:
     type: OS::Heat::MultipartMime
     properties:
       parts:
+      - config: {get_resource: provision_wait}
       - config: {get_resource: wipe_disks}
+
+  provision_wait:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      config: |
+        #!/bin/bash
+        # Sometimes, the IP of the provisioning network is not acquired at the time of
+        # cloud-init, which will fail the metadata query, looping for 10seconds to ensure
+        # the network connectivity is ready.
+        i=0
+        while [ $i -lt 5 ]; do
+          NETWORK=$(curl -m 10 http://169.254.169.254/openstack/latest/network_data.json)
+          if [ $? -eq 0 ]; then
+            # Rebooting without running os-net-config will have default ifcfg scripts which
+            # is boot the interfaces in alphanumberic order and if DHCPDISCOVER of an interface\
+            # fails, then the network.service gets failed and does not try others.
+            # Here we are identifying the provisioning network interface and keep the
+            # BOOTPROTO as dpch and for all other interfaces make it as none. So that
+            # network.service will invoke dhcp only on the provisioning network.
+            # We are identifying the provisioning network using the meta data of the node,
+            # which will provide the mac address of the provisioning network interface.
+            # NOTE: Only one provisioning network interface is supported with this script
+
+            MAC=$(echo $NETWORK | jq -r ".links[0].ethernet_mac_address")
+            IFACE=$(ip a | grep $MAC -B1 | awk 'NR==1{print $2;}' | cut -d ":" -f1)
+            find /etc/sysconfig/network-scripts/ -name 'ifcfg-*' ! -name 'ifcfg-'$IFACE -type f -exec sed 's/^BOOTPROTO=.*/BOOTPROTO=none/g' -i {} +
+
+            reboot
+            break
+          fi
+          sleep 2
+          i=`expr $i + 1`
+        done
 
   wipe_disks:
     type: OS::Heat::SoftwareConfig
