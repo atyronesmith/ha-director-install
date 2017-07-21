@@ -26,6 +26,7 @@ resources:
         # Sometimes, the IP of the provisioning network is not acquired at the time of
         # cloud-init, which will fail the metadata query, looping for 10seconds to ensure
         # the network connectivity is ready.
+        touch /var/log/config_dd
         i=0
         while [ $i -lt 5 ]; do
           NETWORK=$(curl -m 10 http://169.254.169.254/openstack/latest/network_data.json)
@@ -56,6 +57,7 @@ resources:
     properties:
       config: |
         #!/bin/bash
+        touch /var/log/wipe_disks
         if [[ `hostname` = *"ceph"* ]]
         then
           echo "Number of disks detected: $(lsblk -no NAME,TYPE,MOUNTPOINT | grep "disk" | awk '{print $1}' | wc -l)"
