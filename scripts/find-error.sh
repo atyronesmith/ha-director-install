@@ -1,8 +1,8 @@
 #!/bin/sh
-export SWIFT_PASSWORD=`sudo crudini --get /etc/ironic-inspector/inspector.conf swift password`
-if [ ! -d swift-data ]; then
-  mkdir swift-data;
-fi
+
+tac /var/log/nova/nova-conductor.log | grep 'The hints';
+if [ $? == 0 ]; then
+   echo "
 
 for node in $(ironic node-list | grep -v UUID| awk '{print $2}'); 
     do 
