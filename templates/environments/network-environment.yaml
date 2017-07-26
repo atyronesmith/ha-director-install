@@ -8,7 +8,7 @@ resource_registry:
   # Ceph storage nodes configs.
   OS::TripleO::CephStorage::Net::SoftwareConfig: ../ceph-storage.yaml
 
-  OS::TripleO::NodeUserData: ../first-boot.yaml
+#  OS::TripleO::NodeUserData: ../first-boot.yaml
   OS::TripleO::NodeExtraConfigPost: ../post-install.yaml
 
 parameter_defaults:
