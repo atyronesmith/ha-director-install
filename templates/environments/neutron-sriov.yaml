@@ -1,0 +1,24 @@
+## A Heat environment that can be used to deploy SR-IOV
+resource_registry:
+  OS::TripleO::Services::NeutronSriovAgent: ../puppet/services/neutron-sriov-agent.yaml
+
+parameter_defaults:
+  #NeutronMechanismDrivers: ['openvswitch','sriovnicswitch']
+
+  # Add PciPassthroughFilter to the scheduler default filters
+  NovaSchedulerDefaultFilters: ['RetryFilter','AvailabilityZoneFilter','RamFilter','ComputeFilter','ComputeCapabilitiesFilter','ImagePropertiesFilter','ServerGroupAntiAffinityFilter','ServerGroupAffinityFilter','PciPassthroughFilter']
+  NovaSchedulerAvailableFilters: ["nova.scheduler.filters.all_filters","nova.scheduler.filters.pci_passthrough_filter.PciPassthroughFilter"]
+
+  # Provide the vendorid:productid of the VFs
+  NeutronSupportedPCIVendorDevs: ['8086:1584']
+
+  NeutronPhysicalDevMappings: "physnet_sriov1:ens1f2,physnet_sriov2:ens1f3"
+
+  # Number of VFs that needs to be configured for a physical interface
+  NeutronSriovNumVFs: "ens1f2:5,ens1f3:5"
+
+  NovaPCIPassthrough:
+    - devname: "ens1f2"
+      physical_network: "physnet_sriov1"
+    - devname: "ens1f3"
+      physical_network: "physnet_sriov2"
