@@ -67,7 +67,7 @@ parameter_defaults:
   # Number of nodes to deploy.
   ControllerCount: 1
   ComputeCount: 1
-  CephStorageCount: 1
+  CephStorageCount: 0
 
   ##################################
   # Common performance paramenters
