@@ -118,7 +118,7 @@ resources:
 
             -
               type: ovs_bridge
-              name: br-all
+              name: br-ex
               use_dhcp: false
 
               members:

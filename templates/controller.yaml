@@ -118,7 +118,7 @@ resources:
 
             -
               type: ovs_bridge
-              name: br-all
+              name: {get_input: bridge_name}
               use_dhcp: false
 
               members:
@@ -165,6 +165,13 @@ resources:
                     -
                       default: true
                       next_hop: {get_param: ExternalInterfaceDefaultRoute}
+                -
+                  type: vlan
+                  device: bond1
+                  vlan_id: {get_param: TenantNetworkVlanID}
+                  addresses:
+                    -
+                      ip_netmask: {get_param: TenantIpSubnet}
 
 outputs:
   OS::stack_id:
