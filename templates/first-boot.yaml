@@ -70,6 +70,11 @@ resources:
               sed 's/^\(GRUB_CMDLINE_LINUX=".*\)"/\1 $KERNEL_ARGS"/g' -i /etc/default/grub ;
               grub2-mkconfig -o /etc/grub2.cfg
 
+              # for the XL710, need to disable the i40evf driver and only use the i40e driver.
+              # The i40evf driver will take ownership of a VF as soon as it's created not allowing
+              # the VM access.  Go Intel.
+              echo "blacklist i40evf" > /etc/modprobe.d/i40efv-blacklist.conf
+
               # Sometimes, the IP of the provisioning network is not acquired at the time of
               # cloud-init, which will fail the metadata query, looping for 10seconds to ensure
               # the network connectivity is ready.
