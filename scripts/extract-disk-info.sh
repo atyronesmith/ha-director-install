@@ -2,6 +2,12 @@
 root_disk=$1
 swift_data_dir="swift-data"
 
+if [ -z "$1" ]
+  then
+    echo "Usage: $0 drive    i.e.  $0 sda or $0 sdc"
+    exit 1
+fi
+
 echo "Searching for..." ${root_disk}
 
 for node in $(ironic node-list | awk '!/UUID/ {print $2}'); 
