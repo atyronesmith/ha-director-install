@@ -8,7 +8,7 @@ resource_registry:
   # Ceph storage nodes configs.
   OS::TripleO::CephStorage::Net::SoftwareConfig: ../ceph-storage.yaml
 
-#  OS::TripleO::NodeUserData: ../first-boot.yaml
+  OS::TripleO::NodeUserData: ../firstboot/first-boot.yaml
   OS::TripleO::NodeExtraConfigPost: ../post-install.yaml
 
 parameter_defaults:
@@ -70,19 +70,50 @@ parameter_defaults:
   CephStorageCount: 1
 
   ##################################
-  # Common performance paramenters
+  # Common paramenters
   ##################################
-
-  #ComputeKernelArgs: "iommu=pt intel_iommu=on default_hugepagesz=1GB hugepagesz=1G hugepages=12 isolcpus=12-23"
-
-  # Add a list or range of physical CPU cores to be reserved for virtual machine processes
-  #NovaVcpuPinSet: ['16-23']
  
   # Set the tunnel type for tenant network (for example, vxlan or gre). To disable the tunnel type parameter, set the value to ""
-  NeutronTunnelTypes: "vxlan"
+  NeutronTunnelTypes: ""
  
   # Set the tenant network type for OpenStack Networking. The options available are vlan or vxlan:
-  NeutronNetworkType: 'vxlan,vlan'
+  NeutronNetworkType: 'vlan'
 
-  NeutronNetworkVLANRanges: "datacentre:1000:2000"
+  NeutronNetworkVLANRanges: "datacentre:1000:2000,dpdk:2001:3000"
 
+  NeutronBridgeMappings: 'datacentre:br-all,dpdk:br-ex'
+
+  ##################################
+  # DPDK parameters
+  ##################################
+
+  DpdkBondInterfaceOvsOptions: "bond_mode=balance-tcp lacp=active"
+
+  ComputeKernelArgs: "iommu=pt intel_iommu=on default_hugepagesz=1GB hugepagesz=1G hugepages=12 isolcpus=0-11"
+
+  # List of cores to be used for DPDK Poll Mode Driver
+  NeutronDpdkCoreList: "'0,1,2,3'"
+
+  # NeutronDpdkSocketMemory
+  NeutronDpdkSocketMemory: "'2048,2048'"
+
+  NeutronDpdkDriverType: "vfio-pci"
+
+  NeutronDpdkMemoryChannels: "4"
+
+  NeutronDatapathType: "netdev"
+
+  NeutronVhostuserSocketDir: "/var/run/openvswitch"
+
+  NovaReservedHostMemory: "4096"
+
+  # Add a list or range of physical CPU cores to be reserved for virtual machine processes
+  NovaVcpuPinSet: ['4-11']
+
+  NovaSchedulerDefaultFilters: "RamFilter,ComputeFilter,AvailabilityZoneFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,PciPassthroughFilter,NUMATopologyFilter"
+
+  # Set a list or range of physical CPU cores that should be excluded from tuning:
+  HostCpusList: "'12,13,14,15,16,17,18,19,20,21,22,23,36,37,38,39,40,41,42,43,44,45,46,47'"  
+
+  # HostIsolatedCoreList = NeutronDpdkCoreList(0-3) + NovaVcpuPinSet(4-11)
+  HostIsolatedCoreList: "0-11"
