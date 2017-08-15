@@ -111,3 +111,9 @@ parameter_defaults:
   NovaSchedulerAvailableFilters: ["nova.scheduler.filters.all_filters","nova.scheduler.filters.pci_passthrough_filter.PciPassthroughFilter"]
   
   ComputeKernelArgs: "pci=realloc intel_iommu=on default_hugepagesz=1GB hugepagesz=1G hugepages=12 rdblacklist=i40evf iommu=pt net.ifnames=0 biosdevname=0"
+
+  ##################################
+  # ODL paramenters
+  ##################################
+  
+  OpenDaylightProviderMappings: 'odl:br-odl'
