@@ -181,7 +181,7 @@ resources:
 
             -
               type: ovs_bridge
-              name: br-tenant
+              name: br-sriov
               use_dhcp: false
 
               members:
@@ -203,6 +203,24 @@ resources:
                   addresses:
                     -
                       ip_netmask: {get_param: TenantIpSubnet}
+                      
+            -
+              type: ovs_bridge
+              name: br-odl
+              use_dhcp: false
+
+              members:
+                -
+                  type: linux_bond
+                  name: bond3
+                  bonding_options: {get_param: LinuxBondInterfaceOptions}
+                  members:
+                    -
+                      type: interface
+                      name: ens2f1
+                    -
+                      type: interface
+                      name: ens2f3
 
 outputs:
   OS::stack_id:
