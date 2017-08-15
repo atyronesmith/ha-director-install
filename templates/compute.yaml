@@ -126,16 +126,6 @@ resources:
               use_dhcp: false
               defroute: false
 
-            - type: interface
-              name: ens2f1
-              use_dhcp: false
-              defroute: false
-
-            - type: interface
-              name: ens2f3
-              use_dhcp: false
-              defroute: false
-
             -
               type: ovs_bridge
               name: {get_input: bridge_name}
