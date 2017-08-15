@@ -118,7 +118,7 @@ resources:
 
             -
               type: ovs_bridge
-              name: {get_input: bridge_name}
+              name: br-isolated
               use_dhcp: false
 
               members:
