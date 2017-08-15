@@ -79,10 +79,10 @@ parameter_defaults:
   #NovaVcpuPinSet: ['16-23']
  
   # Set the tunnel type for tenant network (for example, vxlan or gre). To disable the tunnel type parameter, set the value to ""
-  NeutronTunnelTypes: "vxlan"
+  NeutronTunnelTypes: ""
  
   # Set the tenant network type for OpenStack Networking. The options available are vlan or vxlan:
-  NeutronNetworkType: 'vxlan,vlan'
+  NeutronNetworkType: 'vlan'
 
   NeutronNetworkVLANRanges: "datacentre:1000:2000"
 
