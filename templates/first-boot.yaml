@@ -44,28 +44,6 @@ resources:
               # Disable selinux line added, as we still didn't verified that DPDK feature works with selinux enabled.
               sed 's/SELINUX=enforcing/SELINUX=permissive/g' -i /etc/selinux/config
 
-              # OVS specific change for enabling DPDK
-              OVS_SERVICE_PATH="/usr/lib/systemd/system/openvswitch-nonetwork.service"
-              grep -q "RuntimeDirectoryMode=.*" $OVS_SERVICE_PATH
-              if [ "$?" -eq 0 ]; then
-                sed -i 's/RuntimeDirectoryMode=.*/RuntimeDirectoryMode=0775/' $OVS_SERVICE_PATH
-              else
-                echo "RuntimeDirectoryMode=0775" >> $OVS_SERVICE_PATH
-              fi
-              grep -Fxq "Group=qemu" $OVS_SERVICE_PATH
-              if [ ! "$?" -eq 0 ]; then
-                echo "Group=qemu" >> $OVS_SERVICE_PATH
-              fi
-              grep -Fxq "UMask=0002" $OVS_SERVICE_PATH
-              if [ ! "$?" -eq 0 ]; then
-                echo "UMask=0002" >> $OVS_SERVICE_PATH
-              fi
-              OVS_CTL_PATH='/usr/share/openvswitch/scripts/ovs-ctl'
-              grep -q "umask 0002 \&\& start_daemon \"\$OVS_VSWITCHD_PRIORITY\"" $OVS_CTL_PATH
-              if [ ! "$?" -eq 0 ]; then
-                sed -i 's/start_daemon \"\$OVS_VSWITCHD_PRIORITY.*/umask 0002 \&\& start_daemon \"$OVS_VSWITCHD_PRIORITY\" \"$OVS_VSWITCHD_WRAPPER\" \"$@\"/' $OVS_CTL_PATH
-              fi
-
               # Update the KERNEL ARGS to the grub 
               sed 's/^\(GRUB_CMDLINE_LINUX=".*\)"/\1 $KERNEL_ARGS"/g' -i /etc/default/grub ;
               grub2-mkconfig -o /etc/grub2.cfg
