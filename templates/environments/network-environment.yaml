@@ -8,7 +8,7 @@ resource_registry:
   # Ceph storage nodes configs.
   OS::TripleO::CephStorage::Net::SoftwareConfig: ../ceph-storage.yaml
 
-#  OS::TripleO::NodeUserData: ../first-boot.yaml
+  OS::TripleO::NodeUserData: ../firstboot/first-boot.yaml
   OS::TripleO::NodeExtraConfigPost: ../post-install.yaml
 
 parameter_defaults:
@@ -26,10 +26,10 @@ parameter_defaults:
   TenantNetCidr: 172.16.0.0/24
   ExternalNetCidr: 10.19.111.0/24
   # Customize the VLAN IDs to match the local environment
-  InternalApiNetworkVlanID: 1020
-  StorageNetworkVlanID: 1030
-  StorageMgmtNetworkVlanID: 1040
-  TenantNetworkVlanID: 1050
+  InternalApiNetworkVlanID: 1021
+  StorageNetworkVlanID: 1031
+  StorageMgmtNetworkVlanID: 1041
+  TenantNetworkVlanID: 1051
   ExternalNetworkVlanID: 111
   # Customize the IP ranges on each network to use for static IPs and VIPs
   InternalApiAllocationPools: [{'start': '172.17.0.10', 'end': '172.17.0.200'}]
@@ -37,8 +37,8 @@ parameter_defaults:
   StorageMgmtAllocationPools: [{'start': '172.19.0.10', 'end': '172.19.0.200'}]
   TenantAllocationPools: [{'start': '172.16.0.10', 'end': '172.16.0.200'}]
   # Leave room if the external network is also used for floating IPs
-  ExternalAllocationPools: [{'start': '10.19.111.23', 'end': '10.19.111.50'}]
-  ExternalNetworkVip: 10.19.111.51
+  ExternalAllocationPools: [{'start': '10.19.111.52', 'end': '10.19.111.75'}]
+  ExternalNetworkVip: 10.19.111.76
 
   # Specify the NTP server for nodes to use
   NtpServer: 10.5.26.10
@@ -67,7 +67,7 @@ parameter_defaults:
   # Number of nodes to deploy.
   ControllerCount: 1
   ComputeCount: 1
-  CephStorageCount: 1
+  CephStorageCount: 0
 
   ##################################
   # Common performance paramenters
