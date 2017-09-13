@@ -14,8 +14,8 @@ parameter_defaults:
 
   NeutronPhysicalDevMappings: "physnet_sriov1:ens1f2,physnet_sriov2:ens1f3"
 
-#  NeutronBridgeMappings: 'datacentre:br-ex,physnet_sriov1:br-isolated1,physnet_sriov2:br-isolated2'
-  NeutronBridgeMappings: 'datacentre:br-ex'
+  NeutronBridgeMappings: 'datacentre:br-ex,physnet_sriov1:br-isolated1,physnet_sriov2:br-isolated2'
+#  NeutronBridgeMappings: 'datacentre:br-ex'
 
   NeutronNetworkVLANRanges: "datacentre:1000:1999,physnet_sriov1:2000:2099,physnet_sriov2:2100:2199"
 
