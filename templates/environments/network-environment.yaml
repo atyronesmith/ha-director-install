@@ -117,3 +117,5 @@ parameter_defaults:
   ##################################
   
   OpenDaylightProviderMappings: 'odl:br-odl'
+
+  NeutronPluginExtensions: 'port_security'
