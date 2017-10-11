@@ -16,7 +16,7 @@ infrared virsh -v \
     --host-key ~/.ssh/id_rsa \
     --topology-network 3_bridges_1_net
 
-    To clean, just add "--cleanup yes"
+    To clean (and only clean), just add "--cleanup yes"
 
 Install Undercloud:
 
