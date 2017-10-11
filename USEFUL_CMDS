@@ -18,7 +18,7 @@ infrared tripleo-undercloud -v \
  --version=12 \
  --build=latest \
  --images-task=rpm \
- --config-file undercloud.conf
+ --config-file ~/ha-director-install/undercloud.conf
 
 Introspect/Tag Overcloud:
 
