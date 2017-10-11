@@ -8,7 +8,7 @@ infrared virsh -v \
     -e override.undercloud.cpu=6 \
     --host-address 10.19.110.13 \
     --host-key ~/.ssh/id_rsa \
-    --topology-network ~/ha-director/install/3_bridges_1_net
+    --topology-network ~/ha-director-install/3_bridges_1_net
 
     To clean, just add "--cleanup yes"
 
