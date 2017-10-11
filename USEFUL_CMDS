@@ -1,3 +1,9 @@
+First copy topologies to Infrared:
+
+cp hybrid_undercloud.yml ~/infrared/plugins/virsh/vars/topology/nodes/.
+cp hybrid_controller.yml ~/infrared/plugins/virsh/vars/topology/nodes/.
+cp 3_bridge_1_net.yml ~/infrared/plugins/virsh/vars/topology/network/.
+
 Provision:
 
 infrared virsh -v \
@@ -8,7 +14,7 @@ infrared virsh -v \
     -e override.undercloud.cpu=6 \
     --host-address 10.19.110.13 \
     --host-key ~/.ssh/id_rsa \
-    --topology-network ~/ha-director-install/3_bridges_1_net
+    --topology-network 3_bridges_1_net
 
     To clean, just add "--cleanup yes"
 
