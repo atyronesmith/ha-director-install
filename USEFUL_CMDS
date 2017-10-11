@@ -27,7 +27,7 @@ ir tripleo-overcloud -vv --version 12 \
     --overcloud-script ~/ha-director-install/overcloud_deploy.sh \
      --build latest --introspect=yes --tagging=yes --deploy=no \
      -e provison_virsh_network_name=br-ctlplane --hybrid \
-     ~/infrared/compute.json
+     ~/ha-director-install/compute.json
 
 Deploy Overcloud:
 
@@ -36,4 +36,4 @@ ir tripleo-overcloud -vv --version 12 \
     --overcloud-script ~/ha-director-install/overcloud_deploy.sh \ 
      --build latest --introspect=no --tagging=no --deploy=yes \     
      -e provison_virsh_network_name=br-ctlplane --hybrid \
-     ~/infrared/compute.json
+     ~/ha-director-install/compute.json
