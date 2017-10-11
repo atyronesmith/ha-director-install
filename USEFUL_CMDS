@@ -6,7 +6,7 @@ infrared virsh -v \
     -e override.undercloud.memory=28672 \
     -e override.controller.cpu=6 \
     -e override.undercloud.cpu=6 \
-    --host-address 10.19.110.15 \
+    --host-address 10.19.110.13 \
     --host-key ~/.ssh/id_rsa \
     --topology-network 3_bridges_1_net
 
@@ -15,25 +15,25 @@ infrared virsh -v \
 Install Undercloud:
 
 infrared tripleo-undercloud -v \
- --version=11 \
- --build=Z3 \
+ --version=12 \
+ --build=latest \
  --images-task=rpm \
  --config-file undercloud.conf
 
 Introspect/Tag Overcloud:
 
-ir tripleo-overcloud -vv --version 11 \
+ir tripleo-overcloud -vv --version 12 \
     --deployment-files  ~/ha-director-install/templates \
     --overcloud-script ~/ha-director-install/overcloud_deploy.sh \
-     --build Z3 --introspect=yes --tagging=yes --deploy=no \
+     --build latest --introspect=yes --tagging=yes --deploy=no \
      -e provison_virsh_network_name=br-ctlplane --hybrid \
      ~/infrared/compute.json
 
 Deploy Overcloud:
 
-ir tripleo-overcloud -vv --version 11 \    
+ir tripleo-overcloud -vv --version 12 \    
     --deployment-files  ~/ha-director-install/templates \   
     --overcloud-script ~/ha-director-install/overcloud_deploy.sh \ 
-     --build Z3 --introspect=no --tagging=no --deploy=yes \     
+     --build latest --introspect=no --tagging=no --deploy=yes \     
      -e provison_virsh_network_name=br-ctlplane --hybrid \
      ~/infrared/compute.json
