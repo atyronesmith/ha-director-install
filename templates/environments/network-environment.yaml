@@ -1,88 +1,136 @@
-#This file is an example of an environment file for defining the isolated
-#networks and related parameters.
 resource_registry:
-  # Network Interface templates to use (these files must exist)
-  OS::TripleO::Compute::Net::SoftwareConfig: ../compute.yaml
-  OS::TripleO::Controller::Net::SoftwareConfig: ../controller.yaml
+  # Specify the relative/absolute path to the config files you want to use for override the default.
+  OS::TripleO::Compute::Net::SoftwareConfig: nic-configs/compute.yaml
+  OS::TripleO::Controller::Net::SoftwareConfig: nic-configs/controller.yaml
+  # First boot and Kernel Args
+  OS::TripleO::NodeUserData: first-boot.yaml
 
-  # Ceph storage nodes configs.
-  OS::TripleO::CephStorage::Net::SoftwareConfig: ../ceph-storage.yaml
+  # Network isolation configuration
+  # Service section
+  OS::TripleO::Network::External: /usr/share/openstack-tripleo-heat-templates/network/external.yaml
+  OS::TripleO::Network::InternalApi: /usr/share/openstack-tripleo-heat-templates/network/internal_api.yaml
+  OS::TripleO::Network::Tenant: /usr/share/openstack-tripleo-heat-templates/network/tenant.yaml
+  OS::TripleO::Network::Management: OS::Heat::None
+  OS::TripleO::Network::StorageMgmt: OS::Heat::None
+  OS::TripleO::Network::Storage: OS::Heat::None
 
-#  OS::TripleO::NodeUserData: ../first-boot.yaml
-  OS::TripleO::NodeExtraConfigPost: ../post-install.yaml
+  # Port assignments for the VIPs
+  OS::TripleO::Network::Ports::ExternalVipPort: /usr/share/openstack-tripleo-heat-templates/network/ports/external.yaml
+  OS::TripleO::Network::Ports::InternalApiVipPort: /usr/share/openstack-tripleo-heat-templates/network/ports/internal_api.yaml
+  OS::TripleO::Network::Ports::RedisVipPort: /usr/share/openstack-tripleo-heat-templates/network/ports/vip.yaml
+  OS::TripleO::Network::Ports::StorageVipPort: /usr/share/openstack-tripleo-heat-templates/network/ports/noop.yaml
+  OS::TripleO::Network::Ports::StorageMgmtVipPort: /usr/share/openstack-tripleo-heat-templates/network/ports/noop.yaml
+
+  # Port assignments for the controller role
+  OS::TripleO::Controller::Ports::ExternalPort: /usr/share/openstack-tripleo-heat-templates/network/ports/external.yaml
+  OS::TripleO::Controller::Ports::InternalApiPort: /usr/share/openstack-tripleo-heat-templates/network/ports/internal_api.yaml
+  OS::TripleO::Controller::Ports::TenantPort: /usr/share/openstack-tripleo-heat-templates/network/ports/tenant.yaml
+  OS::TripleO::Controller::Ports::ManagementPort: /usr/share/openstack-tripleo-heat-templates/network/ports/noop.yaml
+  OS::TripleO::Controller::Ports::StoragePort: /usr/share/openstack-tripleo-heat-templates/network/ports/noop.yaml
+  OS::TripleO::Controller::Ports::StorageMgmtPort: /usr/share/openstack-tripleo-heat-templates/network/ports/noop.yaml
+
+  # Port assignments for the compute role
+  OS::TripleO::Compute::Ports::ExternalPort: /usr/share/openstack-tripleo-heat-templates/network/ports/external.yaml
+  OS::TripleO::Compute::Ports::InternalApiPort: /usr/share/openstack-tripleo-heat-templates/network/ports/internal_api.yaml
+  OS::TripleO::Compute::Ports::TenantPort: /usr/share/openstack-tripleo-heat-templates/network/ports/tenant.yaml
+  OS::TripleO::Compute::Ports::ManagementPort: /usr/share/openstack-tripleo-heat-templates/network/ports/noop.yaml
+  OS::TripleO::Compute::Ports::StoragePort: /usr/share/openstack-tripleo-heat-templates/network/ports/noop.yaml
+  OS::TripleO::Compute::Ports::StorageMgmtPort: /usr/share/openstack-tripleo-heat-templates/network/ports/noop.yaml
+
+  # Port assignments for service virtual IPs for the controller role
+  OS::TripleO::Controller::Ports::RedisVipPort: /usr/share/openstack-tripleo-heat-templates/network/ports/vip.yaml
 
 parameter_defaults:
-  # This section is where deployment-specific configuration is done
+  # Customize all these values to match the local environment
+  InternalApiNetCidr: 10.10.112.0/24
+  TenantNetCidr: 10.10.113.0/24
+  ExternalNetCidr: 10.35.141.64/28
   # CIDR subnet mask length for provisioning network
   ControlPlaneSubnetCidr: '24'
+  InternalApiAllocationPools: [{'start': '10.10.112.100', 'end': '10.10.112.200'}]
+  TenantAllocationPools: [{'start': '10.10.113.100', 'end': '10.10.113.200'}]
+  # Use an External allocation pool which will leave room for floating IPs
+  ExternalAllocationPools: [{'start': '10.35.141.67', 'end': '10.35.141.70'}]
+  # Set to the router gateway on the external network
+  ExternalInterfaceDefaultRoute: 10.35.141.78
   # Gateway router for the provisioning network (or Undercloud IP)
-  ControlPlaneDefaultRoute: 192.0.2.4
-  ControlPlaneIp: 192.0.2.4
-  EC2MetadataIp: 192.0.2.4  # Generally the IP of the Undercloud
-  # Customize the IP subnets to match the local environment
-  InternalApiNetCidr: 172.17.0.0/24
-  StorageNetCidr: 172.18.0.0/24
-  StorageMgmtNetCidr: 172.19.0.0/24
-  TenantNetCidr: 172.16.0.0/24
-  ExternalNetCidr: 10.19.111.0/24
-  # Customize the VLAN IDs to match the local environment
-  InternalApiNetworkVlanID: 1020
-  StorageNetworkVlanID: 1030
-  StorageMgmtNetworkVlanID: 1040
-  TenantNetworkVlanID: 1050
-  ExternalNetworkVlanID: 111
-  # Customize the IP ranges on each network to use for static IPs and VIPs
-  InternalApiAllocationPools: [{'start': '172.17.0.10', 'end': '172.17.0.200'}]
-  StorageAllocationPools: [{'start': '172.18.0.10', 'end': '172.18.0.200'}]
-  StorageMgmtAllocationPools: [{'start': '172.19.0.10', 'end': '172.19.0.200'}]
-  TenantAllocationPools: [{'start': '172.16.0.10', 'end': '172.16.0.200'}]
-  # Leave room if the external network is also used for floating IPs
-  ExternalAllocationPools: [{'start': '10.19.111.23', 'end': '10.19.111.50'}]
-  ExternalNetworkVip: 10.19.111.51
-
-  # Specify the NTP server for nodes to use
-  NtpServer: 10.5.26.10
-
-  # Gateway router for the external network
-  ExternalInterfaceDefaultRoute: 10.19.111.254
-
-  DnsServers: ["10.16.36.29","10.11.5.19"]
-
-  # Set to empty string to enable multiple external networks or VLANs
+  ControlPlaneDefaultRoute: 192.0.90.1
+  # Generally the IP of the Undercloud
+  EC2MetadataIp: 192.0.90.1
+  InternalApiNetworkVlanID: 512
+  TenantNetworkVlanID: 513
+  ExternalNetworkVlanID: 400
+  # Define the DNS servers (maximum 2) for the overcloud nodes
+  DnsServers: ["10.35.28.28","8.8.8.8"]
+  # May set to br-ex if using floating IPs only on native VLAN on bridge br-ex
   NeutronExternalNetworkBridge: "''"
-
-  # Customize bonding options, e.g. "mode=4 lacp_rate=1 updelay=1000 miimon=100"
-  # LinuxBondInterfaceOptions: "mode=802.3ad" <== Don't use this use next one specifying details to make it faster
-  LinuxBondInterfaceOptions: "mode=4 lacp_rate=1 updelay=1000 miimon=100"
-  BondInterfaceOvsOptions: "bond_mode=active-backup lacp=active"
-
-  # Set to 9000 for Jumbo frames
-  #NeutronGlobalPhysnetMtu: 9000 
-
-  # Flavor of controller and compute nodes:
-  OvercloudControlFlavor: controller
+  # The tunnel type for the tenant network (vxlan or gre). Set to '' to disable tunneling.
+  NeutronTunnelTypes: ''
+  # The tenant network type for Neutron (vlan or vxlan).
+  NeutronNetworkType: 'vlan'
+  # The OVS logical->physical bridge mappings to use.
+  NeutronBridgeMappings: 'tenant:br-ex,sriov1:br-sriov1,sriov2:br-sriov2'
+  # The Neutron ML2 and OpenVSwitch vlan mapping range to support.
+  NeutronNetworkVLANRanges: 'tenant:400:400,sriov1:422:422,sriov2:424:424'
+  # Nova flavor to use.
+  OvercloudControlFlavor: control
   OvercloudComputeFlavor: compute
-  #OvercloudCephStorageFlavor: ceph-storage
-  
-  # Number of nodes to deploy.
+  #Number of nodes to deploy.
   ControllerCount: 1
   ComputeCount: 1
-  CephStorageCount: 0
 
-  ##################################
-  # Common performance paramenters
-  ##################################
+  # Sets overcloud nodes custom names
+  # http://docs.openstack.org/developer/tripleo-docs/advanced_deployment/node_placement.html#custom-hostnames
+  ControllerHostnameFormat: 'controller-%index%'
+  ComputeHostnameFormat: 'compute-%index%'
+  CephStorageHostnameFormat: 'ceph-%index%'
+  ObjectStorageHostnameFormat: 'swift-%index%'
 
-  #ComputeKernelArgs: "iommu=pt intel_iommu=on default_hugepagesz=1GB hugepagesz=1G hugepages=12 isolcpus=12-23"
+  #######################
+  # SRIOV configuration #
+  #######################
+  # The mechanism drivers for the Neutron tenant network.
+  NeutronMechanismDrivers: "openvswitch,sriovnicswitch"
+  # List of PCI Passthrough whitelist parameters.
+  # Use ONE of the following examples.
+  # Example 1:
+  # NovaPCIPassthrough:
+  #   - vendor_id: "8086"
+  #     product_id: "154c"
+  #     address: "0000:05:00.0" - (optional)
+  #     physical_network: "datacentre"
+  #
+  # Example 2:
+  # NovaPCIPassthrough:
+  #   - devname: "p6p1"
+  #     physical_network: "tenant"
+  NovaPCIPassthrough:
+    - devname: "ens2f0"
+      physical_network: "sriov1"
+    - devname: "ens3f0"
+      physical_network: "sriov2"
+  # List of supported pci vendor devices in the format VendorID:ProductID.
+  NeutronSupportedPCIVendorDevs: ['8086:154d', '8086:10ed']
+  # List of <physical_network>:<physical device>
+  # All physical networks listed in network_vlan_ranges on the server
+  # should have mappings to appropriate interfaces on each agent.
+  NeutronPhysicalDevMappings: "sriov1:ens2f0,sriov2:ens3f0"
+  # Provide the list of VFs to be reserved for each SR-IOV interface.
+  # Format "<interface_name1>:<numvfs1>","<interface_name2>:<numvfs2>"
+  # Example "eth1:4096","eth2:128"
+  NeutronSriovNumVFs: "ens2f0:5,ens3f0:5"
 
-  # Add a list or range of physical CPU cores to be reserved for virtual machine processes
-  #NovaVcpuPinSet: ['16-23']
- 
-  # Set the tunnel type for tenant network (for example, vxlan or gre). To disable the tunnel type parameter, set the value to ""
-  NeutronTunnelTypes: "vxlan"
- 
-  # Set the tenant network type for OpenStack Networking. The options available are vlan or vxlan:
-  NeutronNetworkType: 'vxlan,vlan'
+  # List of scheduler available filters
+  NovaSchedulerAvailableFilters: ["nova.scheduler.filters.all_filters","nova.scheduler.filters.pci_passthrough_filter.PciPassthroughFilter"]
+  # An array of filters used by Nova to filter a node.These filters will be applied in the order they are listed,
+  # so place your most restrictive filters first to make the filtering process more efficient.
+  NovaSchedulerDefaultFilters: ['AvailabilityZoneFilter','RamFilter','ComputeFilter','ComputeCapabilitiesFilter','ImagePropertiesFilter','ServerGroupAntiAffinityFilter','ServerGroupAffinityFilter','PciPassthroughFilter']
+  # Kernel arguments for Compute node
+  ComputeKernelArgs: "default_hugepagesz=1GB hugepagesz=1G hugepages=12 intel_iommu=on iommu=pt"
 
-  NeutronNetworkVLANRanges: "datacentre:1000:2000"
-
+  # The given args will be appended to the tuned cpu-partitioning profile.
+  HostIsolatedCoreList: "1,2,3,4,5,16,17,18,19,20,21"
+  
+  HostCpusList: "6,7,22,23"
+         
+  NovaVcpuPinSet: "1,2,3,5,16,17,18,19,21,10,11,12,13,26,27,28,29"
