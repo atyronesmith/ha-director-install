@@ -32,13 +32,13 @@ parameter_defaults:
   TenantNetworkVlanID: 1050
   ExternalNetworkVlanID: 111
   # Customize the IP ranges on each network to use for static IPs and VIPs
-  InternalApiAllocationPools: [{'start': '172.17.0.10', 'end': '172.17.0.200'}]
-  StorageAllocationPools: [{'start': '172.18.0.10', 'end': '172.18.0.200'}]
-  StorageMgmtAllocationPools: [{'start': '172.19.0.10', 'end': '172.19.0.200'}]
-  TenantAllocationPools: [{'start': '172.16.0.10', 'end': '172.16.0.200'}]
+  InternalApiAllocationPools: [{'start': '172.17.0.100', 'end': '172.17.0.200'}]
+  StorageAllocationPools: [{'start': '172.18.0.100', 'end': '172.18.0.200'}]
+  StorageMgmtAllocationPools: [{'start': '172.19.0.100', 'end': '172.19.0.200'}]
+  TenantAllocationPools: [{'start': '172.16.0.100', 'end': '172.16.0.200'}]
   # Leave room if the external network is also used for floating IPs
-  ExternalAllocationPools: [{'start': '10.19.111.23', 'end': '10.19.111.50'}]
-  ExternalNetworkVip: 10.19.111.51
+  ExternalAllocationPools: [{'start': '10.19.111.100', 'end': '10.19.111.150'}]
+  ExternalNetworkVip: 10.19.111.151
 
   # Specify the NTP server for nodes to use
   NtpServer: 10.5.26.10
