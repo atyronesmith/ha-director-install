@@ -35,6 +35,13 @@ ir tripleo-overcloud -vv --version 12 \
      -e provison_virsh_network_name=br-ctlplane --hybrid \
      ~/ha-director-install/compute.json
 
+CONTAINER STUFF BEFORE DEPLOY (perform as stack on undercloud):
+
+openstack overcloud container image prepare   --namespace rhosp12   --tag 20171011.2 --prefix openstack --suffix docker   --pull-source docker-registry.engineering.redhat.com   --push-destination 192.0.2.1:8787   --images-file overcloud_containers.yaml
+openstack overcloud container image upload --config-file overcloud_containers.yaml -v
+openstack overcloud container image prepare   --namespace 192.0.2.1:8787/rhosp12   --tag 20171011.2   --prefix openstack   --suffix docker   --env-file ~/docker_registry.yaml
+echo "  DockerInsecureRegistryAddress: 192.0.2.1:8787" >>   ~/docker_registry.yaml
+
 Deploy Overcloud:
 
 ir tripleo-overcloud -vv --version 12 \    
