@@ -2,13 +2,14 @@
 #networks and related parameters.
 resource_registry:
   # Network Interface templates to use (these files must exist)
-  OS::TripleO::Compute::Net::SoftwareConfig: ../compute.yaml
+  #OS::TripleO::Compute::Net::SoftwareConfig: ../compute.yaml
+  OS::TripleO::ComputeOvsDpdk::Net::SoftwareConfig: ../computeovsdpdk.yaml
   OS::TripleO::Controller::Net::SoftwareConfig: ../controller.yaml
 
   # Ceph storage nodes configs.
-  OS::TripleO::CephStorage::Net::SoftwareConfig: ../ceph-storage.yaml
+  #OS::TripleO::CephStorage::Net::SoftwareConfig: ../ceph-storage.yaml
 
-#  OS::TripleO::NodeUserData: ../first-boot.yaml
+  #OS::TripleO::NodeUserData: ../firstboot/first-boot.yaml
   OS::TripleO::NodeExtraConfigPost: ../post-install.yaml
 
 parameter_defaults:
@@ -61,7 +62,7 @@ parameter_defaults:
 
   # Flavor of controller and compute nodes:
   OvercloudControlFlavor: controller
-  OvercloudComputeFlavor: compute
+  OvercloudComputeOvsDpdkFlavor: compute
   #OvercloudCephStorageFlavor: ceph-storage
   
   # Number of nodes to deploy.
@@ -73,16 +74,51 @@ parameter_defaults:
   # Common performance paramenters
   ##################################
 
-  #ComputeKernelArgs: "iommu=pt intel_iommu=on default_hugepagesz=1GB hugepagesz=1G hugepages=12 isolcpus=12-23"
-
-  # Add a list or range of physical CPU cores to be reserved for virtual machine processes
-  #NovaVcpuPinSet: ['16-23']
  
   # Set the tunnel type for tenant network (for example, vxlan or gre). To disable the tunnel type parameter, set the value to ""
-  NeutronTunnelTypes: "vxlan"
+  NeutronTunnelTypes: ""
  
   # Set the tenant network type for OpenStack Networking. The options available are vlan or vxlan:
-  NeutronNetworkType: 'vxlan,vlan'
+  NeutronNetworkType: 'vlan'
 
-  NeutronNetworkVLANRanges: "datacentre:1000:2000"
+  # HANDLED IN neutron-sriov.yaml
+  #NeutronNetworkVLANRanges: "datacentre:1000:2000"
+
+  ##################################
+  # DPDK parameters
+  ##################################
+
+  DpdkBondInterfaceOvsOptions: "bond_mode=balance-tcp lacp=active"
+
+  # HANDLED IN neutron-sriov.yaml
+  #ComputeKernelArgs: "iommu=pt intel_iommu=on default_hugepagesz=1GB hugepagesz=1G hugepages=12 isolcpus=0-11"
+
+  NeutronDpdkDriverType: "vfio-pci"
+
+  NeutronDatapathType: "netdev"
+
+  NeutronVhostuserSocketDir: "/var/run/openvswitch"
+
+  # HANDLED IN neutron-sriov.yaml
+  #NovaSchedulerDefaultFilters: "RamFilter,ComputeFilter,AvailabilityZoneFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,PciPassthroughFilter,NUMATopologyFilter"
+
+  # Set a list or range of physical CPU cores that should be excluded from tuning:
+  HostCpusList: "12,13,14,15,16,17,18,19,20,21,22,23,36,37,38,39,40,41,42,43,44,45,46,47"  
+
+  ComputeOvsDpdkParameters:
+    KernelArgs: pci=realloc intel_iommu=on default_hugepagesz=1GB hugepagesz=1G hugepages=12 rdblacklist=i40evf iommu=pt
+    TunedProfileName: "cpu-partitioning"
+    IsolCpusList: "0-11"
+
+
+  OvsDpdkSocketMemory: "1024,1024"
+  OvsDpdkMemoryChannels: "4"
+  NovaReservedHostMemory: 4096
+
+  OvsPmdCoreList: "0-3"
+  OvsDpdkCoreList: "0-3"
+  NovaVcpuPinSet: ['4-11']
+
+  NeutronEnableIsolatedMetadata: true
+  NeutronEnableForceMetadata: true
 
