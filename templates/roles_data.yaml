@@ -146,17 +146,24 @@
     - OS::TripleO::Services::Vpp
     - OS::TripleO::Services::Zaqar
 ###############################################################################
-# Role: ComputeOvsDpdk                                                        #
+# Role: ComputeOvsDpdkSriov                                                        #
 ###############################################################################
-- name: ComputeOvsDpdk
+- name: ComputeOvsDpdkSriov
   description: |
-    Compute OvS DPDK Role
+    Compute OvS DPDK + SRIOV Role
   CountDefault: 1
   networks:
     - InternalApi
     - Tenant
     - Storage
-  HostnameFormatDefault: 'computeovsdpdk-%index%'
+  HostnameFormatDefault: 'computeovsdpdksriov-%index%'
+  uses_deprecated_params: True
+  deprecated_param_image: 'NovaImage'
+  deprecated_param_extraconfig: 'NovaComputeExtraConfig'
+  deprecated_param_metadata: 'NovaComputeServerMetadata'
+  deprecated_param_scheduler_hints: 'NovaComputeSchedulerHints'
+  deprecated_param_ips: 'NovaComputeIPs'
+  deprecated_server_resource_name: 'NovaCompute'
   disable_upgrade_deployment: True
   ServicesDefault:
     - OS::TripleO::Services::AuditD
@@ -177,6 +184,10 @@
     - OS::TripleO::Services::MySQLClient
     - OS::TripleO::Services::NovaCompute
     - OS::TripleO::Services::NovaLibvirt
+    - OS::TripleO::Services::NovaMigrationTarget
+    - OS::TripleO::Services::NeutronLinuxbridgeAgent
+    - OS::TripleO::Services::NeutronSriovAgent
+    - OS::TripleO::Services::NeutronVppAgent
     - OS::TripleO::Services::Ntp
     - OS::TripleO::Services::ContainersLogrotateCrond
     - OS::TripleO::Services::OpenDaylightOvs
@@ -187,4 +198,7 @@
     - OS::TripleO::Services::Timezone
     - OS::TripleO::Services::TripleoFirewall
     - OS::TripleO::Services::TripleoPackages
+    - OS::TripleO::Services::Tuned
+    - OS::TripleO::Services::Vpp
+    - OS::TripleO::Services::OVNController
 

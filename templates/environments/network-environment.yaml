@@ -3,7 +3,7 @@
 resource_registry:
   # Network Interface templates to use (these files must exist)
   #OS::TripleO::Compute::Net::SoftwareConfig: ../compute.yaml
-  OS::TripleO::ComputeOvsDpdk::Net::SoftwareConfig: ../computeovsdpdk.yaml
+  OS::TripleO::ComputeOvsDpdkSriov::Net::SoftwareConfig: ../computeovsdpdksriov.yaml
   OS::TripleO::Controller::Net::SoftwareConfig: ../controller.yaml
 
   # Ceph storage nodes configs.
@@ -62,12 +62,12 @@ parameter_defaults:
 
   # Flavor of controller and compute nodes:
   OvercloudControlFlavor: controller
-  OvercloudComputeOvsDpdkFlavor: compute
+  OvercloudComputeOvsDpdkSriovFlavor: compute
   #OvercloudCephStorageFlavor: ceph-storage
   
   # Number of nodes to deploy.
   ControllerCount: 1
-  ComputeCount: 1
+  ComputeOvsDpdkSriovCount: 1
   CephStorageCount: 0
 
   ##################################
@@ -105,7 +105,7 @@ parameter_defaults:
   # Set a list or range of physical CPU cores that should be excluded from tuning:
   HostCpusList: "12,13,14,15,16,17,18,19,20,21,22,23,36,37,38,39,40,41,42,43,44,45,46,47"  
 
-  ComputeOvsDpdkParameters:
+  ComputeOvsDpdkSriovParameters:
     KernelArgs: pci=realloc intel_iommu=on default_hugepagesz=1GB hugepagesz=1G hugepages=12 rdblacklist=i40evf iommu=pt
     TunedProfileName: "cpu-partitioning"
     IsolCpusList: "0-11"
@@ -121,4 +121,4 @@ parameter_defaults:
 
   NeutronEnableIsolatedMetadata: true
   NeutronEnableForceMetadata: true
-
+  NeutronOVSFirewallDriver: openvswitch
