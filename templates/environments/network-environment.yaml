@@ -9,7 +9,7 @@ resource_registry:
   # Ceph storage nodes configs.
   #OS::TripleO::CephStorage::Net::SoftwareConfig: ../ceph-storage.yaml
 
-  #OS::TripleO::NodeUserData: ../firstboot/first-boot.yaml
+  OS::TripleO::NodeUserData: ../firstboot/first-boot.yaml
   OS::TripleO::NodeExtraConfigPost: ../post-install.yaml
 
 parameter_defaults:
@@ -27,10 +27,10 @@ parameter_defaults:
   TenantNetCidr: 172.16.0.0/24
   ExternalNetCidr: 10.19.111.0/24
   # Customize the VLAN IDs to match the local environment
-  InternalApiNetworkVlanID: 1020
-  StorageNetworkVlanID: 1030
-  StorageMgmtNetworkVlanID: 1040
-  TenantNetworkVlanID: 1050
+  InternalApiNetworkVlanID: 1021
+  StorageNetworkVlanID: 1031
+  StorageMgmtNetworkVlanID: 1041
+  TenantNetworkVlanID: 1051
   ExternalNetworkVlanID: 111
   # Customize the IP ranges on each network to use for static IPs and VIPs
   InternalApiAllocationPools: [{'start': '172.17.0.100', 'end': '172.17.0.200'}]
@@ -38,8 +38,8 @@ parameter_defaults:
   StorageMgmtAllocationPools: [{'start': '172.19.0.100', 'end': '172.19.0.200'}]
   TenantAllocationPools: [{'start': '172.16.0.100', 'end': '172.16.0.200'}]
   # Leave room if the external network is also used for floating IPs
-  ExternalAllocationPools: [{'start': '10.19.111.100', 'end': '10.19.111.150'}]
-  ExternalNetworkVip: 10.19.111.151
+  ExternalAllocationPools: [{'start': '10.19.111.52', 'end': '10.19.111.75'}]
+  ExternalNetworkVip: 10.19.111.76
 
   # Specify the NTP server for nodes to use
   NtpServer: 10.5.26.10
@@ -61,7 +61,7 @@ parameter_defaults:
   #NeutronGlobalPhysnetMtu: 9000 
 
   # Flavor of controller and compute nodes:
-  OvercloudControlFlavor: controller
+  OvercloudControlFlavor: control
   OvercloudComputeOvsDpdkSriovFlavor: compute
   #OvercloudCephStorageFlavor: ceph-storage
   
@@ -105,20 +105,13 @@ parameter_defaults:
   # Set a list or range of physical CPU cores that should be excluded from tuning:
   HostCpusList: "12,13,14,15,16,17,18,19,20,21,22,23,36,37,38,39,40,41,42,43,44,45,46,47"  
 
-  ComputeOvsDpdkSriovParameters:
-    KernelArgs: pci=realloc intel_iommu=on default_hugepagesz=1GB hugepagesz=1G hugepages=12 rdblacklist=i40evf iommu=pt
-    TunedProfileName: "cpu-partitioning"
-    IsolCpusList: "0-11"
+  ComputeKernelArgs: "pci=realloc intel_iommu=on default_hugepagesz=1GB hugepagesz=1G hugepages=12 rdblacklist=i40evf iommu=pt"
 
+  HostIsolatedCoreList: "0-11"
 
-  OvsDpdkSocketMemory: "1024,1024"
-  OvsDpdkMemoryChannels: "4"
-  NovaReservedHostMemory: 4096
+  NeutronDpdkSocketMemory: "'2048,2048'"
+  NeutronDpdkMemoryChannels: "4"
+  NovaReservedHostMemory: "4096"
 
-  OvsPmdCoreList: "0-3"
-  OvsDpdkCoreList: "0-3"
+  NeutronDpdkCoreList: "'0,1,2,3'"
   NovaVcpuPinSet: ['4-11']
-
-  NeutronEnableIsolatedMetadata: true
-  NeutronEnableForceMetadata: true
-  NeutronOVSFirewallDriver: openvswitch

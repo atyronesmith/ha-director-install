@@ -132,11 +132,6 @@ resources:
               defroute: false
 
             - type: interface
-              name: ens2f0
-              use_dhcp: false
-              defroute: false
-
-            - type: interface
               name: ens2f1
               use_dhcp: false
               defroute: false
@@ -179,31 +174,32 @@ resources:
                       ip_netmask: {get_param: StorageIpSubnet}
             -
               type: ovs_user_bridge
-              name: br-link
+              name: br-ex
               use_dhcp: false
 
               members:
-                #-
-                #  type: ovs_dpdk_bond
-                #  name: bond2
-                #  #bonding_options: {get_param: DpdkBondInterfaceOvsOptions}
-                #  members:
-                #    -
-                #      type: ovs_dpdk_port
-                #      name: dpdk0
-                #      members:
-                #        -
-                #          type: interface
-                #          name: ens2f0
                 -
-                  type: ovs_dpdk_port
-                  name: dpdk0
+                  type: ovs_dpdk_bond
+                  name: bond2
+                  bonding_options: {get_param: DpdkBondInterfaceOvsOptions}
                   members:
                     -
-                      type: interface
-                      name: ens2f2
+                      type: ovs_dpdk_port
+                      name: dpdk0
+                      members:
+                        -
+                          type: interface
+                          name: ens2f0
+                    -
+                      type: ovs_dpdk_port
+                      name: dpdk1
+                      members:
+                        -
+                          type: interface
+                          name: ens2f2
                 -
                   type: vlan
+                  device: bond2
                   vlan_id: {get_param: TenantNetworkVlanID}
                   addresses:
                     -
@@ -213,5 +209,4 @@ outputs:
   OS::stack_id:
     description: The OsNetConfigImpl resource.
     value: {get_resource: OsNetConfigImpl}
-
 

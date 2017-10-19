@@ -1,0 +1,60 @@
+{
+    "nodes":[
+        {
+            "name": "overcloud-compute-2",
+            "mac":[
+                "0c:c4:7a:db:af:03"
+            ],
+            "cpu":"4",
+            "memory":"6144",
+            "disk":"40",
+            "arch":"x86_64",
+            "pm_type":"pxe_ipmitool",
+            "pm_user":"ADMIN",
+            "pm_password":"ADMIN",
+            "pm_addr":"10.19.110.16"
+        },
+        {
+            "name": "overcloud-compute-3",
+            "mac":[
+                "0c:c4:7a:db:a9:ab"
+            ],
+            "cpu":"4",
+            "memory":"6144",
+            "disk":"40",
+            "arch":"x86_64",
+            "pm_type":"pxe_ipmitool",
+            "pm_user":"ADMIN",
+            "pm_password":"ADMIN",
+            "pm_addr":"10.19.110.18"
+        },
+        {
+            "name": "overcloud-ceph-3",
+            "mac":[
+                "0c:c4:7a:db:a9:93"
+            ],
+            "cpu":"4",
+            "memory":"6144",
+            "disk":"40",
+            "arch":"x86_64",
+            "pm_type":"pxe_ipmitool",
+            "pm_user":"ADMIN",
+            "pm_password":"ADMIN",
+            "pm_addr":"10.19.110.12"
+        },
+        {
+            "name": "overcloud-controller-3",
+            "mac":[
+                "0c:c4:7a:db:a9:b9"
+            ],
+            "cpu":"4",
+            "memory":"6144",
+            "disk":"40",
+            "arch":"x86_64",
+            "pm_type":"pxe_ipmitool",
+            "pm_user":"ADMIN",
+            "pm_password":"ADMIN",
+            "pm_addr":"10.19.110.6"
+        }
+    ]
+}

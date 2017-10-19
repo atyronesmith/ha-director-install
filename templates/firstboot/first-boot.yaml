@@ -242,3 +242,5 @@ outputs:
   # get_attr in the parent template instead.
   OS::stack_id:
     value: {get_resource: userdata}
+
+
