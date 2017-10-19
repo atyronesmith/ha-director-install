@@ -147,54 +147,35 @@ resources:
               defroute: false
 
             -
-              type: ovs_bridge
-              name: br-all
-              use_dhcp: false
-
+              type: linux_bond
+              name: bond1
+              bonding_options: {get_param: LinuxBondInterfaceOptions}
               members:
                 -
-                  type: linux_bond
-                  name: bond1
-                  bonding_options: {get_param: LinuxBondInterfaceOptions}
-                  members:
-                    -
-                      type: interface
-                      name: ens1f0
-                    -
-                      type: interface
-                      name: ens1f1
+                  type: interface
+                  name: ens1f0
                 -
-                  type: vlan
-                  device: bond1
-                  vlan_id: {get_param: InternalApiNetworkVlanID}
-                  addresses:
-                    -
-                      ip_netmask: {get_param: InternalApiIpSubnet}
+                  type: interface
+                  name: ens1f1
+            -
+              type: vlan
+              device: bond1
+              vlan_id: {get_param: InternalApiNetworkVlanID}
+              addresses:
                 -
-                  type: vlan
-                  device: bond1
-                  vlan_id: {get_param: StorageNetworkVlanID}
-                  addresses:
-                    -
-                      ip_netmask: {get_param: StorageIpSubnet}
+                  ip_netmask: {get_param: InternalApiIpSubnet}
+            -
+              type: vlan
+              device: bond1
+              vlan_id: {get_param: StorageNetworkVlanID}
+              addresses:
+                -
+                  ip_netmask: {get_param: StorageIpSubnet}
             -
               type: ovs_user_bridge
               name: br-link
               use_dhcp: false
-
               members:
-                #-
-                #  type: ovs_dpdk_bond
-                #  name: bond2
-                #  #bonding_options: {get_param: DpdkBondInterfaceOvsOptions}
-                #  members:
-                #    -
-                #      type: ovs_dpdk_port
-                #      name: dpdk0
-                #      members:
-                #        -
-                #          type: interface
-                #          name: ens2f0
                 -
                   type: ovs_dpdk_port
                   name: dpdk0
@@ -204,6 +185,7 @@ resources:
                       name: ens2f2
                 -
                   type: vlan
+                  device: br-link
                   vlan_id: {get_param: TenantNetworkVlanID}
                   addresses:
                     -
