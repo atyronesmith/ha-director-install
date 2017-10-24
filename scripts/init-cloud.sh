@@ -30,7 +30,7 @@ openstack security group rule create --ingress --protocol tcp --src-ip 0.0.0.0/0
 openstack security group rule create --ingress --protocol udp --src-ip 0.0.0.0/0 all-access
 
 
-openstack flavor create --ram 512 --disk 1 --vcpus 1 --public cirros.1
-openstack flavor create --ram 1024 --disk 1 --vcpus 1 --public small.1
-openstack flavor create --ram 2048 --disk 10 --vcpus 2 --public medium.1
-openstack flavor create --ram 4096 --disk 20 --vcpus 4 --public large.1
+openstack flavor create --ram 512 --disk 1 --vcpus 1 --property hw:mem_page_size=large --public cirros.1
+openstack flavor create --ram 1024 --disk 1 --vcpus 1 --property hw:mem_page_size=large --public small.1
+openstack flavor create --ram 2048 --disk 10 --vcpus 2 --property hw:mem_page_size=large --public medium.1
+openstack flavor create --ram 4096 --disk 20 --vcpus 4 --property hw:mem_page_size=large --public large.1
