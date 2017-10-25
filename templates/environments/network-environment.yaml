@@ -114,4 +114,4 @@ parameter_defaults:
   NovaReservedHostMemory: "4096"
 
   NeutronDpdkCoreList: "'0,1,2,3'"
-  NovaVcpuPinSet: ['4-20']
+  NovaVcpuPinSet: ['4-20,28-35']

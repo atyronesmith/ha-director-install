@@ -25,6 +25,11 @@ openstack flavor create --ram 1024 --disk 1 --vcpus 1 --property hw:mem_page_siz
 openstack flavor create --ram 2048 --disk 10 --vcpus 2 --property hw:mem_page_size=large --public medium.1
 openstack flavor create --ram 4096 --disk 20 --vcpus 4 --property hw:mem_page_size=large --public large.1
 
+###
+### NOTE: Use this flavor for instances that have DPDK and SRIOV ports
+###
+openstack flavor create --ram 2048 --disk 10 --vcpus 2 --property hw:mem_page_size=large --property hw:numa_cpus.0=0,1 --property hw:numa_cpus.1=2,3 --property hw:numa_mem.0=1024 --property hw:numa_mem.1=1024 --property hw:numa_nodes=2 --public medium.2
+
 openstack security group create all-access
 openstack security group rule create --ingress --protocol icmp --src-ip 0.0.0.0/0 all-access
 openstack security group rule create --ingress --protocol tcp --src-ip 0.0.0.0/0 all-access
