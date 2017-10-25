@@ -111,7 +111,7 @@ parameter_defaults:
     IsolCpusList: "0-20"
 
 
-  OvsDpdkSocketMemory: "1024,1024"
+  OvsDpdkSocketMemory: "2048,2048"
   OvsDpdkMemoryChannels: "4"
   NovaReservedHostMemory: 4096
 
