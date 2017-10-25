@@ -117,7 +117,7 @@ parameter_defaults:
 
   OvsPmdCoreList: "0-3"
   OvsDpdkCoreList: "0-3"
-  NovaVcpuPinSet: ['4-20,28-35']
+  NovaVcpuPinSet: ['4-20','28-35']
 
   NeutronEnableIsolatedMetadata: true
   NeutronEnableForceMetadata: true
