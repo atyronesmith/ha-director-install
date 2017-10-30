@@ -115,8 +115,8 @@ parameter_defaults:
   OvsDpdkMemoryChannels: "4"
   NovaReservedHostMemory: 4096
 
-  OvsPmdCoreList: "0-3"
-  OvsDpdkCoreList: "0-3"
+  OvsPmdCoreList: "0,1,12,13"
+  OvsDpdkCoreList: "2,3,14,15"
   NovaVcpuPinSet: ['4-20','28-35']
 
   NeutronEnableIsolatedMetadata: true
