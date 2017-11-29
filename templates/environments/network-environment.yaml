@@ -67,7 +67,7 @@ parameter_defaults:
   
   # Number of nodes to deploy.
   ControllerCount: 1
-  ComputeOvsDpdkSriovCount: 4 
+  ComputeOvsDpdkSriovCount: 2 
   CephStorageCount: 0
 
   ##################################
