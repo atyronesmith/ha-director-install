@@ -127,18 +127,18 @@ resources:
               defroute: false
 
             - type: interface
-              name: ens2f1
+              name: ens2f0
               use_dhcp: false
               defroute: false
 
             - type: interface
-              name: ens2f3
+              name: ens2f2
               use_dhcp: false
               defroute: false
 
             -
               type: ovs_bridge
-              name: br-all
+              name: br-isolated
               use_dhcp: false
 
               members:
@@ -167,30 +167,60 @@ resources:
                   addresses:
                     -
                       ip_netmask: {get_param: StorageIpSubnet}
+                -
+                  type: vlan
+                  device: bond1
+                  vlan_id: {get_param: ExternalNetworkVlanID}
+                  addresses:
+                    -
+                      ip_netmask: {get_param: ExternalIpSubnet}
+                  routes:
+                    -
+                      default: true
+                      next_hop: {get_param: ExternalInterfaceDefaultRoute}
+
+           # -
+           #   type: ovs_bridge
+           #   name: br-sriov
+           #   use_dhcp: false
+
+            #  members:
+            #    -
+            #      type: linux_bond
+            #      name: bond2
+            #      bonding_options: {get_param: LinuxBondInterfaceOptions}
+            #      members:
+            #        -
+            #          type: interface
+            #          name: ens2f0
+            #        -
+            #          type: interface
+            #          name: ens2f2
+            #    -
+            #      type: vlan
+            #      device: bond2
+            #     vlan_id: {get_param: TenantNetworkVlanID}
+            #      addresses:
+            #        -
+            #          ip_netmask: {get_param: TenantIpSubnet}
+                      
             -
               type: ovs_bridge
-              name: br-ex
+              name: br-odl
               use_dhcp: false
 
               members:
                 -
                   type: linux_bond
-                  name: bond2
+                  name: bond3
                   bonding_options: {get_param: LinuxBondInterfaceOptions}
                   members:
                     -
                       type: interface
-                      name: ens2f0
+                      name: ens2f1
                     -
                       type: interface
-                      name: ens2f2
-                -
-                  type: vlan
-                  device: bond2
-                  vlan_id: {get_param: TenantNetworkVlanID}
-                  addresses:
-                    -
-                      ip_netmask: {get_param: TenantIpSubnet}
+                      name: ens2f3
 
 outputs:
   OS::stack_id:
