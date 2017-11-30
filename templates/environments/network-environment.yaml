@@ -26,10 +26,10 @@ parameter_defaults:
   TenantNetCidr: 172.16.0.0/24
   ExternalNetCidr: 10.19.111.0/24
   # Customize the VLAN IDs to match the local environment
-  InternalApiNetworkVlanID: 1020
-  StorageNetworkVlanID: 1030
-  StorageMgmtNetworkVlanID: 1040
-  TenantNetworkVlanID: 1050
+  InternalApiNetworkVlanID: 1022
+  StorageNetworkVlanID: 1032
+  StorageMgmtNetworkVlanID: 1042
+  TenantNetworkVlanID: 1052
   ExternalNetworkVlanID: 111
   # Customize the IP ranges on each network to use for static IPs and VIPs
   InternalApiAllocationPools: [{'start': '172.17.0.10', 'end': '172.17.0.200'}]
@@ -66,7 +66,7 @@ parameter_defaults:
   
   # Number of nodes to deploy.
   ControllerCount: 1
-  ComputeCount: 1
+  ComputeCount: 2
   CephStorageCount: 0
   
   NeutronNetworkVLANRanges: "datacentre:1000:1999,physnet_sriov1:2000:2099,physnet_sriov2:2100:2199"
@@ -87,6 +87,8 @@ parameter_defaults:
   NeutronNetworkType: 'vlan'
 
   NeutronNetworkVLANRanges: "datacentre:1000:1999,physnet_sriov1:2000:2099,physnet_sriov2:2100:2199"
+
+  NeutronBridgeMappings: 'datacentre:br-isolated,physnet_sriov1:br-isolated1,physnet_sriov2:br-isolated2'
 
   ##################################
   # SR-IOV paramenters
@@ -110,7 +112,13 @@ parameter_defaults:
   NovaSchedulerDefaultFilters: ['RetryFilter','AvailabilityZoneFilter','RamFilter','ComputeFilter','ComputeCapabilitiesFilter','ImagePropertiesFilter','ServerGroupAntiAffinityFilter','ServerGroupAffinityFilter','PciPassthroughFilter','NUMATopologyFilter']
   NovaSchedulerAvailableFilters: ["nova.scheduler.filters.all_filters","nova.scheduler.filters.pci_passthrough_filter.PciPassthroughFilter"]
   
-  ComputeKernelArgs: "pci=realloc intel_iommu=on default_hugepagesz=1GB hugepagesz=1G hugepages=12 rdblacklist=i40evf"
+  # doesn't work in 12, because we don't use first-boot to consume this anymore
+  #ComputeKernelArgs: "pci=realloc intel_iommu=on default_hugepagesz=1GB hugepagesz=1G hugepages=12 rdblacklist=i40evf"
+
+  ComputeParameters:
+    KernelArgs: pci=realloc intel_iommu=on default_hugepagesz=1GB hugepagesz=1G hugepages=20 rdblacklist=i40evf iommu=pt
+    TunedProfileName: "cpu-partitioning"
+    IsolCpusList: "0-20"
 
   ##################################
   # ODL paramenters

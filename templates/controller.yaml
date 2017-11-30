@@ -165,13 +165,13 @@ resources:
                     -
                       default: true
                       next_hop: {get_param: ExternalInterfaceDefaultRoute}
-                -
-                  type: vlan
-                  device: bond1
-                  vlan_id: {get_param: TenantNetworkVlanID}
-                  addresses:
-                    -
-                      ip_netmask: {get_param: TenantIpSubnet}
+#                -
+#                  type: vlan
+#                  device: bond1
+#                  vlan_id: {get_param: TenantNetworkVlanID}
+#                  addresses:
+#                    -
+#                      ip_netmask: {get_param: TenantIpSubnet}
                       
             #-
             #  type: ovs_bridge

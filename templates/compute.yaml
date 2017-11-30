@@ -126,6 +126,16 @@ resources:
               use_dhcp: false
               defroute: false
 
+            - type: interface
+              name: ens2f0
+              use_dhcp: false
+              defroute: false
+
+            - type: interface
+              name: ens2f2
+              use_dhcp: false
+              defroute: false
+
             -
               type: ovs_bridge
               name: br-isolated
@@ -169,30 +179,30 @@ resources:
                       default: true
                       next_hop: {get_param: ExternalInterfaceDefaultRoute}
 
-            -
-              type: ovs_bridge
-              name: br-sriov
-              use_dhcp: false
+           # -
+           #   type: ovs_bridge
+           #   name: br-sriov
+           #   use_dhcp: false
 
-              members:
-                -
-                  type: linux_bond
-                  name: bond2
-                  bonding_options: {get_param: LinuxBondInterfaceOptions}
-                  members:
-                    -
-                      type: interface
-                      name: ens2f0
-                    -
-                      type: interface
-                      name: ens2f2
-                -
-                  type: vlan
-                  device: bond2
-                  vlan_id: {get_param: TenantNetworkVlanID}
-                  addresses:
-                    -
-                      ip_netmask: {get_param: TenantIpSubnet}
+            #  members:
+            #    -
+            #      type: linux_bond
+            #      name: bond2
+            #      bonding_options: {get_param: LinuxBondInterfaceOptions}
+            #      members:
+            #        -
+            #          type: interface
+            #          name: ens2f0
+            #        -
+            #          type: interface
+            #          name: ens2f2
+            #    -
+            #      type: vlan
+            #      device: bond2
+            #     vlan_id: {get_param: TenantNetworkVlanID}
+            #      addresses:
+            #        -
+            #          ip_netmask: {get_param: TenantIpSubnet}
                       
             -
               type: ovs_bridge

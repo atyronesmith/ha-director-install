@@ -2,6 +2,8 @@
 resource_registry:
   OS::TripleO::Services::NeutronSriovAgent: /usr/share/openstack-tripleo-heat-templates/puppet/services/neutron-sriov-agent.yaml
 
+# NOTE: everything below *SHOULD* be handled in network-environment.yaml already
+
 parameter_defaults:
   NeutronMechanismDrivers: ['openvswitch','sriovnicswitch']
 
@@ -14,8 +16,9 @@ parameter_defaults:
 
   NeutronPhysicalDevMappings: "physnet_sriov1:ens1f2,physnet_sriov2:ens1f3"
 
+  # HANDLED in network-environment.yaml
 #  NeutronBridgeMappings: 'datacentre:br-ex,physnet_sriov1:br-isolated1,physnet_sriov2:br-isolated2'
-  NeutronBridgeMappings: 'datacentre:br-ex'
+#  NeutronBridgeMappings: 'datacentre:br-ex'
 
   NeutronNetworkVLANRanges: "datacentre:1000:1999,physnet_sriov1:2000:2099,physnet_sriov2:2100:2199"
 
