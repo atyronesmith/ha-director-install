@@ -49,6 +49,7 @@
     - OS::TripleO::Services::CinderApi
     - OS::TripleO::Services::CinderBackendDellPs
     - OS::TripleO::Services::CinderBackendDellSc
+    - OS::TripleO::Services::CinderBackendDellEMCUnity
     - OS::TripleO::Services::CinderBackendNetApp
     - OS::TripleO::Services::CinderBackendScaleIO
     - OS::TripleO::Services::CinderBackendVRTSHyperScale
@@ -84,6 +85,8 @@
     - OS::TripleO::Services::ManilaBackendCephFs
     - OS::TripleO::Services::ManilaBackendGeneric
     - OS::TripleO::Services::ManilaBackendNetapp
+    - OS::TripleO::Services::ManilaBackendUnity
+    - OS::TripleO::Services::ManilaBackendVNX
     - OS::TripleO::Services::ManilaScheduler
     - OS::TripleO::Services::ManilaShare
     - OS::TripleO::Services::Memcached
@@ -113,6 +116,7 @@
     - OS::TripleO::Services::NovaScheduler
     - OS::TripleO::Services::NovaVncProxy
     - OS::TripleO::Services::Ntp
+    - OS::TripleO::Services::ContainersLogrotateCrond
     - OS::TripleO::Services::OctaviaApi
     - OS::TripleO::Services::OctaviaHealthManager
     - OS::TripleO::Services::OctaviaHousekeeping
@@ -184,6 +188,7 @@
     - OS::TripleO::Services::NeutronSriovAgent
     - OS::TripleO::Services::NeutronVppAgent
     - OS::TripleO::Services::Ntp
+    - OS::TripleO::Services::ContainersLogrotateCrond
     - OS::TripleO::Services::OpenDaylightOvs
     - OS::TripleO::Services::Securetty
     - OS::TripleO::Services::SensuClient
@@ -195,4 +200,5 @@
     - OS::TripleO::Services::Tuned
     - OS::TripleO::Services::Vpp
     - OS::TripleO::Services::OVNController
+
 

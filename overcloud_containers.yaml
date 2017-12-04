@@ -1,0 +1,4 @@
+container_images:
+- imagename: docker.io/ceph/daemon:tag-build-master-jewel-centos-7
+  pull_source: docker-registry.engineering.redhat.com
+  push_destination: 192.0.2.1:8787
