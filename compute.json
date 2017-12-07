@@ -14,35 +14,7 @@
             "pm_password":"ADMIN",
             "pm_addr":"10.19.110.16"
         },
-        {
-            "name": "compute-4",
-            "mac":[
-                "0c:c4:7a:db:a9:b1"
-            ],
-            "cpu":"4",
-            "memory":"6144",
-            "disk":"40",
-            "arch":"x86_64",
-            "pm_type":"pxe_ipmitool",
-            "pm_user":"ADMIN",
-            "pm_password":"ADMIN",
-            "pm_addr":"10.19.110.20"
-        },
-        {
-            "name": "compute-5",
-            "mac":[
-                "0c:c4:7a:db:a9:b3"
-            ],
-            "cpu":"4",
-            "memory":"6144",
-            "disk":"40",
-            "arch":"x86_64",
-            "pm_type":"pxe_ipmitool",
-            "pm_user":"ADMIN",
-            "pm_password":"ADMIN",
-            "pm_addr":"10.19.110.22"
-        },
-        {
+       {
             "name": "compute-6",
             "mac":[
                 "0c:c4:7a:db:ac:05"
