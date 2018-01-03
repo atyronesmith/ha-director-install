@@ -8,7 +8,7 @@ resource_registry:
   # Ceph storage nodes configs.
   OS::TripleO::CephStorage::Net::SoftwareConfig: ../ceph-storage.yaml
 
-  OS::TripleO::NodeUserData: ../first-boot.yaml
+  #OS::TripleO::NodeUserData: ../first-boot.yaml
   OS::TripleO::NodeExtraConfigPost: ../post-install.yaml
 
 parameter_defaults:
@@ -81,10 +81,10 @@ parameter_defaults:
   #NovaVcpuPinSet: ['16-23']
  
   # Set the tunnel type for tenant network (for example, vxlan or gre). To disable the tunnel type parameter, set the value to ""
-  NeutronTunnelTypes: ""
+  NeutronTunnelTypes: "vxlan"
  
   # Set the tenant network type for OpenStack Networking. The options available are vlan or vxlan:
-  NeutronNetworkType: 'vlan'
+  NeutronNetworkType: 'vxlan'
 
   NeutronNetworkVLANRanges: "datacentre:1000:1999,physnet_sriov1:2000:2099,physnet_sriov2:2100:2199"
 
@@ -124,6 +124,6 @@ parameter_defaults:
   # ODL paramenters
   ##################################
   
-  OpenDaylightProviderMappings: 'odl:br-odl'
+  OpenDaylightProviderMappings: 'datacentre:br-isolated'
 
   NeutronPluginExtensions: 'port_security'
