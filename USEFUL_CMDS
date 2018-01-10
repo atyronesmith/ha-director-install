@@ -1,3 +1,9 @@
+Activate virtual env:
+
+source .venv/bin/activate
+cd infrared
+source etc/bash_completion.d/infrared
+
 - Redirect metadata service traffic to vlan 11 device (allows overcloud nodes to call back after initial deployment):
 
 iptables -D INPUT -i br-ctlplane -p udp -m udp --dport 67 -j ironic-inspector
