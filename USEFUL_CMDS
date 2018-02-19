@@ -4,13 +4,48 @@ source .venv/bin/activate
 cd infrared
 source etc/bash_completion.d/infrared
 
-- Redirect metadata service traffic to vlan 11 device (allows overcloud nodes to call back after initial deployment):
+First copy topologies to Infrared:
 
-iptables -D INPUT -i br-ctlplane -p udp -m udp --dport 67 -j ironic-inspector
-iptables -F ironic-inspector 
-iptables -X ironic-inspector 
-iptables -t nat -A PREROUTING -d 169.254.169.254/32 -i vlan11 -p tcp -m tcp --dport 80 -j REDIRECT --to-ports 8775
+cp hybrid_undercloud.yml ~/infrared/plugins/virsh/vars/topology/nodes/.
+cp hybrid_controller.yml ~/infrared/plugins/virsh/vars/topology/nodes/.
+cp 3_bridge_1_net.yml ~/infrared/plugins/virsh/vars/topology/network/.
 
-- Deploy non-DPDK overcloud:
+Provision:
 
-openstack overcloud deploy --templates ~/my_templates/ -e environments/network-isolation.yaml -e ~/my_templates/environments/network-environment.yaml -e ~/my_templates/environments/storage-environment.yaml  --control-scale 1 --compute-scale 1 --compute-flavor compute --control-flavor control --neutron-network-type vxlan --neutron-tunnel-types vxlan --ntp-server 10.5.26.10 -e ~/my_templates/ips-from-pool-all.yaml -e ~/my_templates/post-deployment.yaml
+infrared virsh -v \
+    --topology-nodes hybrid_undercloud:1,hybrid_controller:1 \
+    -e override.controller.memory=28672 \
+    -e override.undercloud.memory=28672 \
+    -e override.controller.cpu=6 \
+    -e override.undercloud.cpu=6 \
+    --host-address 10.19.110.13 \
+    --host-key ~/.ssh/id_rsa \
+    --topology-network 3_bridges_1_net
+
+    To clean (and only clean), just add "--cleanup yes"
+
+Install Undercloud:
+
+infrared tripleo-undercloud -v \
+ --version=10 \
+ --build=latest \
+ --images-task=rpm \
+ --config-file ~/ha-director-install/undercloud.conf
+
+Introspect/Tag Overcloud:
+
+ir tripleo-overcloud -vv --version 10 \
+    --deployment-files  ~/ha-director-install/templates \
+    --overcloud-script ~/ha-director-install/overcloud_deploy.sh \
+     --build latest --introspect=yes --tagging=yes --deploy=no \
+     -e provison_virsh_network_name=br-ctlplane --hybrid \
+     ~/ha-director-install/compute.json
+
+Deploy Overcloud:
+
+ir tripleo-overcloud -vv --version 10 \    
+    --deployment-files  ~/ha-director-install/templates \   
+    --overcloud-script ~/ha-director-install/overcloud_deploy.sh \ 
+     --build latest --introspect=no --tagging=no --deploy=yes \     
+     -e provison_virsh_network_name=br-ctlplane --hybrid \
+     ~/ha-director-install/compute.json
