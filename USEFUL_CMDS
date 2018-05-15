@@ -1,4 +1,10 @@
-First copy topologies to Infrared:
+Activate virtual environment:
+
+source .venv/bin/activate
+cd infrared
+source etc/bash_completion.d/infrared
+
+Copy topologies to Infrared:
 
 cp hybrid_undercloud.yml ~/infrared/plugins/virsh/vars/topology/nodes/.
 cp hybrid_controller.yml ~/infrared/plugins/virsh/vars/topology/nodes/.
