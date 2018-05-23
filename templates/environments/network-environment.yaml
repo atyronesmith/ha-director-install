@@ -60,7 +60,7 @@ parameter_defaults:
   #NeutronGlobalPhysnetMtu: 9000 
 
   # Flavor of controller and compute nodes:
-  OvercloudControlFlavor: control
+  OvercloudControlFlavor: controller
   OvercloudComputeFlavor: compute
   #OvercloudCephStorageFlavor: ceph-storage
   
