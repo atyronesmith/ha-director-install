@@ -27,14 +27,14 @@ infrared virsh -v \
 Install Undercloud:
 
 infrared tripleo-undercloud -v \
- --version=12 \
+ --version=13 \
  --build=latest \
  --images-task=rpm \
  --config-file ~/ha-director-install/undercloud.conf
 
 Introspect/Tag Overcloud:
 
-ir tripleo-overcloud -vv --version 12 \
+ir tripleo-overcloud -vv --version 13 \
     --deployment-files  ~/ha-director-install/templates \
     --overcloud-script ~/ha-director-install/overcloud_deploy.sh \
      --build latest --introspect=yes --tagging=yes --deploy=no \
@@ -43,16 +43,29 @@ ir tripleo-overcloud -vv --version 12 \
 
 CONTAINER STUFF BEFORE DEPLOY (perform as stack on undercloud):
 
-openstack overcloud container image prepare   --namespace rhosp12   --tag 20171011.2 --prefix openstack --suffix docker   --pull-source docker-registry.engineering.redhat.com   --push-destination 192.0.2.1:8787   --images-file overcloud_containers.yaml
+sudo vi /usr/lib/python2.7/site-packages/tripleo_common/image/image_uploader.py
+
+# no
+#if DockerImageUploader._images_match(full_image, full_new_repo,
+#                                     insecure_registries):
+#    LOG.info('Skipping upload for image %s' % image_name)
+#    return []
+
+# Do cleanup after all the uploads so common layers don't get deleted
+# repeatedly
+# ^ no
+#self.cleanup(local_images)
+
+openstack overcloud container image prepare   --namespace rhosp13   --tag 2018-05-23.1 --prefix openstack- --pull-source docker-registry.engineering.redhat.com   --push-destination 192.0.2.1:8787   --images-file overcloud_containers.yaml
 openstack overcloud container image upload --config-file overcloud_containers.yaml -v
-openstack overcloud container image prepare   --namespace 192.0.2.1:8787/rhosp12   --tag 20171011.2   --prefix openstack   --suffix docker   --env-file ~/docker_registry.yaml
-echo "  DockerInsecureRegistryAddress: 192.0.2.1:8787" >>   ~/docker_registry.yaml
+openstack overcloud container image prepare   --namespace 192.0.2.1:8787/rhosp13   --tag 2018-05-23.1   --prefix openstack-  --env-file ~/templates/environments/docker_registry.yaml
+echo "  DockerInsecureRegistryAddress: 192.0.2.1:8787" >>   ~/templates/environments/docker_registry.yaml
 
 Deploy Overcloud:
 
-ir tripleo-overcloud -vv --version 12 \    
-    --deployment-files  ~/ha-director-install/templates \   
-    --overcloud-script ~/ha-director-install/overcloud_deploy.sh \ 
-     --build latest --introspect=no --tagging=no --deploy=yes \     
+ir tripleo-overcloud -vv --version 13 \
+    --deployment-files  ~/ha-director-install/templates \
+    --overcloud-script ~/ha-director-install/overcloud_deploy.sh \
+     --build latest --introspect=no --tagging=no --deploy=yes \
      -e provison_virsh_network_name=br-ctlplane --hybrid \
      ~/ha-director-install/compute.json
