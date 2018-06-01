@@ -30,16 +30,16 @@ infrared tripleo-undercloud -v \
  --version=13 \
  --build=latest \
  --images-task=rpm \
- --config-file ~/ha-director-install/undercloud.conf
+ --config-file ~/ir-osp13/undercloud.conf
 
 Introspect/Tag Overcloud:
 
 ir tripleo-overcloud -vv --version 13 \
-    --deployment-files  ~/ha-director-install/templates \
-    --overcloud-script ~/ha-director-install/overcloud_deploy.sh \
+    --deployment-files  ~/ir-osp13/templates \
+    --overcloud-script ~/ir-osp13/overcloud_deploy.sh \
      --build latest --introspect=yes --tagging=yes --deploy=no \
      -e provison_virsh_network_name=br-ctlplane --hybrid \
-     ~/ha-director-install/compute.json
+     ~/ir-osp13/compute.json
 
 CONTAINER STUFF BEFORE DEPLOY (perform as stack on undercloud):
 
@@ -64,8 +64,8 @@ echo "  DockerInsecureRegistryAddress: 192.0.2.1:8787" >>   ~/templates/environm
 Deploy Overcloud:
 
 ir tripleo-overcloud -vv --version 13 \
-    --deployment-files  ~/ha-director-install/templates \
-    --overcloud-script ~/ha-director-install/overcloud_deploy.sh \
-     --build latest --introspect=no --tagging=no --deploy=yes \
+    --deployment-files  ~/ir-osp13/templates \
+    --overcloud-script ~/ir-osp13/overcloud_deploy.sh \
+     --build 20180523.1 --introspect=no --tagging=no --deploy=yes \
      -e provison_virsh_network_name=br-ctlplane --hybrid \
-     ~/ha-director-install/compute.json
+     ~/ir-osp13/compute.json
