@@ -113,6 +113,9 @@ resources:
                 - ip_netmask: 169.254.169.254/32
                   next_hop:
                     get_param: EC2MetadataIp
+                - default: true
+                  next_hop:
+                    get_param: ControlPlaneDefaultRoute
 
               - type: interface
                 name: eno1
@@ -166,6 +169,13 @@ resources:
                   addresses:
                   - ip_netmask:
                       get_param: StorageIpSubnet
+                - type: vlan
+                  device: bond1
+                  vlan_id:
+                    get_param: TenantNetworkVlanID
+                  addresses:
+                  - ip_netmask:
+                      get_param: TenantIpSubnet
 
               - type: ovs_bridge
                 name: br-ex
@@ -180,13 +190,6 @@ resources:
                     name: ens2f0
                   - type: interface
                     name: ens2f2
-                - type: vlan
-                  device: bond2
-                  vlan_id:
-                    get_param: TenantNetworkVlanID
-                  addresses:
-                  - ip_netmask:
-                      get_param: TenantIpSubnet
 
 outputs:
   OS::stack_id:

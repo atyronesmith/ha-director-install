@@ -139,6 +139,13 @@ resources:
                 - type: vlan
                   device: nic2
                   vlan_id:
+                    get_param: TenantNetworkVlanID
+                  addresses:
+                  - ip_netmask:
+                      get_param: TenantIpSubnet
+                - type: vlan
+                  device: nic2
+                  vlan_id:
                     get_param: ExternalNetworkVlanID
                   addresses:
                   - ip_netmask:

@@ -18,7 +18,7 @@ infrared virsh -v \
     -e override.undercloud.memory=28672 \
     -e override.controller.cpu=6 \
     -e override.undercloud.cpu=6 \
-    --host-address 10.19.110.13 \
+    --host-address 10.19.110.15 \
     --host-key ~/.ssh/id_rsa \
     --topology-network 3_bridges_1_net
 
@@ -30,7 +30,7 @@ infrared tripleo-undercloud -v \
  --version=13 \
  --build=latest \
  --images-task=rpm \
- --config-file ~/ir-osp13/undercloud.conf
+ --config-file ~/rh/ir-osp13/undercloud.conf
 
 Introspect/Tag Overcloud:
 
