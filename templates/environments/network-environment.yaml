@@ -58,26 +58,26 @@ parameter_defaults:
   BondInterfaceOvsOptions: "bond_mode=active-backup lacp=active"
 
   # Set to 9000 for Jumbo frames
-  #NeutronGlobalPhysnetMtu: 9000 
+  #NeutronGlobalPhysnetMtu: 9000
 
   # Flavor of controller and compute nodes:
   OvercloudControlFlavor: controller
   OvercloudComputeOvsDpdkSriovFlavor: compute
   #OvercloudCephStorageFlavor: ceph-storage
-  
+
   # Number of nodes to deploy.
   ControllerCount: 1
-  ComputeOvsDpdkSriovCount: 2 
+  ComputeOvsDpdkSriovCount: 1
   CephStorageCount: 0
 
   ##################################
   # Common performance paramenters
   ##################################
 
- 
+
   # Set the tunnel type for tenant network (for example, vxlan or gre). To disable the tunnel type parameter, set the value to ""
   NeutronTunnelTypes: ""
- 
+
   # Set the tenant network type for OpenStack Networking. The options available are vlan or vxlan:
   NeutronNetworkType: 'vlan'
 
@@ -103,7 +103,7 @@ parameter_defaults:
   #NovaSchedulerDefaultFilters: "RamFilter,ComputeFilter,AvailabilityZoneFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,PciPassthroughFilter,NUMATopologyFilter"
 
   # Set a list or range of physical CPU cores that should be excluded from tuning:
-  HostCpusList: "21,22,23,36,37,38,39,40,41,42,43,44,45,46,47"  
+  HostCpusList: "21,22,23,36,37,38,39,40,41,42,43,44,45,46,47"
 
   ComputeOvsDpdkSriovParameters:
     KernelArgs: pci=realloc intel_iommu=on default_hugepagesz=1GB hugepagesz=1G hugepages=12 rdblacklist=i40evf iommu=pt
