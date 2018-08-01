@@ -1,4 +1,4 @@
-Activate virtual environment:
+First activate virtual env:
 
 source .venv/bin/activate
 cd infrared
@@ -30,7 +30,7 @@ infrared tripleo-undercloud -v \
  --version=13 \
  --build=latest \
  --images-task=rpm \
- --config-file ~/rh/ir-osp13/undercloud.conf
+ --config-file ~/ir-osp13/undercloud.conf
 
 Introspect/Tag Overcloud:
 
@@ -43,29 +43,45 @@ ir tripleo-overcloud -vv --version 13 \
 
 CONTAINER STUFF BEFORE DEPLOY (perform as stack on undercloud):
 
-sudo vi /usr/lib/python2.7/site-packages/tripleo_common/image/image_uploader.py
+openstack overcloud container image prepare \
+--namespace=registry.access.redhat.com/rhosp13 \
+--push-destination=192.0.2.1:8787 \
+--prefix=openstack- \
+-e /usr/share/openstack-tripleo-heat-templates/environments/ceph-ansible/ceph-ansible.yaml \
+--set ceph_namespace=registry.access.redhat.com/rhceph \
+--set ceph_image=rhceph-3-rhel7 \
+--output-env-file=/home/stack/templates/overcloud_images.yaml \
+--output-images-file /home/stack/local_registry_images.yaml
 
-# no
-#if DockerImageUploader._images_match(full_image, full_new_repo,
-#                                     insecure_registries):
-#    LOG.info('Skipping upload for image %s' % image_name)
-#    return []
+openstack overcloud container image upload   --config-file  /home/stack/local_registry_images.yaml   --verbose
 
-# Do cleanup after all the uploads so common layers don't get deleted
-# repeatedly
-# ^ no
-#self.cleanup(local_images)
+OTHER STUFF BEFORE DEPLOY
 
-openstack overcloud container image prepare   --namespace rhosp13   --tag 2018-05-23.1 --prefix openstack- --pull-source docker-registry.engineering.redhat.com   --push-destination 192.0.2.1:8787   --images-file overcloud_containers.yaml
-openstack overcloud container image upload --config-file overcloud_containers.yaml -v
-openstack overcloud container image prepare   --namespace 192.0.2.1:8787/rhosp13   --tag 2018-05-23.1   --prefix openstack-  --env-file ~/templates/environments/docker_registry.yaml
-echo "  DockerInsecureRegistryAddress: 192.0.2.1:8787" >>   ~/templates/environments/docker_registry.yaml
+openstack overcloud roles generate -o /home/stack/templates/roles_data.yaml Controller ComputeHCI
+
+openstack flavor create --id auto --ram 6144 --disk 40 --vcpus 4 osdcompute
+
+openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" --property "capabilities:profile"="osdcompute" osdcompute
+
+ironic node-update 1306bfa4-e877-47df-8e4c-9de838de80d2 add properties/capabilities='profile:osdcompute,boot_option:local'
+
+sudo yum install -y ceph-ansible crudini
+
+export SWIFT_PASSWORD=`sudo crudini --get /etc/ironic-inspector/inspector.conf swift password`
+
+mkdir /home/stack/swift-data
+cd /home/stack/swift-data
+
+for i in $(openstack baremetal node list | grep -v UUID | awk '{print $2}'); do openstack baremetal introspection data save $i --file data_$i; done
+for i in $(openstack baremetal node list | grep -v UUID | awk '{print $2}'); do echo "NODE: $i" ; cat data_$i | jq '.inventory.disks' ; echo "-----" ; done
+
+openstack baremetal node set --property root_device='{"wwn": "<wwn>"}' <compute node>
 
 Deploy Overcloud:
 
 ir tripleo-overcloud -vv --version 13 \
-    --deployment-files  ~/ir-osp13/templates \
-    --overcloud-script ~/ir-osp13/overcloud_deploy.sh \
-     --build 20180523.1 --introspect=no --tagging=no --deploy=yes \
+     --deployment-files  ~/ir-osp13/templates \
+     --overcloud-script ~/ir-osp13/overcloud_deploy.sh \
+     --build latest --introspect=no --tagging=no --deploy=yes \
      -e provison_virsh_network_name=br-ctlplane --hybrid \
      ~/ir-osp13/compute.json

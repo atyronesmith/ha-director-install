@@ -1,0 +1,8 @@
+parameter_defaults:
+  CephAnsibleDisksConfig:
+    osd_scenario: non-collocated
+    devices:
+      - /dev/disk/by-path/pci-0000:00:11.4-ata-2.0
+
+    dedicated_devices:
+      - /dev/disk/by-path/pci-0000:00:11.4-ata-3.0 

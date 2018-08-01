@@ -2,11 +2,12 @@
 #networks and related parameters.
 resource_registry:
   # Network Interface templates to use (these files must exist)
-  OS::TripleO::Compute::Net::SoftwareConfig: ../compute.yaml
+  #OS::TripleO::Compute::Net::SoftwareConfig: ../compute.yaml
+  OS::TripleO::ComputeHCI::Net::SoftwareConfig: ../compute-hci.yaml
   OS::TripleO::Controller::Net::SoftwareConfig: ../controller.yaml
 
   # Ceph storage nodes configs.
-  OS::TripleO::CephStorage::Net::SoftwareConfig: ../ceph-storage.yaml
+  #OS::TripleO::CephStorage::Net::SoftwareConfig: ../ceph-storage.yaml
 
 #  OS::TripleO::NodeUserData: ../first-boot.yaml
   OS::TripleO::NodeExtraConfigPost: ../post-install.yaml
@@ -61,12 +62,13 @@ parameter_defaults:
 
   # Flavor of controller and compute nodes:
   OvercloudControlFlavor: controller
-  OvercloudComputeFlavor: compute
+  OvercloudComputeHCIFlavor: osdcompute
+  #OvercloudComputeFlavor: compute
   #OvercloudCephStorageFlavor: ceph-storage
   
   # Number of nodes to deploy.
   ControllerCount: 1
-  ComputeCount: 1
+  ComputeHCICount: 1
   CephStorageCount: 0
 
   ##################################
