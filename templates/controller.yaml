@@ -1,6 +1,9 @@
-heat_template_version: queens
+heat_template_version: 2015-04-30
+
 description: >
-  Software Config to drive os-net-config with 2 bonded nics on a bridge with VLANs attached for the controller role.
+  Software Config to drive os-net-config with 2 bonded nics on a bridge
+  with VLANs attached for the controller role.
+
 parameters:
   ControlPlaneIp:
     default: ''
@@ -32,11 +35,13 @@ parameters:
     type: string
   BondInterfaceOvsOptions:
     default: 'balance-slb'
-    description: The ovs_options string for the bond interface. Set things like lacp=active and/or bond_mode=balance-slb using this option.
+    description: The ovs_options string for the bond interface. Set things like
+                 lacp=active and/or bond_mode=balance-slb using this option.
     type: string
   LinuxBondInterfaceOptions:
     default: 'balance-slb'
-    description: The ovs_options string for the bond interface. Set things like lacp=active and/or bond_mode=balance-slb using this option.
+    description: The ovs_options string for the bond interface. Set things like
+                 lacp=active and/or bond_mode=balance-slb using this option.
     type: string
   ExternalNetworkVlanID:
     default: 100
@@ -83,86 +88,81 @@ parameters:
 
 resources:
   OsNetConfigImpl:
-    type: OS::Heat::SoftwareConfig
+    type: OS::Heat::StructuredConfig
     properties:
-      group: script
+      group: os-apply-config
       config:
-        str_replace:
-          template:
-            get_file: /usr/share/openstack-tripleo-heat-templates/network/scripts/run-os-net-config.sh
-          params:
-            $network_config:
-              network_config:
-              - type: interface
-                name: nic1
-                use_dhcp: false
-                dns_servers:
-                  get_param: DnsServers
-                addresses:
-                - ip_netmask:
-                    list_join:
-                    - /
-                    - - get_param: ControlPlaneIp
-                      - get_param: ControlPlaneSubnetCidr
-                routes:
-                - ip_netmask: 169.254.169.254/32
-                  next_hop:
-                    get_param: EC2MetadataIp
+        os_net_config:
+          network_config:
 
-              - type: ovs_bridge
-                name: br-all
-                use_dhcp: false
-                members:
-                - type: interface
+            - type: interface
+              name: nic1 
+              use_dhcp: false
+              dns_servers: {get_param: DnsServers}
+              addresses:
+                 -
+                  ip_netmask:
+                    list_join:
+                      - '/'
+                      - - {get_param: ControlPlaneIp}
+                        - {get_param: ControlPlaneSubnetCidr}
+              routes:
+                -
+                  ip_netmask: 169.254.169.254/32
+                  next_hop: {get_param: EC2MetadataIp}
+
+            -
+              type: ovs_bridge
+              name: br-all
+              use_dhcp: false
+
+              members:
+                -
+                  type: interface
                   name: nic2
-                - type: vlan
+                -
+                  type: vlan
                   device: nic2
-                  vlan_id:
-                    get_param: InternalApiNetworkVlanID
+                  vlan_id: {get_param: InternalApiNetworkVlanID}
                   addresses:
-                  - ip_netmask:
-                      get_param: InternalApiIpSubnet
-                - type: vlan
+                    -
+                      ip_netmask: {get_param: InternalApiIpSubnet}
+                -
+                  type: vlan
                   device: nic2
-                  vlan_id:
-                    get_param: StorageNetworkVlanID
+                  vlan_id: {get_param: StorageNetworkVlanID}
                   addresses:
-                  - ip_netmask:
-                      get_param: StorageIpSubnet
-                - type: vlan
+                    -
+                      ip_netmask: {get_param: StorageIpSubnet}
+                -
+                  type: vlan
                   device: nic2
-                  vlan_id:
-                    get_param: StorageMgmtNetworkVlanID
+                  vlan_id: {get_param: StorageMgmtNetworkVlanID}
                   addresses:
-                  - ip_netmask:
-                      get_param: StorageMgmtIpSubnet
-                - type: vlan
+                    -
+                      ip_netmask: {get_param: StorageMgmtIpSubnet}
+                -
+                  type: vlan
                   device: nic2
-                  vlan_id:
-                    get_param: TenantNetworkVlanID
+                  vlan_id: {get_param: ExternalNetworkVlanID}
                   addresses:
-                  - ip_netmask:
-                      get_param: TenantIpSubnet
-                - type: vlan
-                  device: nic2
-                  vlan_id:
-                    get_param: ExternalNetworkVlanID
-                  addresses:
-                  - ip_netmask:
-                      get_param: ExternalIpSubnet
+                    -
+                      ip_netmask: {get_param: ExternalIpSubnet}
                   routes:
-                  - default: true
-                    next_hop:
-                      get_param: ExternalInterfaceDefaultRoute
-              - type: ovs_bridge
-                name: br-link
-                use_dhcp: false
-                members:
-                - type: interface
-                  name: nic3
+                    -
+                      default: true
+                      next_hop: {get_param: ExternalInterfaceDefaultRoute}
+                -
+                  type: ovs_bridge
+                  name: br-link
+                  use_dhcp: false
+                  members:
+                    -
+                      type: interface
+                      name: nic3
 
 outputs:
   OS::stack_id:
     description: The OsNetConfigImpl resource.
-    value:
-      get_resource: OsNetConfigImpl
+    value: {get_resource: OsNetConfigImpl}
+

@@ -1,4 +1,4 @@
-heat_template_version: queens
+heat_template_version: 2015-04-30
 
 description: >
   Software Config to drive os-net-config with 2 bonded nics on a bridge
@@ -88,95 +88,85 @@ parameters:
 
 resources:
   OsNetConfigImpl:
-    type: OS::Heat::SoftwareConfig
+    type: OS::Heat::StructuredConfig
     properties:
-      group: script
+      group: os-apply-config
       config:
-        str_replace:
-          template:
-            get_file: /usr/share/openstack-tripleo-heat-templates/network/scripts/run-os-net-config.sh
-          params:
-            $network_config:
-              network_config:
-              - type: interface
-                name: eno2
-                use_dhcp: false
-                dns_servers:
-                  get_param: DnsServers
-                addresses:
-                - ip_netmask:
+        os_net_config:
+          network_config:
+
+            - type: interface
+              name: eno2
+              use_dhcp: false
+              dns_servers: {get_param: DnsServers}
+              addresses:
+                 -
+                  ip_netmask:
                     list_join:
-                      - /
-                      - - get_param: ControlPlaneIp
-                        - get_param: ControlPlaneSubnetCidr
-                routes:
-                - ip_netmask: 169.254.169.254/32
-                  next_hop:
-                    get_param: EC2MetadataIp
-                - default: true
-                  next_hop:
-                    get_param: ControlPlaneDefaultRoute
+                      - '/'
+                      - - {get_param: ControlPlaneIp}
+                        - {get_param: ControlPlaneSubnetCidr}
+              routes:
+                -
+                  ip_netmask: 169.254.169.254/32
+                  next_hop: {get_param: EC2MetadataIp}
 
-              - type: interface
-                name: eno1
-                use_dhcp: false
-                defroute: true
-                dns_servers:
-                  get_param: DnsServers
-                addresses:
-                - ip_netmask: 10.19.110.17/24
-                routes:
-                - default: true
-                  next_hop: 10.19.110.254
+            - type: interface
+              name: eno1
+              use_dhcp: false
+              defroute: false
 
+            - type: interface
+              name: ens1f2
+              use_dhcp: false
+              defroute: false
 
-              - type: interface
-                name: ens1f2
-                use_dhcp: false
-                defroute: false
+            - type: interface
+              name: ens1f3
+              use_dhcp: false
+              defroute: false
 
-              - type: interface
-                name: ens1f3
-                use_dhcp: false
-                defroute: false
+            - type: interface
+              name: ens2f1
+              use_dhcp: false
+              defroute: false
 
-              - type: interface
-                name: ens2f1
-                use_dhcp: false
-                defroute: false
+            - type: interface
+              name: ens2f3
+              use_dhcp: false
+              defroute: false
 
-              - type: interface
-                name: ens2f3
-                use_dhcp: false
-                defroute: false
+            -
+              type: ovs_bridge
+              name: br-all
+              use_dhcp: false
 
-              - type: ovs_bridge
-                name: br-all
-                use_dhcp: false
-                members:
-                - type: linux_bond
+              members:
+                -
+                  type: linux_bond
                   name: bond1
-                  bonding_options:
-                    get_param: LinuxBondInterfaceOptions
+                  bonding_options: {get_param: LinuxBondInterfaceOptions}
                   members:
-                  - type: interface
-                    name: ens1f0
-                  - type: interface
-                    name: ens1f1
-                - type: vlan
+                    -
+                      type: interface
+                      name: ens1f0
+                    -
+                      type: interface
+                      name: ens1f1
+                -
+                  type: vlan
                   device: bond1
-                  vlan_id:
-                    get_param: InternalApiNetworkVlanID
+                  vlan_id: {get_param: InternalApiNetworkVlanID}
                   addresses:
-                  - ip_netmask:
-                      get_param: InternalApiIpSubnet
-                - type: vlan
+                    -
+                      ip_netmask: {get_param: InternalApiIpSubnet}
+                -
+                  type: vlan
                   device: bond1
-                  vlan_id:
-                    get_param: StorageNetworkVlanID
+                  vlan_id: {get_param: StorageNetworkVlanID}
                   addresses:
-                  - ip_netmask:
-                      get_param: StorageIpSubnet
+                    -
+                      ip_netmask: {get_param: StorageIpSubnet}
                 - type: vlan
                   device: bond1
                   mtu: 9000  #  1
@@ -184,30 +174,32 @@ resources:
                   vlan_id: {get_param: StorageMgmtNetworkVlanID}
                   addresses:
                   - ip_netmask: {get_param: StorageMgmtIpSubnet}
-                - type: vlan
+                -
+                  type: vlan
                   device: bond1
-                  vlan_id:
-                    get_param: TenantNetworkVlanID
+                  vlan_id: {get_param: TenantNetworkVlanID}
                   addresses:
-                  - ip_netmask:
-                      get_param: TenantIpSubnet
+                    -
+                      ip_netmask: {get_param: TenantIpSubnet}
+            -
+              type: ovs_bridge
+              name: br-ex
+              use_dhcp: false
 
-              - type: ovs_bridge
-                name: br-ex
-                use_dhcp: false
-                members:
-                - type: linux_bond
+              members:
+                -
+                  type: linux_bond
                   name: bond2
-                  bonding_options:
-                    get_param: LinuxBondInterfaceOptions
+                  bonding_options: {get_param: LinuxBondInterfaceOptions}
                   members:
-                  - type: interface
-                    name: ens2f0
-                  - type: interface
-                    name: ens2f2
+                    -
+                      type: interface
+                      name: ens2f0
+                    -
+                      type: interface
+                      name: ens2f2
 
 outputs:
   OS::stack_id:
     description: The OsNetConfigImpl resource.
-    value:
-      get_resource: OsNetConfigImpl
+    value: {get_resource: OsNetConfigImpl}

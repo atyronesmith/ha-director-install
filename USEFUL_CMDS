@@ -27,33 +27,43 @@ infrared virsh -v \
 Install Undercloud:
 
 infrared tripleo-undercloud -v \
- --version=13 \
+ --version=12 \
  --build=latest \
  --images-task=rpm \
- --config-file ~/ir-osp13/undercloud.conf
+ --config-file ~/ir-osp12/undercloud.conf
 
 Introspect/Tag Overcloud:
 
-ir tripleo-overcloud -vv --version 13 \
-    --deployment-files  ~/ir-osp13/templates \
-    --overcloud-script ~/ir-osp13/overcloud_deploy.sh \
+ir tripleo-overcloud -vv --version 12 \
+    --deployment-files  ~/ir-osp12/templates \
+    --overcloud-script ~/ir-osp12/overcloud_deploy.sh \
      --build latest --introspect=yes --tagging=yes --deploy=no \
      -e provison_virsh_network_name=br-ctlplane --hybrid \
-     ~/ir-osp13/compute.json
+     ~/ir-osp12/compute.json
 
 CONTAINER STUFF BEFORE DEPLOY (perform as stack on undercloud):
 
 openstack overcloud container image prepare \
---namespace=registry.access.redhat.com/rhosp13 \
---push-destination=192.0.2.1:8787 \
---prefix=openstack- \
--e /usr/share/openstack-tripleo-heat-templates/environments/ceph-ansible/ceph-ansible.yaml \
---set ceph_namespace=registry.access.redhat.com/rhceph \
---set ceph_image=rhceph-3-rhel7 \
---output-env-file=/home/stack/templates/overcloud_images.yaml \
---output-images-file /home/stack/local_registry_images.yaml
+  --namespace=registry.access.redhat.com/rhosp12 \
+  --prefix=openstack- \
+  --tag=latest \
+  --output-images-file /home/stack/local_registry_images.yaml \
+  -e /usr/share/openstack-tripleo-heat-templates/environments/ceph-ansible/ceph-ansible.yaml \
+  --set ceph_namespace=registry.access.redhat.com/rhceph \
+  --set ceph_image=rhceph-2-rhel7 \
+  --set ceph_tag=latest
 
 openstack overcloud container image upload   --config-file  /home/stack/local_registry_images.yaml   --verbose
+
+openstack overcloud container image prepare \
+  --namespace=192.0.2.1:8787/rhosp12 \
+  --prefix=openstack- \
+  --tag=latest \
+  --output-env-file=/home/stack/templates/overcloud_images.yaml \
+  -e /usr/share/openstack-tripleo-heat-templates/environments/ceph-ansible/ceph-ansible.yaml \
+  --set ceph_namespace=registry.access.redhat.com/rhceph \
+  --set ceph_image=rhceph-2-rhel7 \
+  --set ceph_tag=latest
 
 OTHER STUFF BEFORE DEPLOY
 
@@ -79,9 +89,9 @@ openstack baremetal node set --property root_device='{"wwn": "<wwn>"}' <compute 
 
 Deploy Overcloud:
 
-ir tripleo-overcloud -vv --version 13 \
-     --deployment-files  ~/ir-osp13/templates \
-     --overcloud-script ~/ir-osp13/overcloud_deploy.sh \
+ir tripleo-overcloud -vv --version 12 \
+     --deployment-files  ~/ir-osp12/templates \
+     --overcloud-script ~/ir-osp12/overcloud_deploy.sh \
      --build latest --introspect=no --tagging=no --deploy=yes \
      -e provison_virsh_network_name=br-ctlplane --hybrid \
-     ~/ir-osp13/compute.json
+     ~/ir-osp12/compute.json
