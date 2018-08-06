@@ -61,7 +61,7 @@ openstack overcloud container image prepare \
   --tag=latest \
   --output-env-file=/home/stack/templates/overcloud_images.yaml \
   -e /usr/share/openstack-tripleo-heat-templates/environments/ceph-ansible/ceph-ansible.yaml \
-  --set ceph_namespace=registry.access.redhat.com/rhceph \
+  --set ceph_namespace=192.0.2.1:8787/rhceph \
   --set ceph_image=rhceph-2-rhel7 \
   --set ceph_tag=latest
 
