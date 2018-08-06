@@ -13,7 +13,7 @@ parameter_defaults:
   DockerCeilometerComputeImage: 192.0.2.1:8787/rhosp12/openstack-ceilometer-compute:latest
   DockerCeilometerConfigImage: 192.0.2.1:8787/rhosp12/openstack-ceilometer-central:latest
   DockerCeilometerNotificationImage: 192.0.2.1:8787/rhosp12/openstack-ceilometer-notification:latest
-  DockerCephDaemonImage: registry.access.redhat.com/rhceph/rhceph-2-rhel7:latest
+  DockerCephDaemonImage: 192.0.2.1:8787/rhceph/rhceph-2-rhel7:latest
   DockerClustercheckConfigImage: 192.0.2.1:8787/rhosp12/openstack-mariadb:latest
   DockerClustercheckImage: 192.0.2.1:8787/rhosp12/openstack-mariadb:latest
   DockerCrondConfigImage: 192.0.2.1:8787/rhosp12/openstack-cron:latest
@@ -68,4 +68,3 @@ parameter_defaults:
   DockerSwiftContainerImage: 192.0.2.1:8787/rhosp12/openstack-swift-container:latest
   DockerSwiftObjectImage: 192.0.2.1:8787/rhosp12/openstack-swift-object:latest
   DockerSwiftProxyImage: 192.0.2.1:8787/rhosp12/openstack-swift-proxy-server:latest
-
