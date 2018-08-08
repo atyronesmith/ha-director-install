@@ -1,6 +1,6 @@
-# Generated with the following on 2018-08-03T07:44:25.958941
+# Generated with the following on 2018-08-07T12:48:48.794764
 #
-#   openstack overcloud container image prepare --namespace=192.0.2.1:8787/rhosp12 --prefix=openstack- --tag=latest --output-env-file=/home/stack/overcloud_images.yaml -e /usr/share/openstack-tripleo-heat-templates/environments/ceph-ansible/ceph-ansible.yaml --set ceph_namespace=registry.access.redhat.com/rhceph --set ceph_image=rhceph-2-rhel7 --set ceph_tag=latest
+#   openstack overcloud container image prepare --namespace=192.0.2.1:8787/rhosp12 --prefix=openstack- --tag=latest --output-env-file=/home/stack/templates/overcloud_images.yaml -e /usr/share/openstack-tripleo-heat-templates/environments/ceph-ansible/ceph-ansible.yaml --set ceph_namespace=192.0.2.1:8787/rhceph --set ceph_image=rhceph-2-rhel7 --set ceph_tag=latest
 #
 
 parameter_defaults:

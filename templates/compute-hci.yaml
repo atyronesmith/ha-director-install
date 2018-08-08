@@ -112,21 +112,18 @@ resources:
                   next_hop: {get_param: EC2MetadataIp}
                 - next_hop:
                     get_param: ControlPlaneDefaultRoute
-
+            
             - type: interface
               name: eno1
               use_dhcp: false
-              defroute: false
-
-            - type: interface
-              name: ens1f2
-              use_dhcp: false
-              defroute: false
-
-            - type: interface
-              name: ens1f3
-              use_dhcp: false
-              defroute: false
+              defroute: true
+              dns_servers:
+                get_param: DnsServers
+              addresses:
+              - ip_netmask: 10.19.110.17/24
+              routes:
+              - default: true
+                next_hop: 10.19.110.254            
 
             - type: interface
               name: ens2f1
@@ -200,6 +197,22 @@ resources:
                     -
                       type: interface
                       name: ens2f2
+
+            - type: interface
+              name: ens1f2
+              mtu: 9000
+              use_dhcp: false
+              defroute: false
+              nm_controlled: true
+              hotplug: true
+
+            - type: interface
+              name: ens1f3
+              mtu: 9000
+              use_dhcp: false
+              defroute: false
+              nm_controlled: true
+              hotplug: true
 
 outputs:
   OS::stack_id:
