@@ -28,7 +28,7 @@ Install Undercloud:
 
 infrared tripleo-undercloud -v \
  --version=12 \
- --build=latest \
+ --build=20180522.1 \
  --images-task=rpm \
  --config-file ~/ir-osp12-hci/undercloud.conf
 
@@ -37,14 +37,14 @@ Introspect/Tag Overcloud:
 ir tripleo-overcloud -vv --version 12 \
     --deployment-files  ~/ir-osp12-hci/templates \
     --overcloud-script ~/ir-osp12-hci/overcloud_deploy.sh \
-     --build latest --introspect=yes --tagging=yes --deploy=no \
+     --build 20180522.1 --introspect=yes --tagging=yes --deploy=no \
      -e provison_virsh_network_name=br-ctlplane --hybrid \
      ~/ir-osp12-hci/compute.json
 
 CONTAINER STUFF BEFORE DEPLOY (perform as stack on undercloud):
 
 openstack overcloud container image prepare \
-  --namespace=registry.access.redhat.com/rhosp12 \
+  --namespace=docker-registry.engineering.redhat.com/rhosp12 \
   --prefix=openstack- \
   --tag=latest \
   --output-images-file /home/stack/local_registry_images.yaml \
@@ -92,6 +92,6 @@ Deploy Overcloud:
 ir tripleo-overcloud -vv --version 12 \
      --deployment-files  ~/ir-osp12-hci/templates \
      --overcloud-script ~/ir-osp12-hci/overcloud_deploy.sh \
-     --build latest --introspect=no --tagging=no --deploy=yes \
+     --build 20180522.1 --introspect=no --tagging=no --deploy=yes \
      -e provison_virsh_network_name=br-ctlplane --hybrid \
      ~/ir-osp12-hci/compute.json

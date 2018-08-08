@@ -12,6 +12,13 @@ resource_registry:
 #  OS::TripleO::NodeUserData: ../first-boot.yaml
   OS::TripleO::NodeExtraConfigPost: ../post-install.yaml
 
+  # Reboot before network
+  OS::TripleO::Compute::PreNetworkConfig: /usr/share/openstack-tripleo-heat-templates/extraconfig/pre_network/host_config_and_reboot.yaml
+
+  # Enable SR-IOV agent
+  OS::TripleO::Services::NeutronSriovAgent: /usr/share/openstack-tripleo-heat-templates/docker/services/neutron-sriov-agent.yaml
+  OS::TripleO::Services::NeutronSriovHostConfig: /usr/share/openstack-tripleo-heat-templates/puppet/services/neutron-sriov-host-config.yaml
+
 parameter_defaults:
   # This section is where deployment-specific configuration is done
   # CIDR subnet mask length for provisioning network
@@ -88,3 +95,36 @@ parameter_defaults:
 
   NeutronNetworkVLANRanges: "datacentre:1000:2000"
 
+  #####
+  # SRIOV
+  #####
+
+  NeutronPhysicalDevMappings: "physnet_sriov1:ens1f2,physnet_sriov2:ens1f3"
+
+  NeutronBridgeMappings: 'datacentre:br-all,physnet_sriov1:br-isolated1,physnet_sriov2:br-isolated2'
+
+  NeutronSupportedPCIVendorDevs: ['8086:1584','8086:154c']
+
+  NeutronSriovNumVFs: "ens1f2:5,ens1f3:5"
+
+  ComputeHCIParameters:
+    KernelArgs: default_hugepagesz=1GB hugepagesz=1G hugepages=32 iommu=pt intel_iommu=on
+    #TunedProfileName: "cpu-partitioning"
+    #IsolCpusList: "1,2,3,4,5,6,7,9,10,17,18,19,20,21,22,23,11,12,13,14,15,25,26,27,28,29,30,31"
+    #NovaVcpuPinSet: ['1,2,3,4,5,6,7,9,10,17,18,19,20,21,22,23,11,12,13,14,15,25,26,27,28,29,30,31']
+    NovaReservedHostMemory: 4096
+    NovaPCIPassthrough:
+      - devname: "ens1f2"
+        physical_network: "physnet_sriov1"
+      - devname: "ens1f3"
+        physical_network: "physnet_sriov2"
+
+  # MTU global configuration
+  NeutronGlobalPhysnetMtu: 9000
+
+  # DHCP provide metadata route to VM.
+  NeutronEnableIsolatedMetadata: true
+  # DHCP always provides metadata route to VM.
+  NeutronEnableForceMetadata: true
+  # Configure the classname of the firewall driver to use for implementing security groups.
+  NeutronOVSFirewallDriver: openvswitch
