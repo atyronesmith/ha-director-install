@@ -1,9 +1,9 @@
 {
     "nodes":[
         {
-            "name": "compute-3",
+            "name": "compute-1",
             "mac":[
-	      "0c:c4:7a:db:a9:ab"
+	      "0c:c4:7a:db:a9:af"
             ],
             "cpu":"4",
             "memory":"6144",
@@ -12,7 +12,22 @@
             "pm_type":"pxe_ipmitool",
             "pm_user":"ADMIN",
             "pm_password":"ADMIN",
-            "pm_addr":"10.19.110.18"
+            "pm_addr":"10.19.110.14"
+        },
+	 {
+            "name": "compute-2",
+            "mac":[
+	      "0c:c4:7a:db:ac:05"
+            ],
+            "cpu":"4",
+            "memory":"6144",
+            "disk":"40",
+            "arch":"x86_64",
+            "pm_type":"pxe_ipmitool",
+            "pm_user":"ADMIN",
+            "pm_password":"ADMIN",
+            "pm_addr":"10.19.110.24"
         }
+
     ]
 }

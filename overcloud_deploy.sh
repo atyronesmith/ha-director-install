@@ -1,4 +1,5 @@
 openstack overcloud deploy \
--r ./templates/roles_data.yaml \
--p ./templates/plan-environment-derived-params.yaml \
---answers-file /home/stack/templates/answers.yaml
+--templates  \
+-e ./templates/environments/network-isolation.yaml \
+-e ./templates/environments/network-environment.yaml \
+-e ./templates/ips-from-pool-all.yaml

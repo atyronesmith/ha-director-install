@@ -3,7 +3,7 @@ networks:
         name: br-ctlplane
         forward: bridge
         nic: eno2
-        ip_address: 192.0.2.4
+        ip_address: 192.0.2.7
         netmask: 255.255.255.0
     net2:
         name: br-vlan
@@ -16,15 +16,15 @@ networks:
     net4:
         external_connectivity: yes
         name: "management"
-        ip_address: "172.16.0.1"
+        ip_address: "172.16.0.101"
         netmask: "255.255.255.0"
         forward: nat
         dhcp:
             range:
-                start: "172.16.0.2"
-                end: "172.16.0.100"
+                start: "172.16.0.102"
+                end: "172.16.0.200"
             subnet_cidr: "172.16.0.0/24"
-            subnet_gateway: "172.16.0.1"
+            subnet_gateway: "172.16.0.101"
         floating_ip:
-            start: "172.16.0.101"
-            end: "172.16.0.150"
+            start: "172.16.0.201"
+            end: "172.16.0.250"

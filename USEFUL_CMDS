@@ -1,4 +1,4 @@
-First activate virtual env:
+Activate virtual environment:
 
 source .venv/bin/activate
 cd infrared
@@ -18,7 +18,7 @@ infrared virsh -v \
     -e override.undercloud.memory=28672 \
     -e override.controller.cpu=6 \
     -e override.undercloud.cpu=6 \
-    --host-address 10.19.110.15 \
+    --host-address 10.19.110.13 \
     --host-key ~/.ssh/id_rsa \
     --topology-network 3_bridges_1_net
 
@@ -28,70 +28,31 @@ Install Undercloud:
 
 infrared tripleo-undercloud -v \
  --version=12 \
- --build=20180522.1 \
+ --build=latest \
  --images-task=rpm \
- --config-file ~/ir-osp12-hci/undercloud.conf
+ --config-file ~/ha-director-install/undercloud.conf
 
 Introspect/Tag Overcloud:
 
 ir tripleo-overcloud -vv --version 12 \
-    --deployment-files  ~/ir-osp12-hci/templates \
-    --overcloud-script ~/ir-osp12-hci/overcloud_deploy.sh \
-     --build 20180522.1 --introspect=yes --tagging=yes --deploy=no \
+    --deployment-files  ~/ha-director-install/templates \
+    --overcloud-script ~/ha-director-install/overcloud_deploy.sh \
+     --build latest --introspect=yes --tagging=yes --deploy=no \
      -e provison_virsh_network_name=br-ctlplane --hybrid \
-     ~/ir-osp12-hci/compute.json
+     ~/ha-director-install/compute.json
 
 CONTAINER STUFF BEFORE DEPLOY (perform as stack on undercloud):
 
-openstack overcloud container image prepare \
-  --namespace=docker-registry.engineering.redhat.com/rhosp12 \
-  --prefix=openstack- \
-  --tag=latest \
-  --output-images-file /home/stack/local_registry_images.yaml \
-  -e /usr/share/openstack-tripleo-heat-templates/environments/ceph-ansible/ceph-ansible.yaml \
-  --set ceph_namespace=registry.access.redhat.com/rhceph \
-  --set ceph_image=rhceph-2-rhel7 \
-  --set ceph_tag=latest
-
-openstack overcloud container image upload   --config-file  /home/stack/local_registry_images.yaml   --verbose
-
-openstack overcloud container image prepare \
-  --namespace=192.0.2.1:8787/rhosp12 \
-  --prefix=openstack- \
-  --tag=latest \
-  --output-env-file=/home/stack/templates/overcloud_images.yaml \
-  -e /usr/share/openstack-tripleo-heat-templates/environments/ceph-ansible/ceph-ansible.yaml \
-  --set ceph_namespace=192.0.2.1:8787/rhceph \
-  --set ceph_image=rhceph-2-rhel7 \
-  --set ceph_tag=latest
-
-OTHER STUFF BEFORE DEPLOY
-
-openstack overcloud roles generate -o /home/stack/templates/roles_data.yaml Controller ComputeHCI
-
-openstack flavor create --id auto --ram 6144 --disk 40 --vcpus 4 osdcompute
-
-openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" --property "capabilities:profile"="osdcompute" osdcompute
-
-ironic node-update 1306bfa4-e877-47df-8e4c-9de838de80d2 add properties/capabilities='profile:osdcompute,boot_option:local'
-
-sudo yum install -y ceph-ansible crudini
-
-export SWIFT_PASSWORD=`sudo crudini --get /etc/ironic-inspector/inspector.conf swift password`
-
-mkdir /home/stack/swift-data
-cd /home/stack/swift-data
-
-for i in $(openstack baremetal node list | grep -v UUID | awk '{print $2}'); do openstack baremetal introspection data save $i --file data_$i; done
-for i in $(openstack baremetal node list | grep -v UUID | awk '{print $2}'); do echo "NODE: $i" ; cat data_$i | jq '.inventory.disks' ; echo "-----" ; done
-
-openstack baremetal node set --property root_device='{"wwn": "<wwn>"}' <compute node>
+openstack overcloud container image prepare   --namespace rhosp12   --tag 20171011.2 --prefix openstack --suffix docker   --pull-source docker-registry.engineering.redhat.com   --push-destination 192.0.2.1:8787   --images-file overcloud_containers.yaml
+openstack overcloud container image upload --config-file overcloud_containers.yaml -v
+openstack overcloud container image prepare   --namespace 192.0.2.1:8787/rhosp12   --tag 20171011.2   --prefix openstack   --suffix docker   --env-file ~/docker_registry.yaml
+echo "  DockerInsecureRegistryAddress: 192.0.2.1:8787" >>   ~/docker_registry.yaml
 
 Deploy Overcloud:
 
-ir tripleo-overcloud -vv --version 12 \
-     --deployment-files  ~/ir-osp12-hci/templates \
-     --overcloud-script ~/ir-osp12-hci/overcloud_deploy.sh \
-     --build 20180522.1 --introspect=no --tagging=no --deploy=yes \
+ir tripleo-overcloud -vv --version 12 \    
+    --deployment-files  ~/ha-director-install/templates \   
+    --overcloud-script ~/ha-director-install/overcloud_deploy.sh \ 
+     --build latest --introspect=no --tagging=no --deploy=yes \     
      -e provison_virsh_network_name=br-ctlplane --hybrid \
-     ~/ir-osp12-hci/compute.json
+     ~/ha-director-install/compute.json
