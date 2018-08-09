@@ -112,7 +112,7 @@ resources:
                   next_hop: {get_param: EC2MetadataIp}
                 - next_hop:
                     get_param: ControlPlaneDefaultRoute
-            
+
             - type: interface
               name: eno1
               use_dhcp: false
@@ -123,7 +123,7 @@ resources:
               - ip_netmask: 10.19.110.17/24
               routes:
               - default: true
-                next_hop: 10.19.110.254            
+                next_hop: 10.19.110.254
 
             - type: interface
               name: ens2f1
