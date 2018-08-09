@@ -161,14 +161,14 @@ resources:
                     -
                       default: true
                       next_hop: {get_param: ExternalInterfaceDefaultRoute}
+            -
+              type: ovs_bridge
+              name: br-link
+              use_dhcp: false
+              members:
                 -
-                  type: ovs_bridge
-                  name: br-link
-                  use_dhcp: false
-                  members:
-                    -
-                      type: interface
-                      name: nic3
+                  type: interface
+                  name: nic3
 
 outputs:
   OS::stack_id:
