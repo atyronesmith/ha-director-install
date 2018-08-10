@@ -16,9 +16,9 @@ parameter_defaults:
   # CIDR subnet mask length for provisioning network
   ControlPlaneSubnetCidr: '24'
   # Gateway router for the provisioning network (or Undercloud IP)
-  ControlPlaneDefaultRoute: 192.0.2.7
+  ControlPlaneDefaultRoute: 192.0.2.6
   ControlPlaneIp: 192.0.2.7
-  EC2MetadataIp: 192.0.2.7  # Generally the IP of the Undercloud
+  EC2MetadataIp: 192.0.2.6  # Generally the IP of the Undercloud
   # Customize the IP subnets to match the local environment
   InternalApiNetCidr: 172.27.0.0/24
   StorageNetCidr: 172.28.0.0/24
@@ -86,3 +86,7 @@ parameter_defaults:
 
   NeutronNetworkVLANRanges: "datacentre:1000:2000"
 
+  # DHCP provide metadata route to VM.
+  NeutronEnableIsolatedMetadata: true
+  # DHCP always provides metadata route to VM.
+  NeutronEnableForceMetadata: true
