@@ -31,7 +31,7 @@ parameter_defaults:
   InternalApiNetCidr: 172.17.0.0/24
   StorageNetCidr: 172.18.0.0/24
   StorageMgmtNetCidr: 172.19.0.0/24
-  TenantNetCidr: 172.16.0.0/24
+  TenantNetCidr: 172.20.0.0/24
   ExternalNetCidr: 10.19.111.0/24
   # Customize the VLAN IDs to match the local environment
   InternalApiNetworkVlanID: 1020
@@ -43,7 +43,7 @@ parameter_defaults:
   InternalApiAllocationPools: [{'start': '172.17.0.100', 'end': '172.17.0.200'}]
   StorageAllocationPools: [{'start': '172.18.0.100', 'end': '172.18.0.200'}]
   StorageMgmtAllocationPools: [{'start': '172.19.0.100', 'end': '172.19.0.200'}]
-  TenantAllocationPools: [{'start': '172.16.0.100', 'end': '172.16.0.200'}]
+  TenantAllocationPools: [{'start': '172.20.0.100', 'end': '172.20.0.200'}]
   # Leave room if the external network is also used for floating IPs
   ExternalAllocationPools: [{'start': '10.19.111.100', 'end': '10.19.111.150'}]
   ExternalNetworkVip: 10.19.111.151
@@ -65,14 +65,14 @@ parameter_defaults:
   BondInterfaceOvsOptions: "bond_mode=active-backup lacp=active"
 
   # Set to 9000 for Jumbo frames
-  #NeutronGlobalPhysnetMtu: 9000 
+  #NeutronGlobalPhysnetMtu: 9000
 
   # Flavor of controller and compute nodes:
   OvercloudControlFlavor: controller
   OvercloudComputeHCIFlavor: osdcompute
   #OvercloudComputeFlavor: compute
   #OvercloudCephStorageFlavor: ceph-storage
-  
+
   # Number of nodes to deploy.
   ControllerCount: 1
   ComputeHCICount: 1
@@ -86,10 +86,10 @@ parameter_defaults:
 
   # Add a list or range of physical CPU cores to be reserved for virtual machine processes
   #NovaVcpuPinSet: ['16-23']
- 
+
   # Set the tunnel type for tenant network (for example, vxlan or gre). To disable the tunnel type parameter, set the value to ""
   NeutronTunnelTypes: "vxlan"
- 
+
   # Set the tenant network type for OpenStack Networking. The options available are vlan or vxlan:
   NeutronNetworkType: 'vxlan,vlan'
 
