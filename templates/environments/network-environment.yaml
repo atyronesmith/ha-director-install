@@ -90,3 +90,6 @@ parameter_defaults:
   NeutronEnableIsolatedMetadata: true
   # DHCP always provides metadata route to VM.
   NeutronEnableForceMetadata: true
+
+  # Set the Open vSwitch logical to physical bridge mappings:
+  NeutronBridgeMappings: 'datacentre:br-all'
