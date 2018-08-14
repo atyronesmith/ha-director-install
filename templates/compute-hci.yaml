@@ -98,122 +98,121 @@ resources:
           params:
             $network_config:
               network_config:
+              - type: interface
+                name: eno2
+                use_dhcp: false
+                dns_servers: {get_param: DnsServers}
+                addresses:
+                   -
+                    ip_netmask:
+                      list_join:
+                        - '/'
+                        - - {get_param: ControlPlaneIp}
+                          - {get_param: ControlPlaneSubnetCidr}
+                routes:
+                  -
+                    ip_netmask: 169.254.169.254/32
+                    next_hop: {get_param: EC2MetadataIp}
+                  - next_hop:
+                      get_param: ControlPlaneDefaultRoute
 
-                - type: interface
-                  name: eno2
-                  use_dhcp: false
-                  dns_servers: {get_param: DnsServers}
-                  addresses:
-                     -
-                      ip_netmask:
-                        list_join:
-                          - '/'
-                          - - {get_param: ControlPlaneIp}
-                            - {get_param: ControlPlaneSubnetCidr}
-                  routes:
-                    -
-                      ip_netmask: 169.254.169.254/32
-                      next_hop: {get_param: EC2MetadataIp}
-                    - next_hop:
-                        get_param: ControlPlaneDefaultRoute
+              - type: interface
+                name: eno1
+                use_dhcp: false
+                defroute: true
+                dns_servers:
+                  get_param: DnsServers
+                addresses:
+                - ip_netmask: 10.19.110.17/24
+                routes:
+                - default: true
+                  next_hop: 10.19.110.254
 
-                - type: interface
-                  name: eno1
-                  use_dhcp: false
-                  defroute: true
-                  dns_servers:
-                    get_param: DnsServers
-                  addresses:
-                  - ip_netmask: 10.19.110.17/24
-                  routes:
-                  - default: true
-                    next_hop: 10.19.110.254
+              - type: interface
+                name: ens2f1
+                use_dhcp: false
+                defroute: false
 
-                - type: interface
-                  name: ens2f1
-                  use_dhcp: false
-                  defroute: false
-
-                - type: interface
-                  name: ens2f3
-                  use_dhcp: false
-                  defroute: false
+              - type: interface
+                name: ens2f3
+                use_dhcp: false
+                defroute: false
 
 
-                -
-                  type: linux_bond
-                  name: bond1
-                  use_dhcp: false
-                  bonding_options: {get_param: LinuxBondInterfaceOptions}
-                  members:
-                    -
-                      type: interface
-                      name: ens1f0
-                    -
-                      type: interface
-                      name: ens1f1
-                -
-                  type: vlan
-                  device: bond1
-                  vlan_id: {get_param: InternalApiNetworkVlanID}
-                  addresses:
-                    -
-                      ip_netmask: {get_param: InternalApiIpSubnet}
-                -
-                  type: vlan
-                  device: bond1
-                  vlan_id: {get_param: StorageNetworkVlanID}
-                  addresses:
-                    -
-                      ip_netmask: {get_param: StorageIpSubnet}
-                - type: vlan
-                  device: bond1
-                  mtu: 9000  #  1
-                  use_dhcp: false
-                  vlan_id: {get_param: StorageMgmtNetworkVlanID}
-                  addresses:
-                  - ip_netmask: {get_param: StorageMgmtIpSubnet}
-                -
-                  type: vlan
-                  device: bond1
-                  vlan_id: {get_param: TenantNetworkVlanID}
-                  addresses:
-                    -
-                      ip_netmask: {get_param: TenantIpSubnet}
+              -
+                type: linux_bond
+                name: bond1
+                use_dhcp: false
+                bonding_options: {get_param: LinuxBondInterfaceOptions}
+                members:
+                  -
+                    type: interface
+                    name: ens1f0
+                  -
+                    type: interface
+                    name: ens1f1
+              -
+                type: vlan
+                device: bond1
+                vlan_id: {get_param: InternalApiNetworkVlanID}
+                addresses:
+                  -
+                    ip_netmask: {get_param: InternalApiIpSubnet}
+              -
+                type: vlan
+                device: bond1
+                vlan_id: {get_param: StorageNetworkVlanID}
+                addresses:
+                  -
+                    ip_netmask: {get_param: StorageIpSubnet}
+              - type: vlan
+                device: bond1
+                mtu: 9000  #  1
+                use_dhcp: false
+                vlan_id: {get_param: StorageMgmtNetworkVlanID}
+                addresses:
+                - ip_netmask: {get_param: StorageMgmtIpSubnet}
+              -
+                type: vlan
+                device: bond1
+                vlan_id: {get_param: TenantNetworkVlanID}
+                addresses:
+                  -
+                    ip_netmask: {get_param: TenantIpSubnet}
 
-                -
-                  type: ovs_bridge
-                  name: br-ex
-                  use_dhcp: false
+              -
+                type: ovs_bridge
+                name: br-ex
+                use_dhcp: false
 
-                  members:
-                    -
-                      type: linux_bond
-                      name: bond2
-                      bonding_options: {get_param: LinuxBondInterfaceOptions}
-                      members:
-                        -
-                          type: interface
-                          name: ens2f0
-                        -
-                          type: interface
-                          name: ens2f2
+                members:
+                  -
+                    type: linux_bond
+                    name: bond2
+                    bonding_options: {get_param: LinuxBondInterfaceOptions}
+                    members:
+                      -
+                        type: interface
+                        name: ens2f0
+                      -
+                        type: interface
+                        name: ens2f2
 
-                - type: interface
-                  name: ens1f2
-                  mtu: 9000
-                  use_dhcp: false
-                  defroute: false
-                  nm_controlled: true
-                  hotplug: true
+              - type: interface
+                name: ens1f2
+                mtu: 9000
+                use_dhcp: false
+                defroute: false
+                nm_controlled: true
+                hotplug: true
 
-                - type: interface
-                  name: ens1f3
-                  mtu: 9000
-                  use_dhcp: false
-                  defroute: false
-                  nm_controlled: true
-                  hotplug: true
+              - type: interface
+                name: ens1f3
+                mtu: 9000
+                use_dhcp: false
+                defroute: false
+                nm_controlled: true
+                hotplug: true
 
 outputs:
   OS::stack_id:

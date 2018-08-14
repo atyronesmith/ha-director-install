@@ -99,77 +99,76 @@ resources:
           params:
             $network_config:
               network_config:
+              - type: interface
+                name: nic1
+                use_dhcp: false
+                dns_servers: {get_param: DnsServers}
+                addresses:
+                   -
+                    ip_netmask:
+                      list_join:
+                        - '/'
+                        - - {get_param: ControlPlaneIp}
+                          - {get_param: ControlPlaneSubnetCidr}
+                routes:
+                  -
+                    ip_netmask: 169.254.169.254/32
+                    next_hop: {get_param: EC2MetadataIp}
+                  - next_hop:
+                      get_param: ControlPlaneDefaultRoute
 
-                - type: interface
-                  name: nic1
-                  use_dhcp: false
-                  dns_servers: {get_param: DnsServers}
-                  addresses:
-                     -
-                      ip_netmask:
-                        list_join:
-                          - '/'
-                          - - {get_param: ControlPlaneIp}
-                            - {get_param: ControlPlaneSubnetCidr}
-                  routes:
-                    -
-                      ip_netmask: 169.254.169.254/32
-                      next_hop: {get_param: EC2MetadataIp}
-                    - next_hop:
-                        get_param: ControlPlaneDefaultRoute
+              -
+                type: interface
+                name: nic2
+                use_dhcp: false
+              -
+                type: vlan
+                device: nic2
+                vlan_id: {get_param: InternalApiNetworkVlanID}
+                addresses:
+                  -
+                    ip_netmask: {get_param: InternalApiIpSubnet}
+              -
+                type: vlan
+                device: nic2
+                vlan_id: {get_param: StorageNetworkVlanID}
+                addresses:
+                  -
+                    ip_netmask: {get_param: StorageIpSubnet}
+              -
+                type: vlan
+                device: nic2
+                vlan_id: {get_param: StorageMgmtNetworkVlanID}
+                addresses:
+                  -
+                    ip_netmask: {get_param: StorageMgmtIpSubnet}
+              -
+                type: vlan
+                device: nic2
+                vlan_id: {get_param: TenantNetworkVlanID}
+                addresses:
+                  -
+                    ip_netmask: {get_param: TenantIpSubnet}
+              -
+                type: vlan
+                device: nic2
+                vlan_id: {get_param: ExternalNetworkVlanID}
+                addresses:
+                  -
+                    ip_netmask: {get_param: ExternalIpSubnet}
+                routes:
+                  -
+                    default: true
+                    next_hop: {get_param: ExternalInterfaceDefaultRoute}
 
-                -
-                  type: interface
-                  name: nic2
-                  use_dhcp: false
-                -
-                  type: vlan
-                  device: nic2
-                  vlan_id: {get_param: InternalApiNetworkVlanID}
-                  addresses:
-                    -
-                      ip_netmask: {get_param: InternalApiIpSubnet}
-                -
-                  type: vlan
-                  device: nic2
-                  vlan_id: {get_param: StorageNetworkVlanID}
-                  addresses:
-                    -
-                      ip_netmask: {get_param: StorageIpSubnet}
-                -
-                  type: vlan
-                  device: nic2
-                  vlan_id: {get_param: StorageMgmtNetworkVlanID}
-                  addresses:
-                    -
-                      ip_netmask: {get_param: StorageMgmtIpSubnet}
-                -
-                  type: vlan
-                  device: nic2
-                  vlan_id: {get_param: TenantNetworkVlanID}
-                  addresses:
-                    -
-                      ip_netmask: {get_param: TenantIpSubnet}
-                -
-                  type: vlan
-                  device: nic2
-                  vlan_id: {get_param: ExternalNetworkVlanID}
-                  addresses:
-                    -
-                      ip_netmask: {get_param: ExternalIpSubnet}
-                  routes:
-                    -
-                      default: true
-                      next_hop: {get_param: ExternalInterfaceDefaultRoute}
-
-                -
-                  type: ovs_bridge
-                  name: br-link
-                  use_dhcp: false
-                  members:
-                    -
-                      type: interface
-                      name: nic3
+              -
+                type: ovs_bridge
+                name: br-link
+                use_dhcp: false
+                members:
+                  -
+                    type: interface
+                    name: nic3
 
 outputs:
   OS::stack_id:
