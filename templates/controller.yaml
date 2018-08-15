@@ -1,9 +1,6 @@
-heat_template_version: 2015-04-30
-
+heat_template_version: queens
 description: >
-  Software Config to drive os-net-config with 2 bonded nics on a bridge
-  with VLANs attached for the controller role.
-
+  Software Config to drive os-net-config with 2 bonded nics on a bridge with VLANs attached for the controller role.
 parameters:
   ControlPlaneIp:
     default: ''
@@ -35,13 +32,11 @@ parameters:
     type: string
   BondInterfaceOvsOptions:
     default: 'balance-slb'
-    description: The ovs_options string for the bond interface. Set things like
-                 lacp=active and/or bond_mode=balance-slb using this option.
+    description: The ovs_options string for the bond interface. Set things like lacp=active and/or bond_mode=balance-slb using this option.
     type: string
   LinuxBondInterfaceOptions:
     default: 'balance-slb'
-    description: The ovs_options string for the bond interface. Set things like
-                 lacp=active and/or bond_mode=balance-slb using this option.
+    description: The ovs_options string for the bond interface. Set things like lacp=active and/or bond_mode=balance-slb using this option.
     type: string
   ExternalNetworkVlanID:
     default: 100
@@ -86,7 +81,6 @@ parameters:
     description: The IP address of the EC2 metadata server.
     type: string
 
-
 resources:
   OsNetConfigImpl:
     type: OS::Heat::SoftwareConfig
@@ -102,76 +96,74 @@ resources:
               - type: interface
                 name: nic1
                 use_dhcp: false
-                dns_servers: {get_param: DnsServers}
+                dns_servers:
+                  get_param: DnsServers
                 addresses:
-                   -
-                    ip_netmask:
-                      list_join:
-                        - '/'
-                        - - {get_param: ControlPlaneIp}
-                          - {get_param: ControlPlaneSubnetCidr}
+                - ip_netmask:
+                    list_join:
+                    - /
+                    - - get_param: ControlPlaneIp
+                      - get_param: ControlPlaneSubnetCidr
                 routes:
-                  -
-                    ip_netmask: 169.254.169.254/32
-                    next_hop: {get_param: EC2MetadataIp}
-                  - next_hop:
-                      get_param: ControlPlaneDefaultRoute
+                - ip_netmask: 169.254.169.254/32
+                  next_hop:
+                    get_param: EC2MetadataIp
 
-              -
-                type: interface
-                name: nic2
+              - type: ovs_bridge
+                name: br-all
                 use_dhcp: false
-              -
-                type: vlan
-                device: nic2
-                vlan_id: {get_param: InternalApiNetworkVlanID}
-                addresses:
-                  -
-                    ip_netmask: {get_param: InternalApiIpSubnet}
-              -
-                type: vlan
-                device: nic2
-                vlan_id: {get_param: StorageNetworkVlanID}
-                addresses:
-                  -
-                    ip_netmask: {get_param: StorageIpSubnet}
-              -
-                type: vlan
-                device: nic2
-                vlan_id: {get_param: StorageMgmtNetworkVlanID}
-                addresses:
-                  -
-                    ip_netmask: {get_param: StorageMgmtIpSubnet}
-              -
-                type: vlan
-                device: nic2
-                vlan_id: {get_param: TenantNetworkVlanID}
-                addresses:
-                  -
-                    ip_netmask: {get_param: TenantIpSubnet}
-              -
-                type: vlan
-                device: nic2
-                vlan_id: {get_param: ExternalNetworkVlanID}
-                addresses:
-                  -
-                    ip_netmask: {get_param: ExternalIpSubnet}
-                routes:
-                  -
-                    default: true
-                    next_hop: {get_param: ExternalInterfaceDefaultRoute}
-
-              -
-                type: ovs_bridge
+                members:
+                - type: interface
+                  name: nic2
+                - type: vlan
+                  device: nic2
+                  vlan_id:
+                    get_param: InternalApiNetworkVlanID
+                  addresses:
+                  - ip_netmask:
+                      get_param: InternalApiIpSubnet
+                - type: vlan
+                  device: nic2
+                  vlan_id:
+                    get_param: StorageNetworkVlanID
+                  addresses:
+                  - ip_netmask:
+                      get_param: StorageIpSubnet
+                - type: vlan
+                  device: nic2
+                  vlan_id:
+                    get_param: StorageMgmtNetworkVlanID
+                  addresses:
+                  - ip_netmask:
+                      get_param: StorageMgmtIpSubnet
+                - type: vlan
+                  device: nic2
+                  vlan_id:
+                    get_param: TenantNetworkVlanID
+                  addresses:
+                  - ip_netmask:
+                      get_param: TenantIpSubnet
+                - type: vlan
+                  device: nic2
+                  vlan_id:
+                    get_param: ExternalNetworkVlanID
+                  addresses:
+                  - ip_netmask:
+                      get_param: ExternalIpSubnet
+                  routes:
+                  - default: true
+                    next_hop:
+                      get_param: ExternalInterfaceDefaultRoute
+              - type: ovs_bridge
                 name: br-link
                 use_dhcp: false
                 members:
-                  -
-                    type: interface
-                    name: nic3
+                - type: interface
+                  name: nic3
 
 outputs:
   OS::stack_id:
     description: The OsNetConfigImpl resource.
     value:
       get_resource: OsNetConfigImpl
+
