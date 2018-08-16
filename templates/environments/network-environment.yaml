@@ -64,9 +64,7 @@ parameter_defaults:
 
   # Flavor of controller and compute nodes:
   OvercloudControlFlavor: controller
-  OvercloudComputeHCIFlavor: osdcompute
-  #OvercloudComputeFlavor: compute
-  #OvercloudCephStorageFlavor: ceph-storage
+  OvercloudComputeFlavor: compute
 
   # Number of nodes to deploy.
   ControllerCount: 1
