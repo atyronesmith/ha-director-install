@@ -30,16 +30,16 @@ infrared tripleo-undercloud -v \
  --version=13 \
  --build=latest \
  --images-task=rpm \
- --config-file ~/ir-osp13-hci-sriov/undercloud.conf
+ --config-file ~/ir-osp13-sriov/undercloud.conf
 
 Introspect/Tag Overcloud:
 
 ir tripleo-overcloud -vv --version 13 \
-    --deployment-files  ~/ir-osp13-hci-sriov/templates \
-    --overcloud-script ~/ir-osp13-hci-sriov/overcloud_deploy.sh \
+    --deployment-files  ~/ir-osp13-sriov/templates \
+    --overcloud-script ~/ir-osp13-sriov/overcloud_deploy.sh \
      --build latest --introspect=yes --tagging=yes --deploy=no \
      -e provison_virsh_network_name=br-ctlplane --hybrid \
-     ~/ir-osp13-hci-sriov/compute.json
+     ~/ir-osp13-sriov/compute.json
 
 CONTAINER STUFF BEFORE DEPLOY (perform as stack on undercloud):
 
@@ -47,11 +47,7 @@ openstack overcloud container image prepare \
   --namespace=docker-registry.engineering.redhat.com/rhosp13 \
   --prefix=openstack- \
   --tag=latest \
-  --output-images-file /home/stack/local_registry_images.yaml \
-  -e /usr/share/openstack-tripleo-heat-templates/environments/ceph-ansible/ceph-ansible.yaml \
-  --set ceph_namespace=registry.access.redhat.com/rhceph \
-  --set ceph_image=rhceph-3-rhel7 \
-  --set ceph_tag=latest
+  --output-images-file /home/stack/local_registry_images.yaml
 
 openstack overcloud container image upload   --config-file  /home/stack/local_registry_images.yaml   --verbose
 
@@ -59,18 +55,11 @@ openstack overcloud container image prepare \
   --namespace=192.0.2.1:8787/rhosp13 \
   --prefix=openstack- \
   --tag=latest \
-  --output-env-file=/home/stack/templates/overcloud_images.yaml \
-  -e /usr/share/openstack-tripleo-heat-templates/environments/ceph-ansible/ceph-ansible.yaml \
-  --set ceph_namespace=192.0.2.1:8787/rhceph \
-  --set ceph_image=rhceph-3-rhel7 \
-  --set ceph_tag=latest
+  --output-env-file=/home/stack/templates/overcloud_images.yaml
 
 OTHER STUFF BEFORE DEPLOY
 
-openstack overcloud roles generate -o /home/stack/templates/roles_data.yaml Controller ComputeHCI
-
-openstack flavor create --id auto --ram 6144 --disk 40 --vcpus 4 osdcompute
-openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" --property "capabilities:profile"="osdcompute" osdcompute
+openstack overcloud roles generate -o /home/stack/templates/roles_data.yaml Controller Compute
 
 openstack flavor create --id auto --ram 6144 --disk 30 --vcpus 4 controller
 openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" --property "capabilities:profile"="controller" controller
@@ -81,15 +70,15 @@ openstack flavor set controller --property "resources:DISK_GB"="0"
 openstack flavor set controller --property "resources:MEMORY_MB"="0"
 openstack flavor set controller --property "resources:VCPU"="0"
 
-openstack flavor set osdcompute --property "resources:CUSTOM_BAREMETAL"="1"
-openstack flavor set osdcompute --property "resources:DISK_GB"="0"
-openstack flavor set osdcompute --property "resources:MEMORY_MB"="0"
-openstack flavor set osdcompute --property "resources:VCPU"="0"
+openstack flavor set compute --property "resources:CUSTOM_BAREMETAL"="1"
+openstack flavor set compute --property "resources:DISK_GB"="0"
+openstack flavor set compute --property "resources:MEMORY_MB"="0"
+openstack flavor set compute --property "resources:VCPU"="0"
 
-ironic node-update <compute(s)> add properties/capabilities='profile:osdcompute,boot_option:local'
+ironic node-update <compute(s)> add properties/capabilities='profile:compute,boot_option:local'
 ironic node-update <controller(s)> add properties/capabilities='profile:control,boot_option:local'
 
-sudo yum install -y ceph-ansible crudini
+sudo yum install -y crudini
 
 export SWIFT_PASSWORD=`sudo crudini --get /etc/ironic-inspector/inspector.conf swift password`
 
@@ -104,8 +93,8 @@ openstack baremetal node set --property root_device='{"wwn": "<wwn>"}' <compute 
 Deploy Overcloud:
 
 ir tripleo-overcloud -vv --version 13 \
-    --deployment-files  ~/ir-osp13-hci-sriov/templates \
-    --overcloud-script ~/ir-osp13-hci-sriov/overcloud_deploy.sh \
+    --deployment-files  ~/ir-osp13-sriov/templates \
+    --overcloud-script ~/ir-osp13-sriov/overcloud_deploy.sh \
      --build latest --introspect=no --tagging=no --deploy=yes \
      -e provison_virsh_network_name=br-ctlplane --hybrid \
-     ~/ir-osp13-hci-sriov/compute.json
+     ~/ir-osp13-sriov/compute.json
