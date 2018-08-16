@@ -43,6 +43,11 @@ parameters:
     description: The ovs_options string for the bond interface. Set things like
                  lacp=active and/or bond_mode=balance-slb using this option.
     type: string
+  DpdkBondInterfaceOvsOptions:
+    default: 'bond_mode=balance-tcp lacp=active'
+    description: The ovs_options string for the bond interface. Set things like
+                 lacp=active and/or bond_mode=balance-slb using this option.
+    type: string
   ExternalNetworkVlanID:
     default: 100
     description: Vlan ID for the external network traffic.
@@ -185,19 +190,25 @@ resources:
                   - ip_netmask:
                       get_param: TenantIpSubnet
 
-              - type: ovs_bridge
-                name: br-ex
+              - type: ovs_user_bridge
+                name: br-link
                 use_dhcp: false
                 members:
-                - type: linux_bond
-                  name: bond2
-                  bonding_options:
-                    get_param: LinuxBondInterfaceOptions
+                - type: ovs_dpdk_bond
+                  name: dpdkbond0
+                  ovs_options:
+                    get_param: DpdkBondInterfaceOvsOptions
                   members:
-                  - type: interface
-                    name: ens2f0
-                  - type: interface
-                    name: ens2f2
+                  - type: ovs_dpdk_port
+                    name: dpdk0
+                    members:
+                    - type: interface
+                      name: ens2f0
+                  - type: ovs_dpdk_port
+                    name: dpdk1
+                    members:
+                    - type: interface
+                      name: ens2f2
 
               - type: interface
                 name: ens1f2
