@@ -63,7 +63,7 @@ openstack overcloud roles generate -o /home/stack/templates/roles_data.yaml Cont
 
 openstack flavor create --id auto --ram 6144 --disk 30 --vcpus 4 controller
 openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" --property "capabilities:profile"="controller" controller
-openstack flavor delete control
+openstack flavor delete control 
 
 openstack flavor set controller --property "resources:CUSTOM_BAREMETAL"="1"
 openstack flavor set controller --property "resources:DISK_GB"="0"
