@@ -30,16 +30,16 @@ infrared tripleo-undercloud -v \
  --version=12 \
  --build=20180522.1 \
  --images-task=rpm \
- --config-file ~/ir-osp12-hci/undercloud.conf
+ --config-file ~/ir-osp12-hci-sriov/undercloud.conf
 
 Introspect/Tag Overcloud:
 
 ir tripleo-overcloud -vv --version 12 \
-    --deployment-files  ~/ir-osp12-hci/templates \
-    --overcloud-script ~/ir-osp12-hci/overcloud_deploy.sh \
+    --deployment-files  ~/ir-osp12-hci-sriov/templates \
+    --overcloud-script ~/ir-osp12-hci-sriov/overcloud_deploy.sh \
      --build 20180522.1 --introspect=yes --tagging=yes --deploy=no \
      -e provison_virsh_network_name=br-ctlplane --hybrid \
-     ~/ir-osp12-hci/compute.json
+     ~/ir-osp12-hci-sriov/compute.json
 
 CONTAINER STUFF BEFORE DEPLOY (perform as stack on undercloud):
 
@@ -90,8 +90,8 @@ openstack baremetal node set --property root_device='{"wwn": "<wwn>"}' <compute 
 Deploy Overcloud:
 
 ir tripleo-overcloud -vv --version 12 \
-     --deployment-files  ~/ir-osp12-hci/templates \
-     --overcloud-script ~/ir-osp12-hci/overcloud_deploy.sh \
+     --deployment-files  ~/ir-osp12-hci-sriov/templates \
+     --overcloud-script ~/ir-osp12-hci-sriov/overcloud_deploy.sh \
      --build 20180522.1 --introspect=no --tagging=no --deploy=yes \
      -e provison_virsh_network_name=br-ctlplane --hybrid \
-     ~/ir-osp12-hci/compute.json
+     ~/ir-osp12-hci-sriov/compute.json
