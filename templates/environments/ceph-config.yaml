@@ -1,8 +1,9 @@
 parameter_defaults:
-  CephAnsibleDisksConfig:
+  # NodeDataLookup: |
+  #   {"00000000-0000-0000-0000-0CC47ADBA9AA": {"osd_scenario": "non-collocated", "devices": ["/dev/disk/by-path/pci-0000:00:11.4-ata-3.0"], "dedicated_devices": ["/dev/disk/by-path/pci-0000:00:11.4-ata-2.0"]}}
+  ComputeHCIParameters:
     osd_scenario: non-collocated
     devices:
       - /dev/disk/by-path/pci-0000:00:11.4-ata-3.0
-
     dedicated_devices:
       - /dev/disk/by-path/pci-0000:00:11.4-ata-2.0

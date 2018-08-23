@@ -76,7 +76,7 @@ openstack flavor create --id auto --ram 6144 --disk 40 --vcpus 4 osdcompute
 
 openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" --property "capabilities:profile"="osdcompute" osdcompute
 
-ironic node-update 1306bfa4-e877-47df-8e4c-9de838de80d2 add properties/capabilities='profile:osdcompute,boot_option:local'
+ironic node-update <compute node> add properties/capabilities='profile:osdcompute,boot_option:local'
 
 sudo yum install -y ceph-ansible crudini
 
