@@ -53,6 +53,9 @@ openstack overcloud container image prepare \
   --set ceph_image=rhceph-2-rhel7 \
   --set ceph_tag=latest
 
+vi /etc/sysconfig/docker
+--insecure-registry docker-registry.engineering.redhat.com
+
 openstack overcloud container image upload   --config-file  /home/stack/local_registry_images.yaml   --verbose
 
 openstack overcloud container image prepare \
