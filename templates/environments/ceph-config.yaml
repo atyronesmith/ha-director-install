@@ -6,3 +6,10 @@ parameter_defaults:
 
     dedicated_devices:
       - /dev/disk/by-path/pci-0000:00:11.4-ata-2.0
+  CephPoolDefaultSize: 3
+  CephPoolDefaultPgNum: 8
+  CephConfigOverrides:
+    mon_max_pg_per_osd: 1024
+    mon_max_pool_pg_num: 128
+    osd_pool_default_pg_num: 8
+    osd_pool_default_pgp_num: 8

@@ -1,6 +1,6 @@
-# Generated with the following on 2018-08-14T08:19:25.180742
+# Generated with the following on 2018-08-24T09:31:14.603835
 #
-#   openstack overcloud container image prepare --namespace=192.0.2.1:8787/rhosp13 --prefix=openstack- --tag=latest --output-env-file=/home/stack/templates/overcloud_images.yaml -e /usr/share/openstack-tripleo-heat-templates/environments/ceph-ansible/ceph-ansible.yaml --set ceph_namespace=192.0.2.1:8787/rhceph --set ceph_image=rhceph-3-rhel7 --set ceph_tag=latest
+#   openstack overcloud container image prepare --namespace=docker-registry.engineering.redhat.com/rhosp13 --push-destination=192.0.2.1:8787 --prefix=openstack- --tag=latest --output-env-file=/home/stack/templates/overcloud_images.yaml --output-images-file /home/stack/local_registry_images.yaml -e /usr/share/openstack-tripleo-heat-templates/environments/ceph-ansible/ceph-ansible.yaml --set ceph_namespace=registry.access.redhat.com/rhceph --set ceph_image=rhceph-3-rhel7 --set ceph_tag=latest
 #
 
 parameter_defaults:
@@ -38,8 +38,6 @@ parameter_defaults:
   DockerHeatEngineImage: 192.0.2.1:8787/rhosp13/openstack-heat-engine:latest
   DockerHorizonConfigImage: 192.0.2.1:8787/rhosp13/openstack-horizon:latest
   DockerHorizonImage: 192.0.2.1:8787/rhosp13/openstack-horizon:latest
-  DockerInsecureRegistryAddress:
-  - 192.0.2.1:8787
   DockerIscsidConfigImage: 192.0.2.1:8787/rhosp13/openstack-iscsid:latest
   DockerIscsidImage: 192.0.2.1:8787/rhosp13/openstack-iscsid:latest
   DockerKeystoneConfigImage: 192.0.2.1:8787/rhosp13/openstack-keystone:latest
@@ -78,3 +76,5 @@ parameter_defaults:
   DockerSwiftContainerImage: 192.0.2.1:8787/rhosp13/openstack-swift-container:latest
   DockerSwiftObjectImage: 192.0.2.1:8787/rhosp13/openstack-swift-object:latest
   DockerSwiftProxyImage: 192.0.2.1:8787/rhosp13/openstack-swift-proxy-server:latest
+  DockerInsecureRegistryAddress:
+  - 192.0.2.1:8787

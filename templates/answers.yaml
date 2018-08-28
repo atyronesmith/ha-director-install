@@ -11,4 +11,4 @@ environments:
   - /home/stack/templates/environments/storage-container-config.yaml 
   - /home/stack/templates/overcloud_images.yaml 
   - /home/stack/templates/ips-from-pool-all.yaml 
- 
+  - /home/stack/templates/environments/inject-trust-anchor-hiera.yaml 
