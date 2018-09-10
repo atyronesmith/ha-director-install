@@ -55,6 +55,7 @@ openstack overcloud container image prepare \
 
 vi /etc/sysconfig/docker
 --insecure-registry docker-registry.engineering.redhat.com
+sudo systemctl restart docker
 
 openstack overcloud container image upload   --config-file  /home/stack/local_registry_images.yaml   --verbose
 
