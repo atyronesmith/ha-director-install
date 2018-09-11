@@ -2,7 +2,7 @@
 resource_registry:
   OS::TripleO::Controller::Ports::ExternalPort: /usr/share/openstack-tripleo-heat-templates/network/ports/external_from_pool.yaml
 
-  OS::TripleO::Compute::Ports::ExternalPort: /usr/share/openstack-tripleo-heat-templates/network/ports/external_from_pool.yaml
+  OS::TripleO::ComputeHCI::Ports::ExternalPort: /usr/share/openstack-tripleo-heat-templates/network/ports/external_from_pool.yaml
 
   OS::TripleO::CephStorage::Ports::ExternalPort: /usr/share/openstack-tripleo-heat-templates/network/ports/external_from_pool.yaml
 
@@ -13,13 +13,13 @@ parameter_defaults:
     - 10.19.111.111
     - 10.19.111.112
     - 10.19.111.113
-  NovaComputeIPs:
+  ComputeHCIIPs:
     # Each compute will get an IP from the lists below, first compute, first IP
     external:
     - 10.19.111.114
     - 10.19.111.115
     - 10.19.111.116
-    - 10.19.111.117 
+    - 10.19.111.117
     - 10.19.111.118
     - 10.19.111.119
   CephStorageIPs:

@@ -30,16 +30,16 @@ infrared tripleo-undercloud -v \
  --version=13 \
  --build=latest \
  --images-task=rpm \
- --config-file ~/ir-osp13-hci-sriov/undercloud.conf
+ --config-file ~/ir-osp13-hci-odl/undercloud.conf
 
 >>> Introspect/Tag Overcloud:
 
 ir tripleo-overcloud -vv --version 13 \
-    --deployment-files  ~/ir-osp13-hci-sriov/templates \
-    --overcloud-script ~/ir-osp13-hci-sriov/overcloud_deploy.sh \
+    --deployment-files  ~/ir-osp13-hci-odl/templates \
+    --overcloud-script ~/ir-osp13-hci-odl/overcloud_deploy.sh \
      --build latest --introspect=yes --tagging=yes --deploy=no \
      -e provison_virsh_network_name=br-ctlplane --hybrid \
-     ~/ir-osp13-hci-sriov/compute.json
+     ~/ir-osp13-hci-odl/compute.json
 
 >>> CONTAINER STUFF BEFORE DEPLOY (perform as stack on undercloud):
 
@@ -55,6 +55,7 @@ openstack overcloud container image prepare \
   --output-env-file=/home/stack/templates/overcloud_images.yaml \
   --output-images-file /home/stack/local_registry_images.yaml \
   -e /usr/share/openstack-tripleo-heat-templates/environments/ceph-ansible/ceph-ansible.yaml \
+  -e /usr/share/openstack-tripleo-heat-templates/environments/services-docker/neutron-opendaylight.yaml \
   --set ceph_namespace=registry.access.redhat.com/rhceph \
   --set ceph_image=rhceph-3-rhel7 \
   --set ceph_tag=latest
@@ -76,10 +77,12 @@ openstack overcloud container image upload   --config-file  /home/stack/local_re
 sudo cp /etc/pki/tls/certs/undercloud-192.0.2.2.pem /etc/docker/undercloud.crt
 sudo cp /etc/pki/tls/certs/undercloud-front.crt /etc/docker/undercloud.pem
 
+# The "--tls*" options below need to be removed if you need to re-upload container
+# images into the undercloud's local registry!
 sudo vi /etc/sysconfig/docker
   OPTIONS="--log-driver=journald --signature-verification=false --tlscert /etc/docker/undercloud.crt --tlskey /etc/docker/undercloud.pem --tls"
   ...
-  INSECURE_REGISTRY="--insecure-registry 192.0.2.3:8787 --insecure-registry 192.0.2.1:8787 --insecure-registry docker-registry.engineering.redhat.com"
+  INSECURE_REGISTRY="--insecure-registry 192.0.2.3:8787 --insecure-registry 192.0.2.1:8787"
 sudo systemctl restart docker
 
 openstack overcloud roles generate -o /home/stack/templates/roles_data.yaml Controller ComputeHCI
@@ -128,8 +131,8 @@ openstack overcloud image upload --update-existing
 >>> Deploy Overcloud:
 
 ir tripleo-overcloud -vv --version 13 \
-    --deployment-files  ~/ir-osp13-hci-sriov/templates \
-    --overcloud-script ~/ir-osp13-hci-sriov/overcloud_deploy.sh \
+    --deployment-files  ~/ir-osp13-hci-odl/templates \
+    --overcloud-script ~/ir-osp13-hci-odl/overcloud_deploy.sh \
      --build latest --introspect=no --tagging=no --deploy=yes \
      -e provison_virsh_network_name=br-ctlplane --hybrid \
-     ~/ir-osp13-hci-sriov/compute.json
+     ~/ir-osp13-hci-odl/compute.json
