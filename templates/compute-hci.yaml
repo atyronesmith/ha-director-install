@@ -129,17 +129,6 @@ resources:
                 - default: true
                   next_hop: 10.19.110.254
 
-
-              - type: interface
-                name: ens1f2
-                use_dhcp: false
-                defroute: false
-
-              - type: interface
-                name: ens1f3
-                use_dhcp: false
-                defroute: false
-
               - type: interface
                 name: ens2f1
                 use_dhcp: false
