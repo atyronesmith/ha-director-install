@@ -43,8 +43,8 @@ ir tripleo-overcloud -vv --version 13 \
 
 >>> CONTAINER STUFF BEFORE DEPLOY (perform as stack on undercloud):
 
-vi /etc/sysconfig/docker
-  --insecure-registry docker-registry.engineering.redhat.com
+sudo vi /etc/sysconfig/docker
+  INSECURE_REGISTRY="--insecure-registry 192.0.2.3:8787 --insecure-registry 192.0.2.1:8787 --insecure-registry docker-registry.engineering.redhat.com"
 sudo systemctl restart docker
 
 openstack overcloud container image prepare \
@@ -60,7 +60,7 @@ openstack overcloud container image prepare \
   --set ceph_image=rhceph-3-rhel7 \
   --set ceph_tag=latest
 
-vi /usr/lib/python2.7/site-packages/tripleo_common/image/image_uploader.py
+sudo vi /usr/lib/python2.7/site-packages/tripleo_common/image/image_uploader.py
   # DON'T do cleanup after all the uploads so common layers don't get deleted
   # repeatedly
   #self.cleanup(local_images)

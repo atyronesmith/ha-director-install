@@ -91,8 +91,10 @@ parameter_defaults:
 
   NeutronNetworkVLANRanges: "datacentre:1000:2000"
 
-  NeutronBridgeMappings: 'datacentre:br-all'
-  # 
+  #NeutronBridgeMappings: 'datacentre:br-all'
+  OpenDaylightProviderMappings: 'datacentre:br-all'
+
+  #
   # # DHCP provide metadata route to VM.
   # NeutronEnableIsolatedMetadata: true
   # # DHCP always provides metadata route to VM.
