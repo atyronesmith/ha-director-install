@@ -206,22 +206,6 @@ resources:
                   - type: interface
                     name: ens2f2
 
-              - type: interface
-                name: ens1f2
-                mtu: 9000
-                use_dhcp: false
-                defroute: false
-                nm_controlled: true
-                hotplug: true
-
-              - type: interface
-                name: ens1f3
-                mtu: 9000
-                use_dhcp: false
-                defroute: false
-                nm_controlled: true
-                hotplug: true
-
 outputs:
   OS::stack_id:
     description: The OsNetConfigImpl resource.

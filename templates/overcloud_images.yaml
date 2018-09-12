@@ -1,6 +1,6 @@
-# Generated with the following on 2018-08-24T09:31:14.603835
+# Generated with the following on 2018-09-12T08:10:52.544055
 #
-#   openstack overcloud container image prepare --namespace=docker-registry.engineering.redhat.com/rhosp13 --push-destination=192.0.2.1:8787 --prefix=openstack- --tag=latest --output-env-file=/home/stack/templates/overcloud_images.yaml --output-images-file /home/stack/local_registry_images.yaml -e /usr/share/openstack-tripleo-heat-templates/environments/ceph-ansible/ceph-ansible.yaml --set ceph_namespace=registry.access.redhat.com/rhceph --set ceph_image=rhceph-3-rhel7 --set ceph_tag=latest
+#   openstack overcloud container image prepare --namespace=docker-registry.engineering.redhat.com/rhosp13 --push-destination=192.0.2.1:8787 --prefix=openstack- --tag=latest --output-env-file=/home/stack/templates/overcloud_images.yaml --output-images-file /home/stack/local_registry_images.yaml -e /usr/share/openstack-tripleo-heat-templates/environments/ceph-ansible/ceph-ansible.yaml -e /usr/share/openstack-tripleo-heat-templates/environments/services-docker/neutron-opendaylight.yaml --set ceph_namespace=registry.access.redhat.com/rhceph --set ceph_image=rhceph-3-rhel7 --set ceph_tag=latest
 #
 
 parameter_defaults:
@@ -38,6 +38,8 @@ parameter_defaults:
   DockerHeatEngineImage: 192.0.2.1:8787/rhosp13/openstack-heat-engine:latest
   DockerHorizonConfigImage: 192.0.2.1:8787/rhosp13/openstack-horizon:latest
   DockerHorizonImage: 192.0.2.1:8787/rhosp13/openstack-horizon:latest
+  DockerInsecureRegistryAddress:
+  - 192.0.2.1:8787
   DockerIscsidConfigImage: 192.0.2.1:8787/rhosp13/openstack-iscsid:latest
   DockerIscsidImage: 192.0.2.1:8787/rhosp13/openstack-iscsid:latest
   DockerKeystoneConfigImage: 192.0.2.1:8787/rhosp13/openstack-keystone:latest
@@ -47,10 +49,9 @@ parameter_defaults:
   DockerMysqlClientConfigImage: 192.0.2.1:8787/rhosp13/openstack-mariadb:latest
   DockerMysqlConfigImage: 192.0.2.1:8787/rhosp13/openstack-mariadb:latest
   DockerMysqlImage: 192.0.2.1:8787/rhosp13/openstack-mariadb:latest
-  DockerNeutronApiImage: 192.0.2.1:8787/rhosp13/openstack-neutron-server:latest
-  DockerNeutronConfigImage: 192.0.2.1:8787/rhosp13/openstack-neutron-server:latest
+  DockerNeutronApiImage: 192.0.2.1:8787/rhosp13/openstack-neutron-server-opendaylight:latest
+  DockerNeutronConfigImage: 192.0.2.1:8787/rhosp13/openstack-neutron-server-opendaylight:latest
   DockerNeutronDHCPImage: 192.0.2.1:8787/rhosp13/openstack-neutron-dhcp-agent:latest
-  DockerNeutronL3AgentImage: 192.0.2.1:8787/rhosp13/openstack-neutron-l3-agent:latest
   DockerNeutronMetadataImage: 192.0.2.1:8787/rhosp13/openstack-neutron-metadata-agent:latest
   DockerNovaApiImage: 192.0.2.1:8787/rhosp13/openstack-nova-api:latest
   DockerNovaComputeImage: 192.0.2.1:8787/rhosp13/openstack-nova-compute:latest
@@ -64,7 +65,8 @@ parameter_defaults:
   DockerNovaPlacementImage: 192.0.2.1:8787/rhosp13/openstack-nova-placement-api:latest
   DockerNovaSchedulerImage: 192.0.2.1:8787/rhosp13/openstack-nova-scheduler:latest
   DockerNovaVncProxyImage: 192.0.2.1:8787/rhosp13/openstack-nova-novncproxy:latest
-  DockerOpenvswitchImage: 192.0.2.1:8787/rhosp13/openstack-neutron-openvswitch-agent:latest
+  DockerOpendaylightApiImage: 192.0.2.1:8787/rhosp13/openstack-opendaylight:latest
+  DockerOpendaylightConfigImage: 192.0.2.1:8787/rhosp13/openstack-opendaylight:latest
   DockerPankoApiImage: 192.0.2.1:8787/rhosp13/openstack-panko-api:latest
   DockerPankoConfigImage: 192.0.2.1:8787/rhosp13/openstack-panko-api:latest
   DockerRabbitmqConfigImage: 192.0.2.1:8787/rhosp13/openstack-rabbitmq:latest
@@ -76,5 +78,3 @@ parameter_defaults:
   DockerSwiftContainerImage: 192.0.2.1:8787/rhosp13/openstack-swift-container:latest
   DockerSwiftObjectImage: 192.0.2.1:8787/rhosp13/openstack-swift-object:latest
   DockerSwiftProxyImage: 192.0.2.1:8787/rhosp13/openstack-swift-proxy-server:latest
-  DockerInsecureRegistryAddress:
-  - 192.0.2.1:8787
