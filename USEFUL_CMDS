@@ -54,11 +54,7 @@ openstack overcloud container image prepare \
   --tag=latest \
   --output-env-file=/home/stack/templates/overcloud_images.yaml \
   --output-images-file /home/stack/local_registry_images.yaml \
-  -e /usr/share/openstack-tripleo-heat-templates/environments/ceph-ansible/ceph-ansible.yaml \
-  -e /usr/share/openstack-tripleo-heat-templates/environments/services-docker/neutron-opendaylight.yaml \
-  --set ceph_namespace=registry.access.redhat.com/rhceph \
-  --set ceph_image=rhceph-3-rhel7 \
-  --set ceph_tag=latest
+  -e /usr/share/openstack-tripleo-heat-templates/environments/services-docker/neutron-opendaylight.yaml
 
 sudo vi /usr/lib/python2.7/site-packages/tripleo_common/image/image_uploader.py
   # DON'T do cleanup after all the uploads so common layers don't get deleted
@@ -85,10 +81,7 @@ sudo vi /etc/sysconfig/docker
   INSECURE_REGISTRY="--insecure-registry 192.0.2.3:8787 --insecure-registry 192.0.2.1:8787"
 sudo systemctl restart docker
 
-openstack overcloud roles generate -o /home/stack/templates/roles_data.yaml Controller ComputeHCI
-
-openstack flavor create --id auto --ram 6144 --disk 40 --vcpus 4 osdcompute
-openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" --property "capabilities:profile"="osdcompute" osdcompute
+openstack overcloud roles generate -o /home/stack/templates/roles_data.yaml Controller Compute
 
 openstack flavor create --id auto --ram 6144 --disk 30 --vcpus 4 controller
 openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" --property "capabilities:profile"="controller" controller
@@ -99,12 +92,12 @@ openstack flavor set controller --property "resources:DISK_GB"="0"
 openstack flavor set controller --property "resources:MEMORY_MB"="0"
 openstack flavor set controller --property "resources:VCPU"="0"
 
-openstack flavor set osdcompute --property "resources:CUSTOM_BAREMETAL"="1"
-openstack flavor set osdcompute --property "resources:DISK_GB"="0"
-openstack flavor set osdcompute --property "resources:MEMORY_MB"="0"
-openstack flavor set osdcompute --property "resources:VCPU"="0"
+openstack flavor set compute --property "resources:CUSTOM_BAREMETAL"="1"
+openstack flavor set compute --property "resources:DISK_GB"="0"
+openstack flavor set compute --property "resources:MEMORY_MB"="0"
+openstack flavor set compute --property "resources:VCPU"="0"
 
-ironic node-update <compute(s)> add properties/capabilities='profile:osdcompute,boot_option:local'
+ironic node-update <compute(s)> add properties/capabilities='profile:compute,boot_option:local'
 ironic node-update <controller(s)> add properties/capabilities='profile:controller,boot_option:local'
 
 sudo yum install -y ceph-ansible crudini
