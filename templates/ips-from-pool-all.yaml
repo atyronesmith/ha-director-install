@@ -4,8 +4,6 @@ resource_registry:
 
   OS::TripleO::ComputeHCI::Ports::ExternalPort: /usr/share/openstack-tripleo-heat-templates/network/ports/external_from_pool.yaml
 
-  OS::TripleO::CephStorage::Ports::ExternalPort: /usr/share/openstack-tripleo-heat-templates/network/ports/external_from_pool.yaml
-
 parameter_defaults:
   ControllerIPs:
     # Each controller will get an IP from the lists below, first controller, first IP
@@ -13,7 +11,7 @@ parameter_defaults:
     - 10.19.111.111
     - 10.19.111.112
     - 10.19.111.113
-  ComputeHCIIPs:
+  ComputeIPs:
     # Each compute will get an IP from the lists below, first compute, first IP
     external:
     - 10.19.111.114
@@ -22,10 +20,4 @@ parameter_defaults:
     - 10.19.111.117
     - 10.19.111.118
     - 10.19.111.119
-  CephStorageIPs:
-    # Each ceph node will get an IP from the lists below, first node, first IP
-    external:
-    - 10.19.111.120
-    - 10.19.111.121
-    - 10.19.111.122
   ExternalNetworkVip: 10.19.111.151

@@ -12,7 +12,7 @@ networks:
     net3:
         name: br-link
         forward: bridge
-        nic: ens1f1
+        nic: ens1f2
     net4:
         external_connectivity: yes
         name: "management"

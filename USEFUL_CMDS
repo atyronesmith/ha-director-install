@@ -8,7 +8,7 @@ source etc/bash_completion.d/infrared
 
 cp hybrid_undercloud.yml ~/infrared/plugins/virsh/vars/topology/nodes/.
 cp hybrid_controller.yml ~/infrared/plugins/virsh/vars/topology/nodes/.
-cp 3_bridge_1_net.yml ~/infrared/plugins/virsh/vars/topology/network/.
+cp 3_bridges_1_net.yml ~/infrared/plugins/virsh/vars/topology/network/.
 
 >>> Provision:
 
@@ -70,37 +70,7 @@ openstack overcloud container image upload   --config-file  /home/stack/local_re
 
 >>> OTHER STUFF BEFORE DEPLOY
 
-sudo cp /etc/pki/tls/certs/undercloud-192.0.2.2.pem /etc/docker/undercloud.crt
-sudo cp /etc/pki/tls/certs/undercloud-front.crt /etc/docker/undercloud.pem
-
-# The "--tls*" options below need to be removed if you need to re-upload container
-# images into the undercloud's local registry!
-sudo vi /etc/sysconfig/docker
-  OPTIONS="--log-driver=journald --signature-verification=false --tlscert /etc/docker/undercloud.crt --tlskey /etc/docker/undercloud.pem --tls"
-  ...
-  INSECURE_REGISTRY="--insecure-registry 192.0.2.3:8787 --insecure-registry 192.0.2.1:8787"
-sudo systemctl restart docker
-
-openstack overcloud roles generate -o /home/stack/templates/roles_data.yaml Controller Compute
-
-openstack flavor create --id auto --ram 6144 --disk 30 --vcpus 4 controller
-openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" --property "capabilities:profile"="controller" controller
-openstack flavor delete control
-
-openstack flavor set controller --property "resources:CUSTOM_BAREMETAL"="1"
-openstack flavor set controller --property "resources:DISK_GB"="0"
-openstack flavor set controller --property "resources:MEMORY_MB"="0"
-openstack flavor set controller --property "resources:VCPU"="0"
-
-openstack flavor set compute --property "resources:CUSTOM_BAREMETAL"="1"
-openstack flavor set compute --property "resources:DISK_GB"="0"
-openstack flavor set compute --property "resources:MEMORY_MB"="0"
-openstack flavor set compute --property "resources:VCPU"="0"
-
-ironic node-update <compute(s)> add properties/capabilities='profile:compute,boot_option:local'
-ironic node-update <controller(s)> add properties/capabilities='profile:controller,boot_option:local'
-
-sudo yum install -y ceph-ansible crudini
+sudo yum install -y crudini
 
 export SWIFT_PASSWORD=`sudo crudini --get /etc/ironic-inspector/inspector.conf swift password`
 

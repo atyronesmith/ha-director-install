@@ -1,11 +1,10 @@
 templates: /usr/share/openstack-tripleo-heat-templates/
 environments:
   - /home/stack/templates/environments/network-isolation.yaml
-  - /home/stack/templates/environments/network-environment.yaml
   - /usr/share/openstack-tripleo-heat-templates/environments/host-config-and-reboot.yaml
   - /usr/share/openstack-tripleo-heat-templates/environments/docker.yaml
   - /usr/share/openstack-tripleo-heat-templates/environments/docker-ha.yaml
   - /usr/share/openstack-tripleo-heat-templates/environments/services-docker/neutron-opendaylight.yaml
   - /home/stack/templates/overcloud_images.yaml
   - /home/stack/templates/ips-from-pool-all.yaml
-  - /home/stack/templates/environments/inject-trust-anchor-hiera.yaml
+  - /home/stack/templates/environments/network-environment.yaml

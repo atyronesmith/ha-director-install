@@ -20,20 +20,14 @@ parameter_defaults:
   EC2MetadataIp: 192.0.2.4  # Generally the IP of the Undercloud
   # Customize the IP subnets to match the local environment
   InternalApiNetCidr: 172.17.0.0/24
-  StorageNetCidr: 172.18.0.0/24
-  StorageMgmtNetCidr: 172.19.0.0/24
   TenantNetCidr: 172.20.0.0/24
   ExternalNetCidr: 10.19.111.0/24
   # Customize the VLAN IDs to match the local environment
   InternalApiNetworkVlanID: 1020
-  StorageNetworkVlanID: 1030
-  StorageMgmtNetworkVlanID: 1040
   TenantNetworkVlanID: 1050
   ExternalNetworkVlanID: 111
   # Customize the IP ranges on each network to use for static IPs and VIPs
   InternalApiAllocationPools: [{'start': '172.17.0.100', 'end': '172.17.0.200'}]
-  StorageAllocationPools: [{'start': '172.18.0.100', 'end': '172.18.0.200'}]
-  StorageMgmtAllocationPools: [{'start': '172.19.0.100', 'end': '172.19.0.200'}]
   TenantAllocationPools: [{'start': '172.20.0.100', 'end': '172.20.0.200'}]
   # Leave room if the external network is also used for floating IPs
   ExternalAllocationPools: [{'start': '10.19.111.100', 'end': '10.19.111.150'}]
@@ -84,10 +78,10 @@ parameter_defaults:
   # Set the tenant network type for OpenStack Networking. The options available are vlan or vxlan:
   NeutronNetworkType: 'vxlan,vlan'
 
-  NeutronNetworkVLANRanges: "datacentre:1000:2000"
+  NeutronNetworkVLANRanges: "datacentre:2000:2099"
 
-  #NeutronBridgeMappings: 'datacentre:br-all'
-  OpenDaylightProviderMappings: 'datacentre:br-all'
+  NeutronBridgeMappings: 'datacentre:br-ex'
+  OpenDaylightProviderMappings: 'datacentre:br-ex'
 
   #
   # # DHCP provide metadata route to VM.
