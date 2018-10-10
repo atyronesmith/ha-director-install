@@ -179,13 +179,6 @@ resources:
                       get_param: StorageIpSubnet
                 - type: vlan
                   device: bond1
-                  mtu: 9000  #  1
-                  use_dhcp: false
-                  vlan_id: {get_param: StorageMgmtNetworkVlanID}
-                  addresses:
-                  - ip_netmask: {get_param: StorageMgmtIpSubnet}
-                - type: vlan
-                  device: bond1
                   vlan_id:
                     get_param: TenantNetworkVlanID
                   addresses:

@@ -3,7 +3,7 @@
 resource_registry:
   # Network Interface templates to use (these files must exist)
   #OS::TripleO::Compute::Net::SoftwareConfig: ../compute.yaml
-  OS::TripleO::ComputeHCI::Net::SoftwareConfig: ../compute-hci.yaml
+  OS::TripleO::Compute::Net::SoftwareConfig: ../compute.yaml
   OS::TripleO::Controller::Net::SoftwareConfig: ../controller.yaml
 
   # Ceph storage nodes configs.
@@ -38,7 +38,7 @@ parameter_defaults:
   StorageMgmtAllocationPools: [{'start': '172.19.0.100', 'end': '172.19.0.200'}]
   TenantAllocationPools: [{'start': '172.16.0.100', 'end': '172.16.0.200'}]
   # Leave room if the external network is also used for floating IPs
-  ExternalAllocationPools: [{'start': '10.19.111.100', 'end': '10.19.111.150'}]
+  ExternalAllocationPools: [{'start': '10.19.111.120', 'end': '10.19.111.150'}]
   ExternalNetworkVip: 10.19.111.151
 
   # Specify the NTP server for nodes to use
@@ -62,13 +62,13 @@ parameter_defaults:
 
   # Flavor of controller and compute nodes:
   OvercloudControlFlavor: controller
-  OvercloudComputeHCIFlavor: osdcompute
+  OvercloudComputeFlavor: compute
   #OvercloudComputeFlavor: compute
   #OvercloudCephStorageFlavor: ceph-storage
   
   # Number of nodes to deploy.
   ControllerCount: 1
-  ComputeHCICount: 1
+  ComputeCount: 1
   CephStorageCount: 0
 
   ##################################

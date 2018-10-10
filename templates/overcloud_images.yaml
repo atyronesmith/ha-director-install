@@ -1,6 +1,6 @@
-# Generated with the following on 2018-07-31T11:34:33.965750
+# Generated with the following on 2018-10-10T11:08:42.673847
 #
-#   openstack overcloud container image prepare --namespace=registry.access.redhat.com/rhosp13 --push-destination=192.0.2.1:8787 --prefix=openstack- -e /usr/share/openstack-tripleo-heat-templates/environments/ceph-ansible/ceph-ansible.yaml --set ceph_namespace=registry.access.redhat.com/rhceph --set ceph_image=rhceph-3-rhel7 --output-env-file=/home/stack/templates/overcloud_images.yaml --output-images-file /home/stack/local_registry_images.yaml
+#   openstack overcloud container image prepare --namespace=registry.access.redhat.com/rhosp13 --push-destination=192.0.2.1:8787 --prefix=openstack- --output-env-file=/home/stack/templates/overcloud_images.yaml --output-images-file /home/stack/local_registry_images.yaml
 #
 
 parameter_defaults:
@@ -13,7 +13,6 @@ parameter_defaults:
   DockerCeilometerComputeImage: 192.0.2.1:8787/rhosp13/openstack-ceilometer-compute:latest
   DockerCeilometerConfigImage: 192.0.2.1:8787/rhosp13/openstack-ceilometer-central:latest
   DockerCeilometerNotificationImage: 192.0.2.1:8787/rhosp13/openstack-ceilometer-notification:latest
-  DockerCephDaemonImage: 192.0.2.1:8787/rhceph/rhceph-3-rhel7:latest
   DockerCinderApiImage: 192.0.2.1:8787/rhosp13/openstack-cinder-api:latest
   DockerCinderConfigImage: 192.0.2.1:8787/rhosp13/openstack-cinder-api:latest
   DockerCinderSchedulerImage: 192.0.2.1:8787/rhosp13/openstack-cinder-scheduler:latest

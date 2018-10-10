@@ -3,11 +3,8 @@ environments:
   - /usr/share/openstack-tripleo-heat-templates/environments/host-config-and-reboot.yaml 
   - /usr/share/openstack-tripleo-heat-templates/environments/docker.yaml 
   - /usr/share/openstack-tripleo-heat-templates/environments/docker-ha.yaml 
-  - /usr/share/openstack-tripleo-heat-templates/environments/ceph-ansible/ceph-ansible.yaml 
   - /home/stack/templates/environments/network-isolation.yaml 
   - /home/stack/templates/environments/network-environment.yaml 
-  - /home/stack/templates/environments/ceph-config.yaml 
-  - /home/stack/templates/environments/storage-container-config.yaml 
   - /home/stack/templates/overcloud_images.yaml 
   - /home/stack/templates/ips-from-pool-all.yaml 
  
