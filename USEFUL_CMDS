@@ -44,18 +44,14 @@ ir tripleo-overcloud -vv --version 13 \
 CONTAINER STUFF BEFORE DEPLOY (perform as stack on undercloud):
 
 openstack overcloud container image prepare \
-  --namespace=docker-registry.engineering.redhat.com/rhosp13 \
-  --prefix=openstack- \
-  --tag=latest \
-  --output-images-file /home/stack/local_registry_images.yaml
+--namespace=registry.access.redhat.com/rhosp13 \
+--push-destination=192.0.2.1:8787 \
+--prefix=openstack- \
+--output-env-file=/home/stack/templates/overcloud_images.yaml \
+--output-images-file /home/stack/local_registry_images.yaml \
+-e /usr/share/openstack-tripleo-heat-templates/environments/neutron-sriov.yaml
 
 openstack overcloud container image upload   --config-file  /home/stack/local_registry_images.yaml   --verbose
-
-openstack overcloud container image prepare \
-  --namespace=192.0.2.1:8787/rhosp13 \
-  --prefix=openstack- \
-  --tag=latest \
-  --output-env-file=/home/stack/templates/overcloud_images.yaml
 
 OTHER STUFF BEFORE DEPLOY
 
