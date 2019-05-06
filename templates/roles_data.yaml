@@ -208,7 +208,6 @@
     - OS::TripleO::Services::LoginDefs
     - OS::TripleO::Services::MySQLClient
     - OS::TripleO::Services::NeutronBgpVpnBagpipe
-    - OS::TripleO::Services::NeutronLinuxbridgeAgent
     - OS::TripleO::Services::NeutronSriovAgent
     - OS::TripleO::Services::NeutronSriovHostConfig
     - OS::TripleO::Services::NeutronVppAgent
