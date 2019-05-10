@@ -118,45 +118,38 @@ resources:
                 name: br-all
                 use_dhcp: false
                 members:
-                  - type: linux_bond
-                    name: bond1
-                    bonding_options: {get_param: LinuxBondInterfaceOptions}
-                    members:
-                      - type: interface
-                        name: ens1f0
-                      - type: interface
-                        name: ens1f1
-
+                  - type: interface
+                    name: ens1f1
                   - type: vlan
-                    device: bond1
+                    device: ens1f1
                     vlan_id:
                       get_param: InternalApiNetworkVlanID
                     addresses:
                     - ip_netmask:
                         get_param: InternalApiIpSubnet
                   - type: vlan
-                    device: bond1
+                    device: ens1f1
                     vlan_id:
                       get_param: StorageNetworkVlanID
                     addresses:
                     - ip_netmask:
                         get_param: StorageIpSubnet
                   - type: vlan
-                    device: bond1
+                    device: ens1f1
                     vlan_id:
                       get_param: StorageMgmtNetworkVlanID
                     addresses:
                     - ip_netmask:
                         get_param: StorageMgmtIpSubnet
                   - type: vlan
-                    device: bond1
+                    device: ens1f1
                     vlan_id:
                       get_param: TenantNetworkVlanID
                     addresses:
                     - ip_netmask:
                         get_param: TenantIpSubnet
                   - type: vlan
-                    device: bond1
+                    device: ens1f1
                     vlan_id:
                       get_param: ExternalNetworkVlanID
                     addresses:
