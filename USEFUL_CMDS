@@ -5,20 +5,29 @@ vi /etc/sysconfig/docker
 sudo systemctl restart docker
 
 openstack overcloud container image prepare \
-  -r /home/stack/osp13-hci-sriov/templates/roles_data.yaml \
+  -r /home/stack/ha-director-install/templates/roles_data.yaml \
   --namespace=registry.access.redhat.com/rhosp13 \
   --push-destination=192.0.2.1:8787 \
   --prefix=openstack- \
   --tag=latest \
-  --output-env-file=/home/stack/osp13-hci-sriov/templates/overcloud_images.yaml \
-  --output-images-file /home/stack/osp13-hci-sriov/local_registry_images.yaml \
+  --output-env-file=/home/stack/ha-director-install/templates/overcloud_images.yaml \
+  --output-images-file /home/stack/ha-director-install/local_registry_images.yaml \
   -e /usr/share/openstack-tripleo-heat-templates/environments/ceph-ansible/ceph-ansible.yaml \
   -e /usr/share/openstack-tripleo-heat-templates/environments/services-docker/neutron-sriov.yaml \
   --set ceph_namespace=registry.access.redhat.com/rhceph \
   --set ceph_image=rhceph-3-rhel7 \
   --set ceph_tag=latest
 
-openstack overcloud container image upload   --config-file  /home/stack/osp13-hci-sriov/local_registry_images.yaml   --verbose
+# NOTE: need to manually add this to local_registry_images.yaml:
+- imagename: registry.access.redhat.com/rhosp13/openstack-neutron-sriov-agent:latest
+  push_destination: 192.0.2.1:8787
+
+# NOTE: need to manually add this to templates/overcloud_images.yaml:
+DockerNeutronSriovImage: 192.0.2.1:8787/rhosp13/openstack-neutron-sriov-agent:latest
+
+openstack overcloud container image upload   --config-file  /home/stack/ha-director-install/local_registry_images.yaml   --verbose
+
+curl http://192.0.2.1:8787/v2/_catalog | jq .repositories[]
 
 >>> OTHER STUFF BEFORE DEPLOY
 

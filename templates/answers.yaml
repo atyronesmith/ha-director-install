@@ -5,10 +5,9 @@ environments:
   - /usr/share/openstack-tripleo-heat-templates/environments/docker-ha.yaml 
   - /usr/share/openstack-tripleo-heat-templates/environments/ceph-ansible/ceph-ansible.yaml 
   - /usr/share/openstack-tripleo-heat-templates/environments/neutron-sriov.yaml
-  - /home/stack/templates/environments/network-isolation.yaml 
-  - /home/stack/templates/environments/network-environment.yaml 
-  - /home/stack/templates/environments/ceph-config.yaml 
-  - /home/stack/templates/environments/storage-container-config.yaml 
-  - /home/stack/templates/overcloud_images.yaml 
-  - /home/stack/templates/ips-from-pool-all.yaml 
-  - /home/stack/templates/environments/inject-trust-anchor-hiera.yaml 
+  - /home/stack/ha-director-install/templates/environments/network-isolation.yaml 
+  - /home/stack/ha-director-install/templates/environments/network-environment.yaml 
+  - /home/stack/ha-director-install/templates/environments/ceph-config.yaml 
+  - /home/stack/ha-director-install/templates/environments/storage-container-config.yaml 
+  - /home/stack/ha-director-install/templates/overcloud_images.yaml 
+  - /home/stack/ha-director-install/templates/ips-from-pool-all.yaml 

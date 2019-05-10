@@ -55,6 +55,8 @@ container_images:
   push_destination: 192.0.2.1:8787
 - imagename: registry.access.redhat.com/rhosp13/openstack-neutron-server:latest
   push_destination: 192.0.2.1:8787
+- imagename: registry.access.redhat.com/rhosp13/openstack-neutron-sriov-agent:latest
+  push_destination: 192.0.2.1:8787
 - imagename: registry.access.redhat.com/rhosp13/openstack-nova-api:latest
   push_destination: 192.0.2.1:8787
 - imagename: registry.access.redhat.com/rhosp13/openstack-nova-conductor:latest

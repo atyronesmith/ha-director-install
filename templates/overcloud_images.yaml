@@ -1,6 +1,6 @@
-# Generated with the following on 2019-05-06T11:26:53.459705
+# Generated with the following on 2019-05-07T14:55:38.761036
 #
-#   openstack overcloud container image prepare -r /home/stack/osp13-hci-sriov/templates/roles_data.yaml --namespace=registry.access.redhat.com/rhosp13 --push-destination=192.0.2.1:8787 --prefix=openstack- --tag=latest --output-env-file=/home/stack/osp13-hci-sriov/templates/overcloud_images.yaml --output-images-file /home/stack/osp13-hci-sriov/local_registry_images.yaml -e /usr/share/openstack-tripleo-heat-templates/environments/ceph-ansible/ceph-ansible.yaml -e /usr/share/openstack-tripleo-heat-templates/environments/services-docker/neutron-sriov.yaml --set ceph_namespace=registry.access.redhat.com/rhceph --set ceph_image=rhceph-3-rhel7 --set ceph_tag=latest
+#   openstack overcloud container image prepare -r /home/stack/ha-director-install/templates/roles_data.yaml --namespace=registry.access.redhat.com/rhosp13 --push-destination=192.0.2.1:8787 --prefix=openstack- --tag=latest --output-env-file=/home/stack/ha-director-install/templates/overcloud_images.yaml --output-images-file /home/stack/ha-director-install/local_registry_images.yaml -e /usr/share/openstack-tripleo-heat-templates/environments/ceph-ansible/ceph-ansible.yaml -e /usr/share/openstack-tripleo-heat-templates/environments/services-docker/neutron-sriov.yaml --set ceph_namespace=registry.access.redhat.com/rhceph --set ceph_image=rhceph-3-rhel7 --set ceph_tag=latest
 #
 
 parameter_defaults:
@@ -37,6 +37,8 @@ parameter_defaults:
   DockerHeatEngineImage: 192.0.2.1:8787/rhosp13/openstack-heat-engine:latest
   DockerHorizonConfigImage: 192.0.2.1:8787/rhosp13/openstack-horizon:latest
   DockerHorizonImage: 192.0.2.1:8787/rhosp13/openstack-horizon:latest
+  DockerInsecureRegistryAddress:
+  - 192.0.2.1:8787
   DockerIscsidConfigImage: 192.0.2.1:8787/rhosp13/openstack-iscsid:latest
   DockerIscsidImage: 192.0.2.1:8787/rhosp13/openstack-iscsid:latest
   DockerKeystoneConfigImage: 192.0.2.1:8787/rhosp13/openstack-keystone:latest
@@ -51,6 +53,7 @@ parameter_defaults:
   DockerNeutronDHCPImage: 192.0.2.1:8787/rhosp13/openstack-neutron-dhcp-agent:latest
   DockerNeutronL3AgentImage: 192.0.2.1:8787/rhosp13/openstack-neutron-l3-agent:latest
   DockerNeutronMetadataImage: 192.0.2.1:8787/rhosp13/openstack-neutron-metadata-agent:latest
+  DockerNeutronSriovImage: 192.0.2.1:8787/rhosp13/openstack-neutron-sriov-agent:latest
   DockerNovaApiImage: 192.0.2.1:8787/rhosp13/openstack-nova-api:latest
   DockerNovaConductorImage: 192.0.2.1:8787/rhosp13/openstack-nova-conductor:latest
   DockerNovaConfigImage: 192.0.2.1:8787/rhosp13/openstack-nova-api:latest
