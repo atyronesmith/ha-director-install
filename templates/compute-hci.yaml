@@ -120,14 +120,7 @@ resources:
               - type: interface
                 name: eno1
                 use_dhcp: false
-                defroute: true
-                dns_servers:
-                  get_param: DnsServers
-                addresses:
-                - ip_netmask: 10.19.110.17/24
-                routes:
-                - default: true
-                  next_hop: 10.19.110.254
+                defroute: false
 
               - type: interface
                 name: ens2f1
