@@ -115,42 +115,42 @@ resources:
                 defroute: false
 
               - type: interface
-                name: ens1f0 
+                name: ens1f1 
                 use_dhcp: false
                 defroute: false
 
               - type: interface
-                name: ens1f1
+                name: ens1f0
               - type: vlan
-                device: ens1f1
+                device: ens1f0
                 vlan_id:
                   get_param: InternalApiNetworkVlanID
                 addresses:
                 - ip_netmask:
                     get_param: InternalApiIpSubnet
               - type: vlan
-                device: ens1f1
+                device: ens1f0
                 vlan_id:
                   get_param: StorageNetworkVlanID
                 addresses:
                 - ip_netmask:
                     get_param: StorageIpSubnet
               - type: vlan
-                device: ens1f1
+                device: ens1f0
                 vlan_id:
                   get_param: StorageMgmtNetworkVlanID
                 addresses:
                 - ip_netmask:
                     get_param: StorageMgmtIpSubnet
               - type: vlan
-                device: ens1f1
+                device: ens1f0
                 vlan_id:
                   get_param: TenantNetworkVlanID
                 addresses:
                 - ip_netmask:
                     get_param: TenantIpSubnet
               - type: vlan
-                device: ens1f1
+                device: ens1f0
                 vlan_id:
                   get_param: ExternalNetworkVlanID
                 addresses:
