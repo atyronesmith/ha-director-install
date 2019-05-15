@@ -106,7 +106,7 @@ parameter_defaults:
   NeutronSupportedPCIVendorDevs: ['8086:1584','8086:154c']
 
   ComputeHCIParameters:
-    KernelArgs: "default_hugepagesz=1GB hugepagesz=1G hugepages=32 iommu=pt intel_iommu=on"
+    KernelArgs: "default_hugepagesz=1GB hugepagesz=1G hugepages=32 iommu=pt intel_iommu=on pci=realloc"
     #TunedProfileName: "cpu-partitioning"
     #IsolCpusList: "1,2,3,4,5,6,7,9,10,17,18,19,20,21,22,23,11,12,13,14,15,25,26,27,28,29,30,31"
     #NovaVcpuPinSet: ['1,2,3,4,5,6,7,9,10,17,18,19,20,21,22,23,11,12,13,14,15,25,26,27,28,29,30,31']
@@ -119,6 +119,9 @@ parameter_defaults:
         physical_network: "physnet_sriov1"
       - devname: "ens1f3"
         physical_network: "physnet_sriov2"
+
+  ComputeHCIExtraConfig:
+    tripleo::host::sriov::number_of_vfs: ["ens1f2:5","ens1f3:5"]
 
   # MTU global configuration
   NeutronGlobalPhysnetMtu: 9000
