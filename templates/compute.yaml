@@ -137,6 +137,16 @@ resources:
                 use_dhcp: false
                 defroute: false
 
+              - type: interface
+                name: ens1f2
+                use_dhcp: false
+                defroute: false
+
+              - type: interface
+                name: ens1f3
+                use_dhcp: false
+                defroute: false
+
               - type: ovs_bridge
                 name: br-all
                 use_dhcp: false
@@ -185,22 +195,6 @@ resources:
                     name: ens2f0
                   - type: interface
                     name: ens2f2
-
-              - type: interface
-                name: ens1f2
-                mtu: 9000
-                use_dhcp: false
-                defroute: false
-                nm_controlled: true
-                hotplug: true
-
-              - type: interface
-                name: ens1f3
-                mtu: 9000
-                use_dhcp: false
-                defroute: false
-                nm_controlled: true
-                hotplug: true
 
 outputs:
   OS::stack_id:
