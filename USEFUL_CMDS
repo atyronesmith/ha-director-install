@@ -5,25 +5,12 @@ vi /etc/sysconfig/docker
 sudo systemctl restart docker
 
 openstack overcloud container image prepare \
-  -r /home/stack/ha-director-install/templates/roles_data.yaml \
   --namespace=registry.access.redhat.com/rhosp13 \
   --push-destination=192.0.2.1:8787 \
   --prefix=openstack- \
   --tag=latest \
   --output-env-file=/home/stack/ha-director-install/templates/overcloud_images.yaml \
-  --output-images-file /home/stack/ha-director-install/local_registry_images.yaml \
-  -e /usr/share/openstack-tripleo-heat-templates/environments/ceph-ansible/ceph-ansible.yaml \
-  -e /usr/share/openstack-tripleo-heat-templates/environments/services-docker/neutron-sriov.yaml \
-  --set ceph_namespace=registry.access.redhat.com/rhceph \
-  --set ceph_image=rhceph-3-rhel7 \
-  --set ceph_tag=latest
-
-# NOTE: need to manually add this to local_registry_images.yaml:
-- imagename: registry.access.redhat.com/rhosp13/openstack-neutron-sriov-agent:latest
-  push_destination: 192.0.2.1:8787
-
-# NOTE: need to manually add this to templates/overcloud_images.yaml:
-DockerNeutronSriovImage: 192.0.2.1:8787/rhosp13/openstack-neutron-sriov-agent:latest
+  --output-images-file /home/stack/ha-director-install/local_registry_images.yaml 
 
 openstack overcloud container image upload   --config-file  /home/stack/ha-director-install/local_registry_images.yaml   --verbose
 
@@ -31,19 +18,11 @@ curl http://192.0.2.1:8787/v2/_catalog | jq .repositories[]
 
 >>> OTHER STUFF BEFORE DEPLOY
 
-sudo cp /etc/pki/tls/certs/undercloud-192.0.2.2.pem /etc/docker/undercloud.crt
-sudo cp /etc/pki/tls/certs/undercloud-front.crt /etc/docker/undercloud.pem
-
 sudo vi /etc/sysconfig/docker
   OPTIONS="--log-driver=journald --signature-verification=false --tlscert /etc/docker/undercloud.crt --tlskey /etc/docker/undercloud.pem --tls"
   ...
   INSECURE_REGISTRY="--insecure-registry 192.0.2.3:8787 --insecure-registry 192.0.2.1:8787 --insecure-registry docker-registry.engineering.redhat.com"
 sudo systemctl restart docker
-
-openstack overcloud roles generate -o /home/stack/templates/roles_data.yaml Controller ComputeHCI
-
-openstack flavor create --id auto --ram 6144 --disk 40 --vcpus 4 osdcompute
-openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" --property "capabilities:profile"="osdcompute" osdcompute
 
 openstack flavor create --id auto --ram 6144 --disk 30 --vcpus 4 controller
 openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" --property "capabilities:profile"="controller" controller
@@ -54,15 +33,15 @@ openstack flavor set controller --property "resources:DISK_GB"="0"
 openstack flavor set controller --property "resources:MEMORY_MB"="0"
 openstack flavor set controller --property "resources:VCPU"="0"
 
-openstack flavor set osdcompute --property "resources:CUSTOM_BAREMETAL"="1"
-openstack flavor set osdcompute --property "resources:DISK_GB"="0"
-openstack flavor set osdcompute --property "resources:MEMORY_MB"="0"
-openstack flavor set osdcompute --property "resources:VCPU"="0"
+openstack flavor set compute --property "resources:CUSTOM_BAREMETAL"="1"
+openstack flavor set compute --property "resources:DISK_GB"="0"
+openstack flavor set compute --property "resources:MEMORY_MB"="0"
+openstack flavor set compute --property "resources:VCPU"="0"
 
-ironic node-update <compute(s)> add properties/capabilities='profile:osdcompute,boot_option:local'
+ironic node-update <compute(s)> add properties/capabilities='profile:compute,boot_option:local'
 ironic node-update <controller(s)> add properties/capabilities='profile:controller,boot_option:local'
 
-sudo yum install -y ceph-ansible crudini
+sudo yum install -y crudini
 
 export SWIFT_PASSWORD=`sudo crudini --get /etc/ironic-inspector/inspector.conf swift password`
 

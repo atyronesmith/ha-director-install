@@ -1,6 +1,6 @@
-# Generated with the following on 2019-05-07T14:55:38.761036
+# Generated with the following on 2019-05-20T09:46:16.382623
 #
-#   openstack overcloud container image prepare -r /home/stack/ha-director-install/templates/roles_data.yaml --namespace=registry.access.redhat.com/rhosp13 --push-destination=192.0.2.1:8787 --prefix=openstack- --tag=latest --output-env-file=/home/stack/ha-director-install/templates/overcloud_images.yaml --output-images-file /home/stack/ha-director-install/local_registry_images.yaml -e /usr/share/openstack-tripleo-heat-templates/environments/ceph-ansible/ceph-ansible.yaml -e /usr/share/openstack-tripleo-heat-templates/environments/services-docker/neutron-sriov.yaml --set ceph_namespace=registry.access.redhat.com/rhceph --set ceph_image=rhceph-3-rhel7 --set ceph_tag=latest
+#   openstack overcloud container image prepare --namespace=registry.access.redhat.com/rhosp13 --push-destination=192.0.2.1:8787 --prefix=openstack- --tag=latest --output-env-file=/home/stack/ha-director-install/templates/overcloud_images.yaml --output-images-file /home/stack/ha-director-install/local_registry_images.yaml
 #
 
 parameter_defaults:
@@ -10,9 +10,9 @@ parameter_defaults:
   DockerAodhListenerImage: 192.0.2.1:8787/rhosp13/openstack-aodh-listener:latest
   DockerAodhNotifierImage: 192.0.2.1:8787/rhosp13/openstack-aodh-notifier:latest
   DockerCeilometerCentralImage: 192.0.2.1:8787/rhosp13/openstack-ceilometer-central:latest
+  DockerCeilometerComputeImage: 192.0.2.1:8787/rhosp13/openstack-ceilometer-compute:latest
   DockerCeilometerConfigImage: 192.0.2.1:8787/rhosp13/openstack-ceilometer-central:latest
   DockerCeilometerNotificationImage: 192.0.2.1:8787/rhosp13/openstack-ceilometer-notification:latest
-  DockerCephDaemonImage: 192.0.2.1:8787/rhceph/rhceph-3-rhel7:latest
   DockerCinderApiImage: 192.0.2.1:8787/rhosp13/openstack-cinder-api:latest
   DockerCinderConfigImage: 192.0.2.1:8787/rhosp13/openstack-cinder-api:latest
   DockerCinderSchedulerImage: 192.0.2.1:8787/rhosp13/openstack-cinder-scheduler:latest
@@ -53,11 +53,13 @@ parameter_defaults:
   DockerNeutronDHCPImage: 192.0.2.1:8787/rhosp13/openstack-neutron-dhcp-agent:latest
   DockerNeutronL3AgentImage: 192.0.2.1:8787/rhosp13/openstack-neutron-l3-agent:latest
   DockerNeutronMetadataImage: 192.0.2.1:8787/rhosp13/openstack-neutron-metadata-agent:latest
-  DockerNeutronSriovImage: 192.0.2.1:8787/rhosp13/openstack-neutron-sriov-agent:latest
   DockerNovaApiImage: 192.0.2.1:8787/rhosp13/openstack-nova-api:latest
+  DockerNovaComputeImage: 192.0.2.1:8787/rhosp13/openstack-nova-compute:latest
   DockerNovaConductorImage: 192.0.2.1:8787/rhosp13/openstack-nova-conductor:latest
   DockerNovaConfigImage: 192.0.2.1:8787/rhosp13/openstack-nova-api:latest
   DockerNovaConsoleauthImage: 192.0.2.1:8787/rhosp13/openstack-nova-consoleauth:latest
+  DockerNovaLibvirtConfigImage: 192.0.2.1:8787/rhosp13/openstack-nova-compute:latest
+  DockerNovaLibvirtImage: 192.0.2.1:8787/rhosp13/openstack-nova-libvirt:latest
   DockerNovaMetadataImage: 192.0.2.1:8787/rhosp13/openstack-nova-api:latest
   DockerNovaPlacementConfigImage: 192.0.2.1:8787/rhosp13/openstack-nova-placement-api:latest
   DockerNovaPlacementImage: 192.0.2.1:8787/rhosp13/openstack-nova-placement-api:latest
