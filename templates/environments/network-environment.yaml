@@ -72,6 +72,7 @@ parameter_defaults:
   NeutronNetworkType: 'vxlan,vlan'
 
   NeutronNetworkVLANRanges: "datacentre:1000:2000"
+  NeutronBridgeMappings: "datacentre:br-all"
 
   # DHCP provide metadata route to VM.
   NeutronEnableIsolatedMetadata: true
