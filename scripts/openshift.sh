@@ -76,4 +76,4 @@ sed -i 's/OS_USERNAME=admin/OS_USERNAME=shiftstack_user/' ../shiftstackrc
 sed -i '/OS_PASSWORD/c\export OS_PASSWORD=redhat' ../shiftstackrc
 sed -i 's/OS_PROJECT_NAME=admin/OS_PROJECT_NAME=shiftstack/' ../shiftstackrc
 
-./openshift_regen
+./openshift_regen.sh
