@@ -103,6 +103,11 @@ RHCOS_VERSION=`ls -ht ../../ocp-images/ | grep rhcos | awk {'print $1'} | cut -d
 
 openstack image create --container-format=bare --disk-format=qcow2 --public --file ../../ocp-images/rhcos-${RHCOS_VERSION}-openstack.qcow2 rhcos
 
+cp ../overcloudrc ../shiftstackrc
+sed -i 's/OS_USERNAME=admin/OS_USERNAME=shiftstack_user/' ../shiftstackrc 
+sed -i '/OS_PASSWORD/c\export OS_PASSWORD=redhat' ../shiftstackrc
+sed -i 's/OS_PROJECT_NAME=admin/OS_PROJECT_NAME=shiftstack/' ../shiftstackrc
+
 source ../shiftstackrc
 
 FLOATER=`openstack floating ip create public_network | grep floating_ip_address | cut -d '|' -f 3 | awk '{$1=$1};1'`
