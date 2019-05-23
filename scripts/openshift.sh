@@ -24,9 +24,9 @@ source ../overcloudrc
 
 AUTH_URL=`openstack endpoint list | grep keystone | grep public | cut -d '|' -f 8 | awk '{$1=$1};1'`
 
-cat <<EOT >> ../../ocp-config/clouds.yaml
+cat <<EOT > ../../ocp-config/clouds.yaml
 clouds:
-  shiftstack:
+  openstack:
     auth:
       auth_url: ${AUTH_URL}/v3
       project_name: shiftstack
@@ -45,7 +45,7 @@ EOT
 
 export OS_CLIENT_CONFIG_FILE=/home/stack/ocp-config/clouds.yaml
 
-cat <<EOT >> ../../ocp-config/install-config.yaml
+cat <<EOT > ../../ocp-config/install-config.yaml
 apiVersion: v1beta3
 baseDomain: nfvha233.nfvpe.redhat.com
 compute:
@@ -115,3 +115,5 @@ FLOATER=`openstack floating ip create public_network | grep floating_ip_address 
 source ../overcloudrc
 
 sed -i '/computeFlavor:/i\    \lbFloatingIP:     "'$FLOATER'"' ../../ocp-config/install-config.yaml
+
+echo ">>> NOW YOU NEED TO MANUALLY SET THE PULL SECRET IN THE install-config.yaml FILE!"
