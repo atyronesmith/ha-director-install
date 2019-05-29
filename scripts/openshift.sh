@@ -59,7 +59,7 @@ openstack user create devuser --project devonly --password redhat
 openstack role add --user shiftstack_user --project shiftstack swiftoperator
 openstack role add --user devuser --project devonly swiftoperator
 
-openstack object store account set --property Temp-URL-Key=superkey
+openstack object store account set --property Temp-URL-Key=CHANGEME
 
 openstack quota set --secgroups 100 --secgroup-rules 1000 shiftstack
 openstack quota set --secgroups 100 --secgroup-rules 1000 devonly
