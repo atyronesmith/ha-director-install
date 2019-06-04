@@ -67,6 +67,8 @@ openstack quota set --secgroups 100 --secgroup-rules 1000 devonly
 openstack network create --external --provider-network-type vlan --provider-physical-network datacentre --provider-segment 111 public_network
 openstack subnet create external --network public_network --dhcp --allocation-pool start=10.19.111.150,end=10.19.111.250 --gateway 10.19.111.254 --subnet-range 10.19.111.0/24 --dns-nameserver 10.11.5.19 
 
+# NOTE: Consult this URL to find an OpenStack RHCOS image:
+# https://raw.githubusercontent.com/openshift/installer/master/data/data/rhcos.json
 RHCOS_VERSION=`ls -ht ../../ocp-images/ | grep rhcos | awk {'print $1'} | cut -d '-' -f 2`
 
 openstack image create --container-format=bare --disk-format=qcow2 --public --file ../../ocp-images/rhcos-${RHCOS_VERSION}-openstack.qcow2 rhcos
