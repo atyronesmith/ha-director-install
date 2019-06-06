@@ -69,6 +69,8 @@ openstack subnet create external --network public_network --dhcp --allocation-po
 
 # NOTE: Consult this URL to find an OpenStack RHCOS image:
 # https://raw.githubusercontent.com/openshift/installer/master/data/data/rhcos.json
+# OR
+# https://releases-redhat-coreos.cloud.paas.upshift.redhat.com/
 RHCOS_VERSION=`ls -ht ../../ocp-images/ | grep rhcos | awk {'print $1'} | cut -d '-' -f 2`
 
 openstack image create --container-format=bare --disk-format=qcow2 --public --file ../../ocp-images/rhcos-${RHCOS_VERSION}-openstack.qcow2 rhcos
