@@ -71,4 +71,9 @@ source ../overcloudrc
 
 sed -i '/computeFlavor:/i\    \lbFloatingIP:     "'$FLOATER'"' ../../ocp-config/install-config.yaml
 
-echo ">>> NOW YOU NEED TO MANUALLY SET THE PULL SECRET IN THE install-config.yaml FILE!"
+if [ -f ~/pull-secret.json ]; then
+    PULL_SECRET=$(cat ~/pull-secret.json)
+    sed -i "s/CHANGEME/'$PULL_SECRET'/" ../../ocp-config/install-config.yaml
+else
+    echo ">>> NOW YOU NEED TO MANUALLY SET THE PULL SECRET IN THE install-config.yaml FILE!"
+fi
